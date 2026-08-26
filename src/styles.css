@@ -1066,15 +1066,15 @@ html { scroll-behavior: smooth; }
   box-shadow: 0 26px 56px rgba(11,71,168,.4);
 }
 
-/* Redni broj — velik, u obrisu, napola izvan kadra. */
+/* Broj na dresu — velik, u obrisu, napola izvan kadra. */
 .player__num {
   position: absolute;
   z-index: 1;
-  top: -26px;
-  right: -18px;
+  top: -12px;
+  right: -14px;
   font-family: var(--font-display);
   font-weight: 900;
-  font-size: 128px;
+  font-size: 116px;
   line-height: 1;
   letter-spacing: -6px;
   color: transparent;
@@ -1084,6 +1084,8 @@ html { scroll-behavior: smooth; }
   transition: rotate .5s cubic-bezier(.22,.61,.36,1), -webkit-text-stroke-color .4s ease;
 }
 .player:hover .player__num { rotate: 2deg; -webkit-text-stroke-color: rgba(143,192,255,.4); }
+/* Jednoznamenkasti broj je uži pa bi inače skoro cijeli ispao iz kadra. */
+.player__num.is-single { right: 14px; letter-spacing: 0; }
 
 .player__glow {
   position: absolute;
@@ -2307,7 +2309,7 @@ html { scroll-behavior: smooth; }
   .player:nth-child(3n + 2) { margin-top: 0; }
   .player:nth-child(4n + 4) { margin-top: 0; }
   .player:nth-child(even) { margin-top: 22px; }
-  .player__num { font-size: 92px; top: -18px; right: -12px; }
+  .player__num { font-size: 84px; top: -10px; right: -10px; }
   .player__pos { bottom: 104px; font-size: 9px; letter-spacing: 2px; left: 9px; }
   .player__plate { left: 12px; right: 26px; bottom: 13px; }
   .player__first { font-size: 9px; letter-spacing: 2.2px; }

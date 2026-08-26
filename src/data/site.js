@@ -58,60 +58,60 @@ export const IMPACT = [
 /**
  * Igrači.
  *
+ * `number` je broj na dresu — prikazuje se velik, u obrisu, u kutu kartice.
  * `photo` je izrezan portret (bez pozadine) u `public/uploads/igraci/`.
- * Datoteke bez dijakritike i razmaka — imena su ispod točno onako kako
- * moraju biti na disku. Ako datoteka ne postoji ili se ne učita, kartica
- * sama pada natrag na rezervirano mjesto, pa se slike mogu dodavati
- * jedna po jedna.
+ * Ako datoteka ne postoji ili se ne učita, kartica pada natrag na prezime
+ * u pozadini, pa se slike mogu dodavati jedna po jedna.
  */
 export const PLAYERS = [
   {
-    name: 'Riccardo Ditano',
+    name: 'Franko Jamičić',
+    number: 1,
     pos: 'Vratar',
-    note: 'Italija',
-    photo: '/uploads/igraci/riccardo-ditano.png',
+    note: 'Hrvatska',
+    photo: '/uploads/igraci/franko-jamicic.webp',
   },
   {
     name: 'Andrej Pandurević',
+    number: 8,
     pos: 'Kapetan',
-    note: 'Domaći igrač',
-    photo: '/uploads/igraci/andrej-pandurevic.png',
+    note: 'Hrvatska',
+    photo: '/uploads/igraci/andrej-pandurevic.webp',
   },
   {
-    name: 'Gordan Duvančić',
+    name: 'Filip Petrušić',
+    number: 19,
     pos: 'Igrač u polju',
     note: 'Hrvatska',
-    photo: '/uploads/igraci/gordan-duvancic.png',
+    photo: '/uploads/igraci/filip-petrusic.webp',
   },
   {
-    name: 'Jeremy Bukovec',
+    name: 'Josip Šalaj',
+    number: 7,
     pos: 'Igrač u polju',
     note: 'Hrvatska',
-    photo: '/uploads/igraci/jeremy-bukovec.png',
+    photo: '/uploads/igraci/josip-salaj.webp',
   },
   {
     name: 'Nejc Hozjan',
+    number: 77,
     pos: 'Igrač u polju',
     note: 'Slovenija',
-    photo: '/uploads/igraci/nejc-hozjan.png',
+    photo: '/uploads/igraci/nejc-hozjan.webp',
   },
   {
-    name: 'Matheus Dener',
+    name: 'Matias Mijić',
+    number: 4,
     pos: 'Igrač u polju',
-    note: 'Brazil',
-    photo: '/uploads/igraci/matheus-dener.png',
+    note: 'Hrvatska',
+    photo: '/uploads/igraci/matias-mijic.webp',
   },
   {
-    name: 'Everton Cardoso — Gallo',
+    name: 'Antonio Sekulić',
+    number: 23,
     pos: 'Igrač u polju',
-    note: 'Brazil',
-    photo: '/uploads/igraci/everton-cardoso.png',
-  },
-  {
-    name: 'Vitor Lima',
-    pos: 'Igrač u polju',
-    note: 'Povratnik u klub',
-    photo: '/uploads/igraci/vitor-lima.png',
+    note: 'Hrvatska',
+    photo: '/uploads/igraci/antonio-sekulic.webp',
   },
 ];
 

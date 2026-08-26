@@ -28,8 +28,9 @@ export default function PlayerCard({ player, index = 0 }) {
       delay={index * 70}
       className={`player${showPhoto ? ' has-photo' : ''}`}
     >
-      <span className="player__num" aria-hidden="true">
-        {String(index + 1).padStart(2, '0')}
+      {/* Broj na dresu, ne redni broj u popisu. */}
+      <span className={`player__num${String(player.number).length === 1 ? ' is-single' : ''}`} aria-hidden="true">
+        {player.number}
       </span>
 
       <div className="player__glow" aria-hidden="true" />

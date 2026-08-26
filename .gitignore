@@ -1,3 +1,6 @@
 node_modules
 dist
 .DS_Store
+
+# originali fotografija (lokalno, ne ide na git)
+_originali-slike
