@@ -2181,6 +2181,13 @@ html { scroll-behavior: smooth; }
   .wip { padding: 72px 0 80px; }
 }
 
+/* Vrlo uski ekrani: gumb za ulaznice ispada iz trake — ostaje samo
+   hamburger, a "Kupi ulaznicu" je odmah na vrhu otvorenog izbornika. */
+@media (max-width: 380px) {
+  .masthead__cta { display: none; }
+  .nav-toggle { margin-left: auto; }
+}
+
 /* --------------------------------------------------------------------------
    16. Smanjeno gibanje
    Beskonačne animacije (trake, "brush" pomaci, treptanje) se gase.
