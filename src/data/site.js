@@ -55,15 +55,64 @@ export const IMPACT = [
   { value: '2024/25', label: 'Finale doigravanja' },
 ];
 
+/**
+ * Igrači.
+ *
+ * `photo` je izrezan portret (bez pozadine) u `public/uploads/igraci/`.
+ * Datoteke bez dijakritike i razmaka — imena su ispod točno onako kako
+ * moraju biti na disku. Ako datoteka ne postoji ili se ne učita, kartica
+ * sama pada natrag na rezervirano mjesto, pa se slike mogu dodavati
+ * jedna po jedna.
+ */
 export const PLAYERS = [
-  { name: 'Riccardo Ditano', pos: 'Vratar', note: 'Italija' },
-  { name: 'Andrej Pandurević', pos: 'Kapetan', note: 'Domaći igrač' },
-  { name: 'Gordan Duvančić', pos: 'Igrač u polju', note: 'Hrvatska' },
-  { name: 'Jeremy Bukovec', pos: 'Igrač u polju', note: 'Hrvatska' },
-  { name: 'Nejc Hozjan', pos: 'Igrač u polju', note: 'Slovenija' },
-  { name: 'Matheus Dener', pos: 'Igrač u polju', note: 'Brazil' },
-  { name: 'Everton Cardoso — Gallo', pos: 'Igrač u polju', note: 'Brazil' },
-  { name: 'Vitor Lima', pos: 'Igrač u polju', note: 'Povratnik u klub' },
+  {
+    name: 'Riccardo Ditano',
+    pos: 'Vratar',
+    note: 'Italija',
+    photo: '/uploads/igraci/riccardo-ditano.png',
+  },
+  {
+    name: 'Andrej Pandurević',
+    pos: 'Kapetan',
+    note: 'Domaći igrač',
+    photo: '/uploads/igraci/andrej-pandurevic.png',
+  },
+  {
+    name: 'Gordan Duvančić',
+    pos: 'Igrač u polju',
+    note: 'Hrvatska',
+    photo: '/uploads/igraci/gordan-duvancic.png',
+  },
+  {
+    name: 'Jeremy Bukovec',
+    pos: 'Igrač u polju',
+    note: 'Hrvatska',
+    photo: '/uploads/igraci/jeremy-bukovec.png',
+  },
+  {
+    name: 'Nejc Hozjan',
+    pos: 'Igrač u polju',
+    note: 'Slovenija',
+    photo: '/uploads/igraci/nejc-hozjan.png',
+  },
+  {
+    name: 'Matheus Dener',
+    pos: 'Igrač u polju',
+    note: 'Brazil',
+    photo: '/uploads/igraci/matheus-dener.png',
+  },
+  {
+    name: 'Everton Cardoso — Gallo',
+    pos: 'Igrač u polju',
+    note: 'Brazil',
+    photo: '/uploads/igraci/everton-cardoso.png',
+  },
+  {
+    name: 'Vitor Lima',
+    pos: 'Igrač u polju',
+    note: 'Povratnik u klub',
+    photo: '/uploads/igraci/vitor-lima.png',
+  },
 ];
 
 /* Ime kluba po kojem se redak u tablici ističe. */
