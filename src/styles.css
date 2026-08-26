@@ -1120,7 +1120,8 @@ html { scroll-behavior: smooth; }
   filter: drop-shadow(0 30px 34px rgba(0,0,0,.6));
 }
 
-/* Prezime iza igrača. Uz fotografiju je tek naznaka, bez nje nosi karticu. */
+/* Prezime u pozadini — samo kad nema fotografije. Tada nosi karticu,
+   inače bi kartica s nedostajućom slikom bila potpuno prazna. */
 .player__ghost {
   position: absolute;
   z-index: 2;
@@ -1139,12 +1140,11 @@ html { scroll-behavior: smooth; }
   pointer-events: none;
   transition: -webkit-text-stroke-color .45s ease, letter-spacing .45s ease;
 }
-.player.has-photo .player__ghost { -webkit-text-stroke-color: rgba(143,192,255,.13); }
+.player.has-photo .player__ghost { display: none; }
 .player:hover .player__ghost {
   -webkit-text-stroke-color: rgba(143,192,255,.5);
   letter-spacing: 0;
 }
-.player.has-photo:hover .player__ghost { -webkit-text-stroke-color: rgba(143,192,255,.24); }
 
 /* Preljev pod tekstom — bez njega se ime gubi na nogama igrača. */
 .player__scrim {
