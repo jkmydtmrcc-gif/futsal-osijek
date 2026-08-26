@@ -1,56 +1,68 @@
 import { useState } from 'react';
-import Pip from './Pip';
 import Reveal from './Reveal';
 
-/** Prezime za vodeni žig iza igrača ("Everton Cardoso — Gallo" → "Gallo"). */
-function surnameOf(name) {
+/** Ime se lomi na prvo i zadnje ("Everton Cardoso — Gallo" → Everton Cardoso / Gallo). */
+function splitName(name) {
   const parts = name.split(' ').filter((p) => p && p !== '—');
-  return parts[parts.length - 1] ?? name;
+  const last = parts.pop() ?? name;
+  return { first: parts.join(' '), last };
 }
 
 /**
  * Kartica igrača.
  *
- * Portret je izrezan (bez pozadine), pa ga kartica sama podlaže: prijelaz
- * boje, potez kistom kao tlo, prezime u pozadini i mekano stapanje donjeg
- * ruba u bijeli dio kartice — da se ne vidi gdje je izrez odrezan.
- *
- * Ako fotografija nedostaje ili se ne učita, ostaje rezervirano mjesto,
- * pa se slike mogu dodavati jedna po jedna.
+ * Namjerno neuredna: kartica je blago nakrivljena, redni broj ispada iz
+ * kadra, pozicija stoji okomito uz rub, a pločica s imenom je zakrenuta.
+ * Portret je izrezan (bez pozadine) pa scenu radi kartica — tamna podloga
+ * daje kontrast bijelim dresovima.
  */
 export default function PlayerCard({ player, index = 0 }) {
   const [failed, setFailed] = useState(false);
   const showPhoto = Boolean(player.photo) && !failed;
+  const { first, last } = splitName(player.name);
 
   return (
-    <Reveal as="article" variant="blur" delay={index * 70} className="player notch-br-22">
-      <div className={`player__shot${showPhoto ? ' has-photo' : ''}`}>
-        <div className="player__grain" aria-hidden="true" />
-        <div className="player__wash" aria-hidden="true" />
-        <span className="player__ghost" aria-hidden="true">
-          {surnameOf(player.name)}
-        </span>
+    <Reveal
+      as="article"
+      variant="blur"
+      delay={index * 70}
+      className={`player${showPhoto ? ' has-photo' : ''}`}
+    >
+      <span className="player__num" aria-hidden="true">
+        {String(index + 1).padStart(2, '0')}
+      </span>
 
-        {showPhoto && (
-          <img
-            className="player__photo"
-            src={player.photo}
-            alt={`${player.name} — portret`}
-            loading="lazy"
-            onError={() => setFailed(true)}
-          />
-        )}
+      <div className="player__glow" aria-hidden="true" />
+      <div className="player__grain" aria-hidden="true" />
 
-        <span className="player__tag">{player.pos}</span>
-        <div className="player__fade" aria-hidden="true" />
-      </div>
+      {/* Prezime stoji uvijek, iza igrača. Slika je `lazy`, pa se ona
+          ispod preloma ni ne pokuša učitati — bez ovoga bi kartica s
+          nedostajućom slikom ostala prazna dok se ne doskrola do nje. */}
+      <span className="player__ghost" aria-hidden="true">
+        {last}
+      </span>
 
-      <div className="player__body">
-        <h3 className="player__name">{player.name}</h3>
-        <div className="player__note-row">
-          <Pip />
-          <span className="player__note">{player.note}</span>
-        </div>
+      {showPhoto && (
+        <img
+          className="player__photo"
+          src={player.photo}
+          alt={`${player.name} — portret`}
+          loading="lazy"
+          onError={() => setFailed(true)}
+        />
+      )}
+
+      <div className="player__scrim" aria-hidden="true" />
+
+      <span className="player__pos">{player.pos}</span>
+
+      <div className="player__plate">
+        {first && <span className="player__first">{first}</span>}
+        <h3 className="player__last">
+          <span className="player__wash" aria-hidden="true" />
+          {last}
+        </h3>
+        <span className="player__note">{player.note}</span>
       </div>
     </Reveal>
   );
