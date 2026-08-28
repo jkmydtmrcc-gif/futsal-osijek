@@ -1026,14 +1026,58 @@ html { scroll-behavior: smooth; }
    8. Momčad
    -------------------------------------------------------------------------- */
 .squad { position: relative; background: var(--paper); padding: 96px 0 100px; overflow: hidden; }
-.squad__grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 26px 22px;
-  /* Kartice ne rastu do visine reda — svaka drži svoj omjer, pa razmak
-     između njih ostaje namjerno neravan. */
-  align-items: start;
+/* --- Traka s igračima ---------------------------------------------------
+   Kartice klize vodoravno i pružaju se do ruba ekrana; prva je poravnata
+   s ostatkom sadržaja preko istog razmaka kao .shell. */
+.rail { position: relative; }
+
+.rail__track {
+  display: flex;
+  gap: 22px;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x proximity;
+  scroll-padding-left: max(28px, calc((100% - var(--shell)) / 2 + 28px));
+  padding: 6px max(28px, calc((100% - var(--shell)) / 2 + 28px)) 30px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
+.rail__track::-webkit-scrollbar { display: none; }
+.rail__track:focus-visible { outline: 3px solid var(--blue); outline-offset: -3px; }
+
+/* Naznaka da ima još sadržaja lijevo/desno. */
+.rail__track.has-start { mask-image: linear-gradient(90deg, transparent, #000 5%); }
+.rail__track.has-end { mask-image: linear-gradient(270deg, transparent, #000 5%); }
+.rail__track.has-start.has-end {
+  mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
+}
+
+.squad__slide {
+  flex: 0 0 auto;
+  width: clamp(230px, 24vw, 268px);
+  scroll-snap-align: start;
+}
+
+.rail__ctrl {
+  display: flex;
+  gap: 10px;
+  max-width: var(--shell);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+.rail__btn {
+  width: 52px;
+  height: 44px;
+  border: 1px solid rgba(11,71,168,.3);
+  background: transparent;
+  color: var(--blue);
+  font-size: 17px;
+  cursor: pointer;
+  clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
+  transition: background .25s ease, color .25s ease, opacity .25s ease, transform .25s ease;
+}
+.rail__btn:hover:not(:disabled) { background: var(--blue); color: var(--white); transform: translateY(-2px); }
+.rail__btn:disabled { opacity: .28; cursor: default; }
 
 /* --- Kartica igrača ---------------------------------------------------
    Blago nakrivljena, tamna, s elementima koji izlaze iz kadra.
@@ -1057,10 +1101,12 @@ html { scroll-behavior: smooth; }
 }
 
 /* Nagib se izmjenjuje po karticama i poništava na hover. */
-.player:nth-child(odd)    { rotate: -.85deg; }
-.player:nth-child(even)   { rotate: .6deg; }
-.player:nth-child(3n + 2) { margin-top: 30px; }
-.player:nth-child(4n + 4) { margin-top: 14px; }
+.squad__slide:nth-child(odd) .player    { rotate: -.85deg; }
+.squad__slide:nth-child(even) .player   { rotate: .6deg; }
+.squad__slide:nth-child(3n + 2) { margin-top: 30px; }
+.squad__slide:nth-child(4n + 4) { margin-top: 14px; }
+/* Na stranici postave kartice stoje u mreži, bez nagiba i pomaka. */
+.squad-grid .player { rotate: 0deg; }
 .player:hover {
   rotate: 0deg;
   box-shadow: 0 26px 56px rgba(11,71,168,.4);
@@ -1549,11 +1595,6 @@ html { scroll-behavior: smooth; }
   letter-spacing: -2px;
   text-transform: uppercase;
 }
-.shop__grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 22px;
-}
 .product {
   position: relative;
   background: var(--white);
@@ -1669,6 +1710,8 @@ html { scroll-behavior: smooth; }
   padding-top: 26px;
   border-top: 1px solid rgba(255,255,255,.2);
 }
+.shop__perk--link { color: var(--white); }
+.shop__perk--link:hover { color: var(--sky); }
 .shop__perk {
   display: flex;
   align-items: center;
@@ -2273,6 +2316,235 @@ html { scroll-behavior: smooth; }
 .footer-credit:hover .footer-credit__text strong { color: var(--sky); }
 
 /* --------------------------------------------------------------------------
+   14c. Podstranice
+   Zajednički gradivni blokovi: vrh stranice, plohe, tekst, mreže.
+   -------------------------------------------------------------------------- */
+.phero {
+  position: relative;
+  background: var(--navy);
+  color: var(--white);
+  overflow: hidden;
+  padding: 96px 0 88px;
+}
+.phero__inner { max-width: 900px; margin-left: 0; }
+.phero__title {
+  margin: 14px 0 0;
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(44px, 6.4vw, 92px);
+  line-height: .88;
+  letter-spacing: -2.4px;
+  text-transform: uppercase;
+}
+.phero__lead {
+  margin: 22px 0 0;
+  max-width: 620px;
+  font-size: 17px;
+  line-height: 1.6;
+  font-weight: 500;
+  color: rgba(255,255,255,.76);
+  text-wrap: pretty;
+}
+.phero .btn { margin-top: 30px; }
+
+/* Ploha — jedan odsječak sadržaja. */
+.slab { position: relative; overflow: hidden; padding: 84px 0 90px; background: var(--white); }
+.slab--paper { background: var(--paper); }
+.slab--dark { background: var(--navy); color: var(--white); }
+.slab--blue { background: var(--blue); color: var(--white); }
+
+.slab__foot {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 34px 0 0;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--muted);
+  text-wrap: pretty;
+}
+.slab--dark .slab__foot, .slab__foot--light { color: rgba(255,255,255,.6); }
+
+.prose {
+  margin: 20px 0 0;
+  max-width: 560px;
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--slate);
+  text-wrap: pretty;
+}
+.slab--dark .prose { color: rgba(255,255,255,.72); }
+
+/* Dvostupac: tekst + slika. */
+.split { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 46px; align-items: start; }
+.split__img { display: block; width: 100%; height: auto; box-shadow: 0 18px 44px rgba(14,20,32,.18); }
+
+/* Brojke. */
+.facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 8px; }
+.facts__cell { padding: 14px 22px; border-left: 2px solid rgba(11,71,168,.22); }
+.facts__value {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(38px, 4.4vw, 58px);
+  line-height: .9;
+  letter-spacing: -1.4px;
+  color: var(--blue);
+}
+.facts__label {
+  display: block;
+  margin-top: 9px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* Stožer. */
+.staff { margin-top: 26px; display: flex; flex-direction: column; gap: 2px; }
+.staff--wide { margin-top: 42px; flex-direction: row; flex-wrap: wrap; gap: 12px; }
+.staff__row {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  background: var(--white);
+  padding: 14px 18px;
+  box-shadow: 0 8px 22px rgba(14,20,32,.07);
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%);
+}
+.staff__role {
+  flex: none;
+  min-width: 78px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 2.2px;
+  text-transform: uppercase;
+  color: var(--blue);
+}
+.staff__name {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 19px;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+/* Uspjesi. */
+.honours { margin-top: 34px; display: flex; flex-direction: column; }
+.honour {
+  display: flex;
+  gap: 22px;
+  align-items: flex-start;
+  padding: 22px 0;
+  border-bottom: 1px solid rgba(255,255,255,.12);
+}
+.honour__when {
+  flex: none;
+  width: 96px;
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 18px;
+  letter-spacing: .6px;
+  color: var(--sky);
+}
+.honour__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 23px;
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+.honour__note { margin: 8px 0 0; font-size: 15px; line-height: 1.6; color: rgba(255,255,255,.7); text-wrap: pretty; }
+
+/* Mreža igrača na stranici postave. */
+.squad-grid {
+  margin-top: 34px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 22px;
+  align-items: start;
+}
+
+/* Fan Shop — razdjelnik prema trgovini. */
+.shop-grid {
+  margin-top: 34px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+}
+.shop-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  min-height: 190px;
+  padding: 24px 26px 26px;
+  background: var(--white);
+  color: var(--ink);
+  transition: transform .3s cubic-bezier(.22,.61,.36,1), box-shadow .3s ease;
+}
+.shop-card:hover { transform: translateY(-7px); box-shadow: 0 26px 54px rgba(6,16,36,.4); color: var(--ink); }
+.shop-card__cat { font-size: 10px; font-weight: 800; letter-spacing: 2.4px; text-transform: uppercase; color: var(--blue); }
+.shop-card__name {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 24px;
+  line-height: 1.05;
+  text-transform: uppercase;
+}
+.shop-card__note { font-size: 13px; color: var(--muted); }
+.shop-card__go {
+  margin-top: auto;
+  align-self: flex-start;
+  font-size: 20px;
+  color: var(--blue);
+  transition: transform .3s cubic-bezier(.22,.61,.36,1);
+}
+.shop-card:hover .shop-card__go { transform: translate(5px, -5px); }
+
+/* Novosti na svojoj stranici. */
+.news-list { margin-top: 22px; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+
+/* Kontakt. */
+.contact { margin-top: 34px; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+.contact__card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 26px 28px 28px;
+  background: var(--white);
+  box-shadow: 0 12px 32px rgba(14,20,32,.08);
+}
+.contact__label { font-size: 10px; font-weight: 800; letter-spacing: 2.4px; text-transform: uppercase; color: var(--blue); }
+.contact__value { margin: 0; font-size: 16px; line-height: 1.65; color: var(--ink); }
+.contact__link {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 21px;
+  letter-spacing: .3px;
+  color: var(--ink);
+  overflow-wrap: anywhere;
+}
+.contact__link:hover { color: var(--blue); }
+.contact__note { margin-top: auto; font-size: 12px; color: var(--muted); }
+
+/* Svijetla inačica obrubljenog gumba, za bijele plohe. */
+.btn--ink { color: var(--ink); border-color: rgba(14,20,32,.3); }
+.btn--ink:hover { background: var(--blue); border-color: var(--blue); color: var(--white); }
+
+@media (max-width: 720px) {
+  .phero { padding: 66px 0 62px; }
+  .slab { padding: 62px 0 66px; }
+  .split { gap: 34px; }
+  .squad-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  .honour { flex-direction: column; gap: 8px; }
+  .honour__when { width: auto; }
+}
+
+/* --------------------------------------------------------------------------
    15. Prilagodba manjim ekranima
    -------------------------------------------------------------------------- */
 @media (max-width: 900px) {
@@ -2304,11 +2576,12 @@ html { scroll-behavior: smooth; }
 @media (max-width: 720px) {
   /* Kartice igrača u dva stupca — format ih podnosi, a sekcija prestaje
      biti beskonačan stupac. */
-  .squad__grid { grid-template-columns: repeat(2, 1fr); gap: 18px 14px; }
+  .rail__track { gap: 14px; padding-bottom: 24px; }
+  .squad__slide { width: clamp(190px, 62vw, 240px); }
   .player { clip-path: polygon(0 0, 100% 0, 100% calc(100% - 26px), calc(100% - 26px) 100%, 0 100%); }
-  .player:nth-child(3n + 2) { margin-top: 0; }
-  .player:nth-child(4n + 4) { margin-top: 0; }
-  .player:nth-child(even) { margin-top: 22px; }
+  .squad__slide:nth-child(3n + 2) { margin-top: 0; }
+  .squad__slide:nth-child(4n + 4) { margin-top: 0; }
+  .squad__slide:nth-child(even) { margin-top: 18px; }
   .player__num { font-size: 84px; top: -10px; right: -10px; }
   .player__pos { bottom: 104px; font-size: 9px; letter-spacing: 2px; left: 9px; }
   .player__plate { left: 12px; right: 26px; bottom: 13px; }

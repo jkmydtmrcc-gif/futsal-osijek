@@ -198,37 +198,6 @@ export const CLUBS = [
   'Vrgorac',
 ];
 
-export const PRODUCTS = [
-  {
-    cat: 'Dres',
-    name: 'Domaći dres — bijelo-plavi',
-    price: 'Cijena na upit',
-    slot: 'foto dresa',
-    tag: 'Novo',
-  },
-  { cat: 'Dres', name: 'Gostujući dres', price: 'Cijena na upit', slot: 'foto dresa', tag: '' },
-  {
-    cat: 'Navijački rekviziti',
-    name: 'Klupski šal',
-    price: 'Cijena na upit',
-    slot: 'foto šala',
-    tag: '',
-  },
-  {
-    cat: 'Navijački rekviziti',
-    name: 'Kapa s grbom',
-    price: 'Cijena na upit',
-    slot: 'foto kape',
-    tag: '',
-  },
-];
-
-export const SHOP_PERKS = [
-  'Preuzimanje u dvorani na dan utakmice',
-  'Klupski web: mnkosijek.com',
-  'Upiti: osijek.kelme@gmail.com',
-];
-
 export const FEATURED_NEWS = {
   flag: 'Izdvojeno',
   title: 'Finale doigravanja nakon pobjede protiv Futsal Dinama',
@@ -304,65 +273,6 @@ export const IMAGES = {
   kandit: '/uploads/kandit-logo.png',
 };
 
-/**
- * Stranice koje su još u izradi.
- *
- * Svaka dobiva isto zaglavlje i podnožje kao naslovnica, a u sredini
- * poruku "u izgradnji" u istoj vizualnoj temi. Kad stranica bude gotova,
- * njezin unos se ovdje briše i dodaje se prava ruta.
- */
-export const UNDER_CONSTRUCTION = {
-  '/klub': {
-    navId: 'klub',
-    eyebrow: 'Klub',
-    title: 'O klubu',
-    lead: 'Priprema se priča o klubu od osnutka 2002. — ljudi, dvorana i putanja kroz lige.',
-    progress: 45,
-  },
-  '/postava': {
-    navId: 'postava',
-    eyebrow: 'Prva postava',
-    title: 'Momčad',
-    lead: 'Profili igrača i stručnog stožera čekaju službene portrete i podatke o sezoni.',
-    progress: 60,
-  },
-  '/raspored': {
-    navId: 'raspored',
-    eyebrow: 'SuperSport HMNL',
-    title: 'Raspored i tablica',
-    lead: 'Cijeli kalendar i tablica upisuju se čim HMNL objavi termine sezone 2026/27.',
-    progress: 35,
-  },
-  '/shop': {
-    navId: 'shop',
-    eyebrow: 'Službena klupska oprema',
-    title: 'Fan Shop',
-    lead: 'Dresovi, šalovi i navijački rekviziti — trgovina se otvara uz fotografije i cijene.',
-    progress: 50,
-  },
-  '/novosti': {
-    navId: 'novosti',
-    eyebrow: 'Novosti',
-    title: 'Iz kluba',
-    lead: 'Arhiva vijesti, najave utakmica i izvještaji uskoro na jednom mjestu.',
-    progress: 40,
-  },
-  '/kontakt': {
-    navId: 'kontakt',
-    eyebrow: 'Javi nam se',
-    title: 'Kontakt',
-    lead: 'Obrazac, karta dvorane i kontakti za medije i partnere su u pripremi.',
-    progress: 55,
-  },
-  '/ulaznice': {
-    navId: null,
-    eyebrow: 'Zrinjevac',
-    title: 'Ulaznice',
-    lead: 'Online prodaja ulaznica priprema se za novu sezonu. Do tada — na blagajni dvorane.',
-    progress: 30,
-  },
-};
-
 /** Poruka za rutu koja ne postoji. */
 export const NOT_FOUND = {
   navId: null,
@@ -371,3 +281,117 @@ export const NOT_FOUND = {
   lead: 'Poveznica je možda zastarjela ili je adresa krivo upisana.',
   progress: null,
 };
+
+/**
+ * Zaglavlje svake stranice: nadnaslov, naslov i uvodna rečenica.
+ * `navId` povezuje rutu sa stavkom u izborniku.
+ */
+export const PAGES = {
+  '/klub': {
+    navId: 'klub',
+    eyebrow: 'Od 2002.',
+    title: 'O klubu',
+    lead: 'Futsal klub iz Osijeka. Domaći parket je Športska dvorana Zrinjevac, boje su bijelo-plave, a ime uz grad nosi Kandit.',
+  },
+  '/postava': {
+    navId: 'postava',
+    eyebrow: 'Sezona 2025/26',
+    title: 'Prva postava',
+    lead: 'Igrači, brojevi i pozicije. Stožer predvodi Carmine Tarantino, momčad kapetan Andrej Pandurević.',
+  },
+  '/raspored': {
+    navId: 'raspored',
+    eyebrow: 'SuperSport HMNL',
+    title: 'Raspored i tablica',
+    lead: 'Poredak i termini sezone 2026/27 upisuju se čim ih HMNL objavi.',
+  },
+  '/shop': {
+    navId: 'shop',
+    eyebrow: 'Klupska oprema',
+    title: 'Fan Shop',
+    lead: 'Opremu prodaje SalaSport — jedina specijalizirana futsal trgovina u Hrvatskoj.',
+  },
+  '/novosti': {
+    navId: 'novosti',
+    eyebrow: 'Iz kluba',
+    title: 'Novosti',
+    lead: 'Što se događa oko momčadi, u ligi i u dvorani.',
+  },
+  '/kontakt': {
+    navId: 'kontakt',
+    eyebrow: 'Javi nam se',
+    title: 'Kontakt',
+    lead: 'Dvorana Zrinjevac, e-mail i telefon kluba — za navijače, medije i partnere.',
+  },
+  '/ulaznice': {
+    navId: null,
+    eyebrow: 'Športska dvorana Zrinjevac',
+    title: 'Ulaznice',
+    lead: 'Domaće utakmice igraju se na Zrinjevcu, dvorani s 1.160 mjesta.',
+  },
+};
+
+/**
+ * Fan Shop vodi na SalaSport (Sportos j.d.o.o.), specijaliziranu futsal
+ * trgovinu. Poveznice su na stvarne kategorije — cijene i dostupnost
+ * stoje kod njih, pa se ovdje namjerno ne prepisuju.
+ */
+export const SHOP_URL = 'https://salasport.hr/';
+
+export const SHOP_LINKS = [
+  {
+    cat: 'Dresovi i tekstil',
+    name: 'Dresovi, hlačice, trenirke',
+    note: 'Kelme, Joma, Errea',
+    href: 'https://salasport.hr/kategorija-proizvoda/tekstil/',
+  },
+  {
+    cat: 'Lopte',
+    name: 'Futsal lopte',
+    note: 'Select, Mikasa',
+    href: 'https://salasport.hr/kategorija-proizvoda/lopte/futsal-lopte/',
+  },
+  {
+    cat: 'Vratari',
+    name: 'Golmanska oprema',
+    note: 'Rukavice i štitnici',
+    href: 'https://salasport.hr/kategorija-proizvoda/oprema/golmanska-oprema/',
+  },
+  {
+    cat: 'Klubovi',
+    name: 'Opremanje klubova',
+    note: 'Narudžbe za momčadi',
+    href: 'https://salasport.hr/klubovi/',
+  },
+];
+
+export const SHOP_NOTE =
+  'SalaSport vodi Sportos j.d.o.o. Za upite o klupskoj opremi javite se klubu na osijek.kelme@gmail.com, a za narudžbe u trgovini na prodaja@salasport.hr.';
+
+/** Stožer — imena poznata iz klupskih objava. */
+export const STAFF = [
+  { role: 'Trener', name: 'Carmine Tarantino' },
+  { role: 'Kapetan', name: 'Andrej Pandurević' },
+];
+
+/** Činjenice o klubu koje stoje na stranici "O klubu". */
+export const CLUB_FACTS = [
+  { label: 'Osnovan', value: '2002.' },
+  { label: 'Dvorana', value: 'Zrinjevac' },
+  { label: 'Kapacitet', value: '1.160' },
+  { label: 'Boje', value: 'Bijelo-plava' },
+];
+
+/** Uspjesi — samo ono što je potvrđeno u klupskim i ligaškim objavama. */
+export const HONOURS = [
+  {
+    when: '2024/25',
+    title: 'Finale doigravanja',
+    note: 'Do finala preko Torcide Biberon u četvrtfinalu i Futsal Dinama u polufinalu. Naslov je osvojilo Novo vrijeme Makarska.',
+  },
+  {
+    when: '2025/26',
+    title: 'Drugo mjesto regularnog dijela',
+    note: 'Ligaški dio SuperSport HMNL-a momčad je završila druga, a doigravanje napustila u četvrtfinalu.',
+  },
+];

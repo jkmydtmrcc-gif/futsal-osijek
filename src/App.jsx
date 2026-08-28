@@ -5,15 +5,20 @@ import Footer from './components/Footer';
 import ScrollToTop from './components/ScrollToTop';
 import Partners from './sections/Partners';
 import Naslovnica from './pages/Naslovnica';
-import UIzgradnji from './pages/UIzgradnji';
-import { UNDER_CONSTRUCTION, NOT_FOUND } from './data/site';
+import Klub from './pages/Klub';
+import Postava from './pages/Postava';
+import Raspored from './pages/Raspored';
+import Shop from './pages/Shop';
+import Novosti from './pages/Novosti';
+import Kontakt from './pages/Kontakt';
+import Ulaznice from './pages/Ulaznice';
+import NijePronadeno from './pages/NijePronadeno';
 
 /**
  * Okvir stranice: zaglavlje, sadržaj, partneri i podnožje.
  *
  * Zaglavlje i podnožje su izvan <Routes> pa ostaju isti na svim rutama —
- * mijenja se samo sredina. Gotova je zasad samo naslovnica; ostale rute
- * dolaze iz UNDER_CONSTRUCTION u data/site.js.
+ * mijenja se samo sredina.
  */
 export default function App() {
   const { pathname } = useLocation();
@@ -36,12 +41,14 @@ export default function App() {
           <div className="route" key={pathname}>
             <Routes>
               <Route path="/" element={<Naslovnica />} />
-
-              {Object.entries(UNDER_CONSTRUCTION).map(([path, page]) => (
-                <Route key={path} path={path} element={<UIzgradnji page={page} />} />
-              ))}
-
-              <Route path="*" element={<UIzgradnji page={NOT_FOUND} notFound />} />
+              <Route path="/klub" element={<Klub />} />
+              <Route path="/postava" element={<Postava />} />
+              <Route path="/raspored" element={<Raspored />} />
+              <Route path="/shop" element={<Shop />} />
+              <Route path="/novosti" element={<Novosti />} />
+              <Route path="/kontakt" element={<Kontakt />} />
+              <Route path="/ulaznice" element={<Ulaznice />} />
+              <Route path="*" element={<NijePronadeno />} />
             </Routes>
           </div>
         </main>

@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import Brush from '../components/Brush';
 import PlayerCard from '../components/PlayerCard';
+import Rail from '../components/Rail';
 import Reveal from '../components/Reveal';
 import { PLAYERS } from '../data/site';
 
@@ -24,13 +25,17 @@ export default function Squad() {
             </Link>
           </Reveal>
         </div>
-
-        <div className="squad__grid">
-          {PLAYERS.map((player, i) => (
-            <PlayerCard key={player.name} player={player} index={i} />
-          ))}
-        </div>
       </div>
+
+      {/* Traka ide izvan .shell da kartice mogu kliziti do samog ruba
+          ekrana, ali se prva poravnava s ostatkom sadržaja. */}
+      <Rail label="Igrači prve postave" className="squad__rail">
+        {PLAYERS.map((player, i) => (
+          <div className="squad__slide" data-rail-item key={player.name}>
+            <PlayerCard player={player} index={i} />
+          </div>
+        ))}
+      </Rail>
     </section>
   );
 }

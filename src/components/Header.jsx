@@ -10,7 +10,7 @@ import {
   TOPBAR_STRIP,
   TICKETS_PATH,
   CONTACT_PATH,
-  UNDER_CONSTRUCTION,
+  PAGES,
   IMAGES,
 } from '../data/site';
 
@@ -34,7 +34,7 @@ export default function Header() {
   // Ulaznice nisu u izborniku, ali gumb treba biti aktivan kad si na njima.
   const activeId =
     NAV_LINKS.find((link) => link.to === pathname)?.id ??
-    UNDER_CONSTRUCTION[pathname]?.navId ??
+    PAGES[pathname]?.navId ??
     null;
 
   return (
