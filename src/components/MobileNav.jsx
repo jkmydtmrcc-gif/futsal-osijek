@@ -2,7 +2,8 @@ import { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import Brush from './Brush';
 import Pip from './Pip';
-import { NAV_LINKS, TICKETS_PATH, CONTACT_PATH, SOCIALS, VENUE } from '../data/site';
+import { NAV_LINKS, TICKETS_PATH, CONTACT_PATH, SOCIALS } from '../data/site';
+import { useContent } from '../content/ContentContext';
 
 /**
  * Mobilni izbornik — zavjesa koja se spušta ispod zaglavlja.
@@ -11,6 +12,7 @@ import { NAV_LINKS, TICKETS_PATH, CONTACT_PATH, SOCIALS, VENUE } from '../data/s
  * `visibility: hidden` i `inert` ga vade iz reda za tipkovnicu.
  */
 export default function MobileNav({ open, onClose, activeId, returnFocusRef }) {
+  const { hero } = useContent();
   const panelRef = useRef(null);
 
   // Escape zatvara izbornik.
@@ -93,7 +95,7 @@ export default function MobileNav({ open, onClose, activeId, returnFocusRef }) {
             ))}
           </div>
 
-          <p className="mobile-nav__venue">{VENUE}</p>
+          <p className="mobile-nav__venue">{hero.venue}</p>
         </div>
       </div>
     </div>

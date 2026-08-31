@@ -2,9 +2,13 @@ import { Link } from 'react-router-dom';
 import Brush from '../components/Brush';
 import Pip from '../components/Pip';
 import Reveal from '../components/Reveal';
-import { FEATURED_NEWS, NEWS, IMAGES } from '../data/site';
+import NewsCard from '../components/NewsCard';
+import { useContent } from '../content/ContentContext';
 
 export default function News() {
+  const { news } = useContent();
+  const featured = news.featured;
+
   return (
     <section className="news" id="novosti" aria-labelledby="naslov-novosti">
       <Brush variant="news-1" />
@@ -31,42 +35,34 @@ export default function News() {
         </div>
 
         <div className="news__layout">
-          <Reveal as="article" variant="scale" className="feature notch-br-24">
+          <Reveal
+            as={Link}
+            to={featured.id ? `/novosti/${featured.id}` : '/novosti'}
+            variant="scale"
+            className="feature feature--link notch-br-24"
+          >
             <img
               className="feature__photo"
-              src={IMAGES.celebration}
+              src={featured.image}
               alt="Slavlje s navijačima"
               loading="lazy"
             />
             <div className="feature__veil" aria-hidden="true" />
             <Brush variant="feature" />
             <div className="feature__body">
-              <span className="feature__flag">{FEATURED_NEWS.flag}</span>
-              <h3 className="feature__title">{FEATURED_NEWS.title}</h3>
-              <p className="feature__lead">{FEATURED_NEWS.lead}</p>
+              <span className="feature__flag">{featured.flag}</span>
+              <h3 className="feature__title">{featured.title}</h3>
+              <p className="feature__lead">{featured.lead}</p>
               <div className="feature__meta">
                 <Pip size="md" tone="sky" />
-                <span>{FEATURED_NEWS.meta}</span>
+                <span>{featured.meta}</span>
               </div>
             </div>
           </Reveal>
 
           <div className="news__list">
-            {NEWS.map((item, i) => (
-              <Reveal
-                as="article"
-                variant="right"
-                delay={120 + i * 110}
-                className="news-card"
-                key={item.title}
-              >
-                <div className="news-card__edge" aria-hidden="true" />
-                <span className="news-card__meta">
-                  {item.date} · {item.cat}
-                </span>
-                <h3 className="news-card__title">{item.title}</h3>
-                <p className="news-card__lead">{item.lead}</p>
-              </Reveal>
+            {news.items.slice(0, 3).map((item, i) => (
+              <NewsCard item={item} index={i} delay={120} key={item.id ?? item.title} />
             ))}
           </div>
         </div>

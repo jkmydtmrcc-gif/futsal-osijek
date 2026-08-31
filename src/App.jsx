@@ -10,18 +10,30 @@ import Postava from './pages/Postava';
 import Raspored from './pages/Raspored';
 import Shop from './pages/Shop';
 import Novosti from './pages/Novosti';
+import Novost from './pages/Novost';
 import Kontakt from './pages/Kontakt';
 import Ulaznice from './pages/Ulaznice';
+import Admin from './pages/Admin';
 import NijePronadeno from './pages/NijePronadeno';
 
 /**
  * Okvir stranice: zaglavlje, sadržaj, partneri i podnožje.
  *
  * Zaglavlje i podnožje su izvan <Routes> pa ostaju isti na svim rutama —
- * mijenja se samo sredina.
+ * mijenja se samo sredina. Administracija je iznimka: ona je radna ploha,
+ * a ne stranica za posjetitelje, pa se prikazuje bez klupskog okvira.
  */
 export default function App() {
   const { pathname } = useLocation();
+
+  if (pathname === '/admin') {
+    return (
+      <>
+        <ScrollToTop />
+        <Admin />
+      </>
+    );
+  }
 
   return (
     <>
@@ -46,6 +58,7 @@ export default function App() {
               <Route path="/raspored" element={<Raspored />} />
               <Route path="/shop" element={<Shop />} />
               <Route path="/novosti" element={<Novosti />} />
+              <Route path="/novosti/:id" element={<Novost />} />
               <Route path="/kontakt" element={<Kontakt />} />
               <Route path="/ulaznice" element={<Ulaznice />} />
               <Route path="*" element={<NijePronadeno />} />

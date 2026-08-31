@@ -1,14 +1,17 @@
 import { Link } from 'react-router-dom';
 import Brush from '../components/Brush';
 import Reveal from '../components/Reveal';
-import { VENUE, TICKETS_PATH, IMAGES } from '../data/site';
+import { TICKETS_PATH } from '../data/site';
+import { useContent } from '../content/ContentContext';
 
 export default function Venue() {
+  const { hero, images } = useContent();
+
   return (
     <section className="venue" aria-labelledby="naslov-dvorana">
       <img
         className="venue__photo"
-        src={IMAGES.team}
+        src={images.team}
         alt="Navijači i momčad u dvorani Zrinjevac"
         loading="lazy"
       />
@@ -18,7 +21,7 @@ export default function Venue() {
 
       <div className="venue__inner">
         <Reveal>
-          <span className="eyebrow eyebrow--sky">{VENUE}</span>
+          <span className="eyebrow eyebrow--sky">{hero.venue}</span>
         </Reveal>
         <Reveal delay={110}>
           <h2 className="venue__title" id="naslov-dvorana">

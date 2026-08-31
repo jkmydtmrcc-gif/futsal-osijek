@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import Brush from '../components/Brush';
 import Pip from '../components/Pip';
 import Reveal from '../components/Reveal';
-import { NOT_FOUND, TICKETS_PATH } from '../data/site';
+import { NOT_FOUND, TICKETS_PATH, NAV_LINKS } from '../data/site';
 
 export default function NijePronadeno() {
   return (
@@ -34,6 +34,17 @@ export default function NijePronadeno() {
           <Link className="btn btn--ghost" to={TICKETS_PATH}>
             Ulaznice
           </Link>
+        </Reveal>
+
+        <Reveal delay={380} className="wip__links">
+          <span className="wip__links-label">Ili idi na</span>
+          <div className="chips chips--tight">
+            {NAV_LINKS.filter((l) => l.to !== '/').map((link) => (
+              <Link className="chip chip--sm" to={link.to} key={link.id}>
+                {link.label}
+              </Link>
+            ))}
+          </div>
         </Reveal>
       </div>
     </section>

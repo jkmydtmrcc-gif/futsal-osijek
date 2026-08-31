@@ -1,16 +1,11 @@
 import { Link } from 'react-router-dom';
 import Brush from './Brush';
-import {
-  FOOTER_LINKS,
-  SOCIALS,
-  CONTACT,
-  CONTACT_PATH,
-  LEGAL_LINKS,
-  CREDIT,
-  IMAGES,
-} from '../data/site';
+import { FOOTER_LINKS, SOCIALS, CONTACT_PATH, LEGAL_LINKS, CREDIT } from '../data/site';
+import { useContent } from '../content/ContentContext';
 
 export default function Footer() {
+  const { contact, images } = useContent();
+
   return (
     <footer className="site-footer">
       <Brush variant="footer-1" />
@@ -22,7 +17,7 @@ export default function Footer() {
           <div className="footer-brand__row">
             <img
               className="footer-brand__crest notch-8"
-              src={IMAGES.crest}
+              src={images.crest}
               alt="Grb Futsal kluba Osijek"
               width="56"
               height="56"
@@ -58,18 +53,18 @@ export default function Footer() {
         <div className="footer-col">
           <span className="footer-col__title">Kontakt</span>
           <span className="footer-col__address">
-            {CONTACT.address.map((line, i) => (
+            {contact.address.map((line, i) => (
               <span key={line}>
                 {line}
-                {i < CONTACT.address.length - 1 && <br />}
+                {i < contact.address.length - 1 && <br />}
               </span>
             ))}
           </span>
-          <a className="is-highlight" href={`mailto:${CONTACT.email}`}>
-            {CONTACT.email}
+          <a className="is-highlight" href={`mailto:${contact.email}`}>
+            {contact.email}
           </a>
-          <a className="is-highlight" href={`tel:${CONTACT.phoneHref}`}>
-            {CONTACT.phone}
+          <a className="is-highlight" href={`tel:${contact.phoneHref}`}>
+            {contact.phone}
           </a>
         </div>
 

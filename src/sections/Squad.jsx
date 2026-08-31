@@ -3,9 +3,11 @@ import Brush from '../components/Brush';
 import PlayerCard from '../components/PlayerCard';
 import Rail from '../components/Rail';
 import Reveal from '../components/Reveal';
-import { PLAYERS } from '../data/site';
+import { useContent } from '../content/ContentContext';
 
 export default function Squad() {
+  const { players } = useContent();
+
   return (
     <section className="squad" id="postava" aria-labelledby="naslov-momcad">
       <Brush variant="squad-1" />
@@ -30,7 +32,7 @@ export default function Squad() {
       {/* Traka ide izvan .shell da kartice mogu kliziti do samog ruba
           ekrana, ali se prva poravnava s ostatkom sadržaja. */}
       <Rail label="Igrači prve postave" className="squad__rail">
-        {PLAYERS.map((player, i) => (
+        {players.map((player, i) => (
           <div className="squad__slide" data-rail-item key={player.name}>
             <PlayerCard player={player} index={i} />
           </div>

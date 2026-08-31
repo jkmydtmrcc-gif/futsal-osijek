@@ -5,14 +5,8 @@ import Pip from './Pip';
 import Marquee from './Marquee';
 import MobileNav from './MobileNav';
 import useScrolled from '../hooks/useScrolled';
-import {
-  NAV_LINKS,
-  TOPBAR_STRIP,
-  TICKETS_PATH,
-  CONTACT_PATH,
-  PAGES,
-  IMAGES,
-} from '../data/site';
+import { NAV_LINKS, TICKETS_PATH, CONTACT_PATH } from '../data/site';
+import { useContent } from '../content/ContentContext';
 
 /**
  * Zaglavlje s gornjom trakom vijesti i glavnom navigacijom.
@@ -21,6 +15,7 @@ import {
  * se u izborniku i dalje normalno — samo vode na stranicu "u izgradnji".
  */
 export default function Header() {
+  const { topbar, images, pages } = useContent();
   const { pathname } = useLocation();
   const scrolled = useScrolled(24);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -34,7 +29,7 @@ export default function Header() {
   // Ulaznice nisu u izborniku, ali gumb treba biti aktivan kad si na njima.
   const activeId =
     NAV_LINKS.find((link) => link.to === pathname)?.id ??
-    PAGES[pathname]?.navId ??
+    pages[pathname]?.navId ??
     null;
 
   return (
@@ -49,7 +44,7 @@ export default function Header() {
             Live
           </span>
 
-          <Marquee items={TOPBAR_STRIP} className="topbar__marquee" faded>
+          <Marquee items={topbar} className="topbar__marquee" faded>
             {(text, i) => (
               <span className="topbar__item" key={i}>
                 {text}
@@ -73,7 +68,7 @@ export default function Header() {
           <Link className="brand" to="/">
             <img
               className="brand__crest notch-8"
-              src={IMAGES.crest}
+              src={images.crest}
               alt="Grb Futsal kluba Osijek"
               width="56"
               height="56"

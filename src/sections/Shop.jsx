@@ -2,13 +2,16 @@ import { Link } from 'react-router-dom';
 import Brush from '../components/Brush';
 import Pip from '../components/Pip';
 import Reveal from '../components/Reveal';
-import { SHOP_LINKS, SHOP_URL, SHOP_NOTE } from '../data/site';
+import ProductCard from '../components/ProductCard';
+import { useContent } from '../content/ContentContext';
 
 /**
  * Klub nema vlastitu naplatu — sekcija vodi na SalaSport. Zato ovdje nema
  * ni izmišljenih cijena ni gumba za košaricu koji ništa ne radi.
  */
 export default function Shop() {
+  const { shop } = useContent();
+
   return (
     <section className="shop" id="shop" aria-labelledby="naslov-shop">
       <div className="scanlines scanlines--shop" aria-hidden="true" />
@@ -26,40 +29,30 @@ export default function Shop() {
           </Reveal>
           <Reveal variant="right" delay={140}>
             <Link className="link-underline link-underline--light" to="/shop">
-              Sve kategorije →
+              Cijeli Fan Shop →
             </Link>
           </Reveal>
         </div>
 
-        <div className="shop-grid">
-          {SHOP_LINKS.map((item, i) => (
-            <Reveal
-              as="a"
-              variant="blur"
-              delay={i * 90}
-              className="shop-card notch-br-20"
-              key={item.href}
-              href={item.href}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <span className="shop-card__cat">{item.cat}</span>
-              <h3 className="shop-card__name">{item.name}</h3>
-              <span className="shop-card__note">{item.note}</span>
-              <span className="shop-card__go" aria-hidden="true">
-                ↗
-              </span>
-            </Reveal>
+        <div className="product-grid product-grid--dark">
+          {shop.products.slice(0, 4).map((product, i) => (
+            <ProductCard product={product} index={i} key={product.id ?? product.href} />
           ))}
         </div>
 
         <div className="shop__perks">
           <Reveal as="span" className="shop__perk" delay={0}>
             <Pip size="md" tone="sky" />
-            {SHOP_NOTE}
+            {shop.note}
           </Reveal>
-          <Reveal as="a" className="shop__perk shop__perk--link" delay={110}
-            href={SHOP_URL} target="_blank" rel="noopener noreferrer">
+          <Reveal
+            as="a"
+            className="shop__perk shop__perk--link"
+            delay={110}
+            href={shop.searchUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <Pip size="md" tone="sky" />
             salasport.hr ↗
           </Reveal>

@@ -1,18 +1,21 @@
 import { Link } from 'react-router-dom';
 import Brush from '../components/Brush';
 import Pip from '../components/Pip';
-import { SLOGAN, HERO_FACTS, VENUE, TICKETS_PATH, IMAGES } from '../data/site';
+import { TICKETS_PATH } from '../data/site';
+import { useContent } from '../content/ContentContext';
 
 /**
  * Hero ne koristi <Reveal> — sadržaj je odmah u kadru, pa ulazne animacije
  * (floatUp) kreću po učitavanju, bez čekanja na listanje.
  */
 export default function Hero() {
+  const { hero, images } = useContent();
+
   return (
     <section className="hero" id="pocetna">
       <img
         className="hero__photo"
-        src={IMAGES.celebration}
+        src={images.celebration}
         alt="Igrač Kandita slavi s navijačima"
         fetchPriority="high"
       />
@@ -27,7 +30,7 @@ export default function Hero() {
           <div className="hero__badgerow">
             <img
               className="hero__crest notch-10"
-              src={IMAGES.crest}
+              src={images.crest}
               alt="Grb Futsal kluba Osijek"
               width="96"
               height="96"
@@ -45,7 +48,7 @@ export default function Hero() {
             </span>
           </h1>
 
-          <p className="hero__slogan">{SLOGAN}</p>
+          <p className="hero__slogan">{hero.slogan}</p>
 
           <div className="hero__actions">
             <Link className="btn btn--solid notch-12" to="/postava">
@@ -62,7 +65,7 @@ export default function Hero() {
             <div className="hero__frame-wash" aria-hidden="true" />
             <img
               className="hero__frame-img notch-br-14"
-              src={IMAGES.team}
+              src={images.team}
               alt="Momčad Kandita slavi pobjedu"
             />
             <span className="hero__frame-tag">Zrinjevac · bijelo-plavi</span>
@@ -71,7 +74,7 @@ export default function Hero() {
           <div className="hero__facts notch-br-18">
             <span className="eyebrow eyebrow--sm">Sezona 2025/26</span>
             <div className="hero__facts-list">
-              {HERO_FACTS.map((fact, i) => (
+              {hero.facts.map((fact, i) => (
                 <div
                   className="hero__fact"
                   key={fact.label}
@@ -82,7 +85,7 @@ export default function Hero() {
                 </div>
               ))}
             </div>
-            <div className="hero__facts-foot">{VENUE}</div>
+            <div className="hero__facts-foot">{hero.venue}</div>
           </div>
         </div>
       </div>

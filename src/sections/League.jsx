@@ -2,9 +2,12 @@ import { Link } from 'react-router-dom';
 import Brush from '../components/Brush';
 import Pip from '../components/Pip';
 import Reveal from '../components/Reveal';
-import { STANDINGS, STANDINGS_NOTE, FIXTURES, TIMELINE, CLUBS } from '../data/site';
+import { useContent, useStandings } from '../content/ContentContext';
 
 export default function League() {
+  const { league } = useContent();
+  const standings = useStandings();
+
   return (
     <section className="league" id="raspored" aria-labelledby="naslov-liga">
       <div className="scanlines scanlines--wide" aria-hidden="true" />
@@ -29,7 +32,7 @@ export default function League() {
                 <span style={{ textAlign: 'right' }}>Bod</span>
               </div>
 
-              {STANDINGS.map((row, i) => (
+              {standings.map((row, i) => (
                 <Reveal
                   variant="right"
                   delay={120 + i * 55}
@@ -49,13 +52,13 @@ export default function League() {
                 </Reveal>
               ))}
 
-              <p className="standings__note">{STANDINGS_NOTE}</p>
+              <p className="standings__note">{league.note}</p>
             </div>
           </Reveal>
 
           <div className="fixtures">
             <span className="eyebrow eyebrow--sky eyebrow--sm">Nadolazeće utakmice</span>
-            {FIXTURES.map((fixture, i) => (
+            {league.fixtures.map((fixture, i) => (
               <Reveal
                 variant="right"
                 delay={i * 110}
@@ -77,7 +80,7 @@ export default function League() {
         <div className="league__row">
           <Reveal variant="left" className="timeline">
             <span className="eyebrow eyebrow--sky eyebrow--sm">Klub kroz sezone</span>
-            {TIMELINE.map((entry, i) => (
+            {league.timeline.map((entry, i) => (
               <Reveal
                 delay={120 + i * 90}
                 className="timeline__item"
@@ -96,7 +99,7 @@ export default function League() {
             <Reveal variant="right" className="clubs notch-br-16">
               <span className="eyebrow eyebrow--sm">Klubovi lige</span>
               <div className="clubs__list">
-                {CLUBS.map((club, i) => (
+                {league.clubs.map((club, i) => (
                   <Reveal
                     as="span"
                     variant="scale"

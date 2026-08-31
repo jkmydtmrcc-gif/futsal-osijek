@@ -199,30 +199,70 @@ export const CLUBS = [
 ];
 
 export const FEATURED_NEWS = {
+  id: 'finale-2024-25',
   flag: 'Izdvojeno',
   title: 'Finale doigravanja nakon pobjede protiv Futsal Dinama',
   lead: 'U sezoni 2024/25 klub je do prvog finala došao preko Torcide Biberon u četvrtfinalu i Futsal Dinama u polufinalu.',
   meta: 'Sezona 2024/25 · Doigravanje',
+  image: '/uploads/S-oskanvma10_GOM_300525-970.webp',
 };
 
+/**
+ * Novosti.
+ *
+ * `id` je i adresa pojedinačne novosti (`/novosti/{id}`), pa mora biti
+ * jedinstven i bez razmaka. `body` je niz odlomaka — tako se tekst piše i
+ * uređuje bez HTML-a.
+ */
 export const NEWS = [
   {
+    id: 'vitor-lima-povratak',
     date: 'Ljeto 2026.',
     cat: 'Transferi',
     title: 'Vitor Lima vratio se u klub',
     lead: 'Povratak brazilskog igrača klub je najavio na svojim društvenim mrežama.',
+    image: '/uploads/aa.jpg',
+    body: [
+      'Vitor Lima ponovno je igrač MNK Osijek Kandit. Povratak je klub objavio na svojim društvenim mrežama, a navijači su ga dočekali kao jedno od najvažnijih pojačanja ljeta.',
+      'Lima je u prethodnom mandatu bio jedno od prepoznatljivih lica momčadi na Zrinjevcu i igrač na kojeg se u napadu računalo u najvažnijim utakmicama sezone.',
+      'Detalje ugovora klub nije objavio.',
+    ],
   },
   {
+    id: 'drugo-mjesto-regularnog-dijela',
     date: 'Sezona 2025/26',
     cat: 'Liga',
     title: 'Drugo mjesto regularnog dijela HMNL-a',
     lead: 'Momčad je ligaški dio završila druga, a doigravanje napustila u četvrtfinalu.',
+    image: '/uploads/S-oskanvma10_GOM_300525-970.webp',
+    body: [
+      'Ligaški dio SuperSport HMNL-a u sezoni 2025/26 momčad je završila na drugom mjestu — najbolji plasman u regularnom dijelu u novijoj povijesti kluba.',
+      'U doigravanju je put stao u četvrtfinalu, a u završnom Glasniku HMNL-a klub je označen kao trećeplasirani sezone.',
+    ],
   },
   {
+    id: 'finale-2024-25',
     date: 'Sezona 2024/25',
     cat: 'Doigravanje',
     title: 'Finale nakon pobjeda protiv Torcide i Dinama',
     lead: 'U finalnoj seriji naslov je osvojilo Novo vrijeme Makarska.',
+    image: '/uploads/aa.jpg',
+    body: [
+      'Sezona 2024/25 ostala je zapisana kao sezona prvog finala doigravanja. U četvrtfinalu je pao Torcida Biberon, u polufinalu Futsal Dinamo.',
+      'U finalnoj seriji protiv Novog vremena Makarska naslov je otišao u Makarsku, ali je put do finala potvrdio da je momčad ušla u sam vrh hrvatskog futsala.',
+    ],
+  },
+  {
+    id: 'zrinjevac-domaci-parket',
+    date: 'Sezona 2025/26',
+    cat: 'Dvorana',
+    title: 'Zrinjevac ponovno pun na derbijima',
+    lead: 'Domaće utakmice igraju se u Športskoj dvorani Zrinjevac s 1.160 mjesta.',
+    image: '/uploads/aa.jpg',
+    body: [
+      'Športska dvorana Zrinjevac domaći je parket kluba. Kapacitet je 1.160 mjesta, a na derbijima protiv Olmissuma i Futsal Dinama tribine su redovito pune.',
+      'Za grupne dolaske i najave gostujućih navijača klub je dostupan na e-mailu i klupskom broju telefona.',
+    ],
   },
 ];
 
@@ -333,10 +373,13 @@ export const PAGES = {
 
 /**
  * Fan Shop vodi na SalaSport (Sportos j.d.o.o.), specijaliziranu futsal
- * trgovinu. Poveznice su na stvarne kategorije — cijene i dostupnost
- * stoje kod njih, pa se ovdje namjerno ne prepisuju.
+ * trgovinu. Klub nema vlastitu naplatu — svaka kartica je razdjelnik prema
+ * stranici trgovine na kojoj se artikl stvarno kupuje.
  */
 export const SHOP_URL = 'https://salasport.hr/';
+
+/** Pretraga "kandit" u trgovini — sve što je vezano uz klub na jednom mjestu. */
+export const SHOP_SEARCH_URL = 'https://salasport.hr/?s=kandit&post_type=product';
 
 export const SHOP_LINKS = [
   {
@@ -365,8 +408,151 @@ export const SHOP_LINKS = [
   },
 ];
 
+/**
+ * Artikli u Fan Shopu.
+ *
+ * `price` je namjerno prazan dok ga netko ne upiše u administraciji: cijene
+ * i dostupnost stoje kod trgovine i mijenjaju se, a prepisana cijena koja
+ * zastari — laže. Dok je prazan, kartica umjesto iznosa nudi "Provjeri
+ * cijenu", pa je stranica točna i bez ijednog upisanog broja.
+ *
+ * `href` vodi točno na stranicu na kojoj se artikl kupuje. Ako artikl nema
+ * svoju stranicu u trgovini, vodi na kategoriju ili na pretragu "kandit" —
+ * nikad na izmišljenu adresu koja završi na 404.
+ *
+ * `art` bira crtež na kartici (vidi ProductArt.jsx); `image` ga pregazi kad
+ * se u administraciji upiše prava fotografija.
+ */
+export const SHOP_PRODUCTS = [
+  {
+    id: 'dres-domaci',
+    cat: 'Dresovi',
+    name: 'MNK Osijek Kandit — dres domaći',
+    note: 'Službeni dres sezone 2025/26, uz personalizaciju broja i prezimena.',
+    brand: 'Joma',
+    badge: 'Službeni dres',
+    price: '',
+    oldPrice: '',
+    art: 'dres',
+    image: '',
+    href: 'https://salasport.hr/proizvod/dres-domaci-mnk-osijek/',
+  },
+  {
+    id: 'dres-gostujuci',
+    cat: 'Dresovi',
+    name: 'MNK Osijek Kandit — dres gostujući',
+    note: 'Gostujuća inačica kompleta. Dostupnost provjeri u trgovini.',
+    brand: 'Joma',
+    badge: '',
+    price: '',
+    oldPrice: '',
+    art: 'dres-gost',
+    image: '',
+    href: 'https://salasport.hr/?s=kandit&post_type=product',
+  },
+  {
+    id: 'golmanski-dres',
+    cat: 'Vratari',
+    name: 'Golmanski dres',
+    note: 'Dugi rukavi, štitnici na laktovima.',
+    brand: 'Joma',
+    badge: '',
+    price: '',
+    oldPrice: '',
+    art: 'golman',
+    image: '',
+    href: 'https://salasport.hr/kategorija-proizvoda/oprema/golmanska-oprema/',
+  },
+  {
+    id: 'hlacice',
+    cat: 'Tekstil',
+    name: 'Igračke hlačice',
+    note: 'Uz dres ili zasebno, u klupskim bojama.',
+    brand: 'Joma',
+    badge: '',
+    price: '',
+    oldPrice: '',
+    art: 'hlacice',
+    image: '',
+    href: 'https://salasport.hr/kategorija-proizvoda/tekstil/',
+  },
+  {
+    id: 'trenirka',
+    cat: 'Tekstil',
+    name: 'Trenirka — gornji dio',
+    note: 'Za zagrijavanje i putovanja.',
+    brand: 'Joma',
+    badge: '',
+    price: '',
+    oldPrice: '',
+    art: 'trenirka',
+    image: '',
+    href: 'https://salasport.hr/kategorija-proizvoda/tekstil/',
+  },
+  {
+    id: 'futsal-lopta',
+    cat: 'Lopte',
+    name: 'Futsal lopta',
+    note: 'Veličina 4, smanjeni odskok — službene lopte za dvoranu.',
+    brand: 'Select · Mikasa',
+    badge: '',
+    price: '',
+    oldPrice: '',
+    art: 'lopta',
+    image: '',
+    href: 'https://salasport.hr/kategorija-proizvoda/lopte/futsal-lopte/',
+  },
+  {
+    id: 'rukavice',
+    cat: 'Vratari',
+    name: 'Golmanske rukavice',
+    note: 'Za parket, s pojačanim hvatom.',
+    brand: 'Joma',
+    badge: '',
+    price: '',
+    oldPrice: '',
+    art: 'rukavice',
+    image: '',
+    href: 'https://salasport.hr/kategorija-proizvoda/oprema/golmanska-oprema/',
+  },
+  {
+    id: 'opremanje-kluba',
+    cat: 'Klubovi',
+    name: 'Opremanje momčadi',
+    note: 'Kompleti za klubove i škole futsala, s tiskom.',
+    brand: 'SalaSport',
+    badge: 'Za klubove',
+    price: '',
+    oldPrice: '',
+    art: 'klub',
+    image: '',
+    href: 'https://salasport.hr/klubovi/',
+  },
+];
+
+/**
+ * Dres s imenom: posjetitelj upiše prezime i broj, kartica ih pokaže na
+ * dresu, a gumb vodi na stranicu proizvoda gdje se personalizacija stvarno
+ * naručuje.
+ */
+export const SHOP_CUSTOM = {
+  eyebrow: 'Personalizacija',
+  title: 'Dres s tvojim imenom',
+  lead: 'Upiši prezime i broj, pogledaj kako izgleda, pa nastavi na SalaSport — personalizacija se bira na stranici proizvoda.',
+  defaultName: 'PANDUREVIĆ',
+  defaultNumber: '8',
+  href: 'https://salasport.hr/proizvod/dres-domaci-mnk-osijek/',
+};
+
 export const SHOP_NOTE =
-  'SalaSport vodi Sportos j.d.o.o. Za upite o klupskoj opremi javite se klubu na osijek.kelme@gmail.com, a za narudžbe u trgovini na prodaja@salasport.hr.';
+  'SalaSport vodi Sportos j.d.o.o. Cijene, veličine i dostupnost stoje u trgovini. Za upite o klupskoj opremi javite se klubu na osijek.kelme@gmail.com, a za narudžbe u trgovini na prodaja@salasport.hr.';
+
+/** Koraci narudžbe — da bude jasno tko što radi. */
+export const SHOP_STEPS = [
+  { n: '01', title: 'Odaberi artikl', note: 'Klik na karticu otvara artikl u trgovini SalaSport.' },
+  { n: '02', title: 'Veličina i tisak', note: 'Veličinu, broj i prezime biraš na stranici proizvoda.' },
+  { n: '03', title: 'Naručuješ kod trgovine', note: 'Plaćanje i dostava idu preko SalaSporta, ne preko kluba.' },
+];
 
 /** Stožer — imena poznata iz klupskih objava. */
 export const STAFF = [
@@ -394,4 +580,54 @@ export const HONOURS = [
     title: 'Drugo mjesto regularnog dijela',
     note: 'Ligaški dio SuperSport HMNL-a momčad je završila druga, a doigravanje napustila u četvrtfinalu.',
   },
+];
+
+/**
+ * Priča o klubu — odlomci na stranici "O klubu". Drže se ovdje, a ne u
+ * JSX-u, da se mogu mijenjati iz administracije.
+ */
+export const CLUB_STORY = [
+  'MNK Osijek Kandit osnovan je 2002. godine. Domaće utakmice igra u Športskoj dvorani Zrinjevac, koja prima 1.160 gledatelja, a natječe se u SuperSport HMNL-u — prvoj hrvatskoj malonogometnoj ligi.',
+  'Kandit je naziv sponzor kluba, pa ime tvrtke stoji uz ime grada u punom nazivu momčadi. Boje su bijelo-plave, a grb i dres nose ih od prvog dana.',
+  'Zadnje dvije sezone klub je proveo u samom vrhu lige: finale doigravanja 2024/25. i drugo mjesto regularnog dijela 2025/26.',
+];
+
+/**
+ * Odigrane utakmice. Namjerno prazno — rezultati se upisuju u administraciji
+ * kad se odigraju. Dok je popis prazan, blok se na stranici ne prikazuje.
+ */
+export const RESULTS = [];
+
+/** Kako doći na Zrinjevac. */
+export const VENUE_INFO = [
+  { label: 'Adresa', value: 'Zrinjevac 11, 31000 Osijek' },
+  { label: 'Kapacitet', value: '1.160 mjesta' },
+  { label: 'Vrata', value: 'Otvaraju se sat vremena prije početka' },
+  { label: 'Parking', value: 'Uz dvoranu i u okolnim ulicama' },
+];
+
+/** Česta pitanja o dolasku i ulaznicama. */
+export const TICKET_FAQ = [
+  {
+    q: 'Prodaju li se ulaznice online?',
+    a: 'Klub trenutno nema online prodaju. Ulaznice se kupuju na dan utakmice na ulazu u dvoranu, a za rezervacije se javi klubu e-mailom.',
+  },
+  {
+    q: 'Dolazimo u grupi — može li popust?',
+    a: 'Za škole, klubove i navijačke skupine javi se klubu unaprijed na osijek.kelme@gmail.com pa dogovorimo ulaz i mjesta na tribini.',
+  },
+  {
+    q: 'Kad se objavljuju termini utakmica?',
+    a: 'Termine objavljujemo čim HMNL potvrdi raspored kola. Do tada popis nadolazećih utakmica na stranici Raspored služi kao okvir.',
+  },
+  {
+    q: 'Dolaze li gostujući navijači?',
+    a: 'Dolaze, uz prethodnu najavu klubu. Za gostujući sektor javi se najkasnije tri dana prije utakmice.',
+  },
+];
+
+/** Redoslijed pozicija na stranici postave. */
+export const POSITION_GROUPS = [
+  { id: 'vratari', label: 'Vratari', match: ['Vratar'] },
+  { id: 'polje', label: 'Igrači u polju', match: ['Igrač u polju', 'Kapetan'] },
 ];

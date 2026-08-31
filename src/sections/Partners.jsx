@@ -1,9 +1,12 @@
 import { Link } from 'react-router-dom';
 import Brush from '../components/Brush';
 import Reveal from '../components/Reveal';
-import { PARTNER_COUNTS, PARTNER_ROWS, CONTACT_PATH, IMAGES } from '../data/site';
+import { PARTNER_COUNTS, PARTNER_ROWS, CONTACT_PATH } from '../data/site';
+import { useContent } from '../content/ContentContext';
 
 export default function Partners() {
+  const { images } = useContent();
+
   return (
     <section className="partners" aria-labelledby="naslov-partneri">
       <Brush variant="partners-1" />
@@ -40,7 +43,7 @@ export default function Partners() {
           <div className="headline-partner__edge" aria-hidden="true" />
           <img
             className="headline-partner__logo"
-            src={IMAGES.kandit}
+            src={images.kandit}
             alt="Kandit — glavni partner kluba"
           />
           <div className="headline-partner__copy">
@@ -62,7 +65,7 @@ export default function Partners() {
               <div className="partner-row__track">
                 {Array.from({ length: row.count }, (_, i) => (
                   <span className="partner-row__cell" key={i}>
-                    <img src={IMAGES.kandit} alt="" loading="lazy" />
+                    <img src={images.kandit} alt="" loading="lazy" />
                   </span>
                 ))}
               </div>
