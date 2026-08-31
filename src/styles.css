@@ -3026,6 +3026,40 @@ html { scroll-behavior: smooth; }
   .faq__q { font-size: 16px; padding: 15px 18px; }
 }
 
+/* Traka koja urednika podsjeća da gleda skicu, a ne objavljeno. */
+.draftbar {
+  position: sticky;
+  top: 0;
+  z-index: 90;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 14px;
+  padding: 9px clamp(16px, 3vw, 28px);
+  background: #ffd44d;
+  color: #4a3a06;
+  font-size: 12.5px;
+  font-weight: 600;
+}
+.draftbar__dot { width: 8px; height: 8px; flex: none; background: #4a3a06; rotate: 45deg; }
+.draftbar__text { flex: 1; min-width: 220px; }
+.draftbar__link, .draftbar__btn {
+  appearance: none;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .4px;
+  text-transform: uppercase;
+  color: #4a3a06;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.draftbar__link:hover, .draftbar__btn:hover { color: var(--ink); }
+
 /* --------------------------------------------------------------------------
    14g. Administracija
    Radna ploha, ne stranica za posjetitelje: mirna, gusta i čitljiva, bez
@@ -3052,8 +3086,48 @@ html { scroll-behavior: smooth; }
 }
 .adm-gate__eyebrow { font-size: 10px; font-weight: 800; letter-spacing: 2.4px; text-transform: uppercase; color: var(--blue); }
 .adm-gate__title { margin: 0; font-family: var(--font-display); font-weight: 900; font-size: 38px; line-height: .95; text-transform: uppercase; }
-.adm-gate__lead { margin: 0 0 8px; font-size: 14px; color: var(--muted); }
+.adm-gate__lead { margin: 0 0 8px; font-size: 14px; line-height: 1.6; color: var(--muted); }
 .adm-gate__back { margin-top: 6px; font-size: 12px; font-weight: 700; color: var(--muted); text-align: center; }
+.adm-gate__loading { color: rgba(255,255,255,.7); font-size: 14px; }
+.adm-gate__again {
+  appearance: none;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--blue);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.adm-gate__dev {
+  margin: 0;
+  padding: 11px 13px;
+  background: #eef3fb;
+  border-left: 3px solid var(--blue);
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: var(--slate);
+}
+.adm-gate__dev code { font-family: var(--font-mono); font-size: 11.5px; }
+.adm-gate__warn {
+  margin: 0;
+  padding: 11px 13px;
+  background: #fff6d8;
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: #5c4a11;
+}
+
+/* Kod se upisuje po znamenkama — razmaknuta, velika, jednoznačna. */
+.adm-input--code {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 30px;
+  letter-spacing: 12px;
+  text-align: center;
+}
 
 .adm-top {
   position: sticky;
@@ -3069,6 +3143,7 @@ html { scroll-behavior: smooth; }
   color: var(--white);
 }
 .adm-top__mark { font-size: 10px; font-weight: 800; letter-spacing: 2.4px; text-transform: uppercase; color: var(--sky); }
+.adm-top__who { display: block; margin-top: 5px; font-size: 12px; color: rgba(255,255,255,.6); }
 .adm-top__title { margin: 4px 0 0; font-family: var(--font-display); font-weight: 900; font-size: 26px; line-height: 1; text-transform: uppercase; }
 .adm-top__tools { display: flex; flex-wrap: wrap; gap: 8px; }
 
@@ -3092,6 +3167,8 @@ html { scroll-behavior: smooth; }
 .adm-btn--primary { background: var(--sky); border-color: var(--sky); color: var(--navy); font-weight: 800; }
 .adm-btn--primary:hover { background: var(--white); border-color: var(--white); color: var(--navy); }
 .adm-btn--primary.is-dirty { background: #ffd44d; border-color: #ffd44d; }
+.adm-btn--soft { background: rgba(255,255,255,.16); border-color: rgba(255,255,255,.3); color: var(--white); }
+.adm-btn--soft:hover { background: rgba(255,255,255,.28); color: var(--white); }
 .adm-btn--add { width: 100%; margin-top: 4px; border: 1px dashed rgba(11,71,168,.4); background: transparent; color: var(--blue); padding: 13px; font-weight: 800; }
 .adm-btn--add:hover { background: rgba(11,71,168,.06); }
 
@@ -3103,6 +3180,32 @@ html { scroll-behavior: smooth; }
 }
 .adm-warn { background: #fff6d8; color: #5c4a11; border-bottom: 1px solid #f0e0aa; }
 .adm-msg { background: #dff0e0; color: #1f5127; border-bottom: 1px solid #bfe0c2; font-weight: 600; }
+.adm-msg--err { background: #fbe3e4; color: #8d1b23; border-bottom-color: #f0c2c5; }
+
+/* Traka stanja: je li ono što vidim isto što vide posjetitelji. */
+.adm-status {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
+  padding: 11px clamp(16px, 3vw, 34px);
+  background: var(--navy-soft);
+  border-bottom: 1px solid rgba(255,255,255,.1);
+}
+.adm-status__meta { font-size: 12px; color: rgba(255,255,255,.55); }
+.adm-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
+}
+.adm-pill--live { background: rgba(143,192,255,.16); color: var(--sky); }
+.adm-pill--draft { background: #ffd44d; color: #4a3a06; }
 
 .adm-body { display: grid; grid-template-columns: 232px 1fr; gap: 24px; padding: 24px clamp(16px, 3vw, 34px) 0; align-items: start; }
 
@@ -3230,11 +3333,12 @@ html { scroll-behavior: smooth; }
     right: 0;
     bottom: 0;
     z-index: 30;
-    display: block;
+    display: flex;
+    gap: 8px;
     padding: 10px 16px calc(10px + env(safe-area-inset-bottom));
     background: rgba(6,16,36,.94);
   }
-  .adm-sticky .adm-btn { width: 100%; padding: 14px; font-size: 14px; }
+  .adm-sticky .adm-btn { flex: 1; padding: 14px 8px; font-size: 13px; }
 }
 
 /* --------------------------------------------------------------------------

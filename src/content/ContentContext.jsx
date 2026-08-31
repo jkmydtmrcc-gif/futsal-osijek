@@ -1,16 +1,23 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
-import { loadContent, subscribe } from './store';
+import { loadContent, refreshPublished, subscribe } from './store';
 
 const ContentContext = createContext(null);
 
 /**
- * Daje cijeloj stranici trenutni sadržaj i osvježava je kad se u
- * administraciji nešto spremi — bez ponovnog učitavanja.
+ * Daje cijeloj stranici trenutni sadržaj.
+ *
+ * Prvo se odmah prikaže ono što već imamo (zadano iz koda ili predmemorirana
+ * objava) — bez čekanja na mrežu i bez praznog bljeska. Zatim se u pozadini
+ * dohvati zadnja objava i, ako se razlikuje, stranica se osvježi.
  */
 export function ContentProvider({ children }) {
   const [content, setContent] = useState(loadContent);
 
-  useEffect(() => subscribe(setContent), []);
+  useEffect(() => {
+    const unsubscribe = subscribe(setContent);
+    refreshPublished();
+    return unsubscribe;
+  }, []);
 
   return <ContentContext.Provider value={content}>{children}</ContentContext.Provider>;
 }

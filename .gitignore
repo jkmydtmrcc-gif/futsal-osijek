@@ -4,3 +4,8 @@ dist
 
 # originali fotografija (lokalno, ne ide na git)
 _originali-slike
+
+# varijable okoline (tajne!)
+.env
+.env.local
+.vercel

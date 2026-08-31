@@ -2,26 +2,19 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   loadContent,
-  saveContent,
-  resetContent,
-  hasStoredContent,
+  saveDraft,
+  discardDraft,
+  hasDraft,
+  publishedContent,
+  publishedInfo,
+  markPublished,
+  refreshPublished,
   toJson,
   fromJson,
 } from '../content/store';
-import { DEFAULT_CONTENT } from '../content/defaults';
+import { publishContent } from '../content/api';
+import useAuth from '../admin/useAuth';
 import * as S from '../admin/sections';
-
-/**
- * Lozinka je obična zapreka, ne zaštita.
- *
- * Stranica je statična i sve što je u njoj završi u JavaScriptu koji svatko
- * može pročitati — tko zna gdje gledati, vidjet će i ovu lozinku. Ona
- * sprječava slučajan ulazak, ništa više. Prava zaštita traži poslužitelj i
- * prijavu, a to je posao za sljedeći korak (npr. mali CMS ili Netlify/
- * Vercel funkcija s korisničkim računima).
- */
-const LOZINKA = 'kandit2002';
-const KLJUC_PRIJAVE = 'mnk-osijek-kandit:admin';
 
 const KARTICE = [
   { id: 'slike', label: 'Slike', Component: S.Slike },
@@ -45,55 +38,134 @@ function setIn(obj, path, value) {
 const clone = (v) => JSON.parse(JSON.stringify(v));
 
 export default function Admin() {
-  const [prijavljen, setPrijavljen] = useState(
-    () => sessionStorage.getItem(KLJUC_PRIJAVE) === 'da'
-  );
+  const auth = useAuth();
 
-  if (!prijavljen) return <Prijava onOk={() => setPrijavljen(true)} />;
-  return <Ploca onOdjava={() => setPrijavljen(false)} />;
+  if (auth.loading) {
+    return (
+      <div className="adm adm--gate">
+        <p className="adm-gate__loading">Provjeravam prijavu…</p>
+      </div>
+    );
+  }
+
+  if (!auth.admin) return <Prijava auth={auth} />;
+  return <Ploca auth={auth} />;
 }
 
-/* --- Prijava --------------------------------------------------------------- */
-function Prijava({ onOk }) {
-  const [value, setValue] = useState('');
-  const [error, setError] = useState('');
+/* ==========================================================================
+   Prijava — broj mobitela pa kod iz SMS-a
+   ========================================================================== */
 
-  const submit = (e) => {
+function Prijava({ auth }) {
+  const [phone, setPhone] = useState('');
+  const [code, setCode] = useState('');
+  const codeRef = useRef(null);
+
+  const step = auth.challenge ? 'kod' : 'broj';
+
+  useEffect(() => {
+    if (step === 'kod') codeRef.current?.focus();
+  }, [step]);
+
+  const submit = async (e) => {
     e.preventDefault();
-    if (value === LOZINKA) {
-      sessionStorage.setItem(KLJUC_PRIJAVE, 'da');
-      onOk();
-    } else {
-      setError('Kriva lozinka.');
-    }
+    if (step === 'broj') await auth.sendCode(phone);
+    else await auth.confirmCode(code);
   };
+
+  const setupMissing =
+    auth.setup && (!auth.setup.admins || !auth.setup.session || !auth.setup.storage);
 
   return (
     <div className="adm adm--gate">
       <form className="adm-gate" onSubmit={submit}>
         <span className="adm-gate__eyebrow">MNK Osijek Kandit</span>
         <h1 className="adm-gate__title">Administracija</h1>
-        <p className="adm-gate__lead">Uređivanje sadržaja stranice.</p>
 
-        <label className="adm-field">
-          <span className="adm-field__label">Lozinka</span>
-          <input
-            className="adm-input"
-            type="password"
-            value={value}
-            autoFocus
-            onChange={(e) => {
-              setValue(e.target.value);
-              setError('');
-            }}
-          />
-        </label>
+        {step === 'broj' ? (
+          <>
+            <p className="adm-gate__lead">
+              Upiši broj mobitela. Kod za prijavu stiže SMS-om — samo na brojeve
+              urednika kluba.
+            </p>
 
-        {error && <span className="adm-error">{error}</span>}
+            <label className="adm-field">
+              <span className="adm-field__label">Broj mobitela</span>
+              <input
+                className="adm-input"
+                type="tel"
+                inputMode="tel"
+                autoComplete="tel"
+                autoFocus
+                placeholder="091 123 4567"
+                value={phone}
+                onChange={(e) => {
+                  setPhone(e.target.value);
+                  auth.setError('');
+                }}
+              />
+            </label>
+          </>
+        ) : (
+          <>
+            <p className="adm-gate__lead">
+              {auth.challenge.message} Poslano na <b>{auth.challenge.phone}</b>.
+            </p>
 
-        <button type="submit" className="adm-btn adm-btn--primary">
-          Prijava
+            {auth.challenge.devMode && (
+              <p className="adm-gate__dev">
+                Razvojni način: SMS se ne šalje, kod je ispisan u zapisu poslužitelja
+                (terminal na kojem radi <code>npm run dev</code>).
+              </p>
+            )}
+
+            <label className="adm-field">
+              <span className="adm-field__label">Kod iz poruke</span>
+              <input
+                ref={codeRef}
+                className="adm-input adm-input--code"
+                type="text"
+                inputMode="numeric"
+                autoComplete="one-time-code"
+                maxLength={6}
+                placeholder="000000"
+                value={code}
+                onChange={(e) => {
+                  setCode(e.target.value.replace(/\D/g, '').slice(0, 6));
+                  auth.setError('');
+                }}
+              />
+            </label>
+          </>
+        )}
+
+        {auth.error && <span className="adm-error">{auth.error}</span>}
+
+        <button type="submit" className="adm-btn adm-btn--primary" disabled={auth.busy}>
+          {auth.busy ? 'Čekaj…' : step === 'broj' ? 'Pošalji kod' : 'Prijavi se'}
         </button>
+
+        {step === 'kod' && (
+          <button
+            type="button"
+            className="adm-gate__again"
+            onClick={() => {
+              setCode('');
+              auth.reset();
+            }}
+          >
+            Upiši drugi broj
+          </button>
+        )}
+
+        {setupMissing && (
+          <p className="adm-gate__warn">
+            Poslužitelj još nije do kraja postavljen
+            {!auth.setup.admins && ' · nedostaje ADMIN_PHONES'}
+            {!auth.setup.session && ' · nedostaje SESSION_SECRET'}
+            {!auth.setup.storage && ' · nema pohrane (Upstash)'}. Upute su u README-u.
+          </p>
+        )}
 
         <Link className="adm-gate__back" to="/">
           ← Natrag na stranicu
@@ -103,21 +175,26 @@ function Prijava({ onOk }) {
   );
 }
 
-/* --- Ploča ----------------------------------------------------------------- */
-function Ploca({ onOdjava }) {
+/* ==========================================================================
+   Ploča
+   ========================================================================== */
+
+function Ploca({ auth }) {
   const [draft, setDraft] = useState(() => clone(loadContent()));
   const [tab, setTab] = useState(KARTICE[0].id);
-  const [dirty, setDirty] = useState(false);
-  const [poruka, setPoruka] = useState(hasStoredContent() ? 'Učitane su spremljene izmjene.' : '');
+  const [dirty, setDirty] = useState(hasDraft());
+  const [poruka, setPoruka] = useState(null);
+  const [busy, setBusy] = useState(false);
+  const [info, setInfo] = useState(publishedInfo);
   const fileRef = useRef(null);
 
   const set = useCallback((path, value) => {
     setDraft((d) => setIn(d, path, value));
     setDirty(true);
-    setPoruka('');
+    setPoruka(null);
   }, []);
 
-  // Zatvaranje kartice s nespremljenim izmjenama traži potvrdu preglednika.
+  // Zatvaranje kartice s neobjavljenim izmjenama traži potvrdu preglednika.
   useEffect(() => {
     if (!dirty) return undefined;
     const warn = (e) => {
@@ -128,27 +205,61 @@ function Ploca({ onOdjava }) {
     return () => window.removeEventListener('beforeunload', warn);
   }, [dirty]);
 
-  const spremi = () => {
-    const res = saveContent(draft);
+  const say = (tone, text) => setPoruka({ tone, text });
+
+  /* --- radnje ------------------------------------------------------------- */
+
+  const spremiSkicu = () => {
+    const res = saveDraft(draft);
     if (res.ok) {
-      setDirty(false);
-      setPoruka('Spremljeno. Izmjene su odmah vidljive na stranici.');
+      say('ok', 'Skica je spremljena u ovaj preglednik. Posjetitelji je još ne vide — za to klikni „Objavi“.');
     } else if (res.error === 'puno') {
-      setPoruka(
-        'Pohrana preglednika je puna — najčešće zbog slika odabranih s računala. ' +
-          'Ubaci slike u public/uploads/ i upiši putanju umjesto njih.'
+      say(
+        'err',
+        'Pohrana preglednika je puna — najčešće zbog slika odabranih s računala. Ubaci ih u public/uploads/ i upiši putanju.'
       );
     } else {
-      setPoruka('Spremanje nije uspjelo.');
+      say('err', 'Spremanje skice nije uspjelo.');
     }
   };
 
-  const vrati = () => {
-    if (!confirm('Vratiti sav sadržaj na zadano? Sve izmjene u ovom pregledniku se brišu.')) return;
-    resetContent();
-    setDraft(clone(DEFAULT_CONTENT));
+  const objavi = async () => {
+    if (!confirm('Objaviti izmjene? Nakon toga ih vide svi posjetitelji stranice.')) return;
+
+    setBusy(true);
+    setPoruka(null);
+    try {
+      const res = await publishContent(draft);
+      markPublished(draft, res);
+      setInfo({ revision: res.revision, updatedAt: res.updatedAt });
+      setDirty(false);
+      say('ok', 'Objavljeno. Izmjene su vidljive svima na stranici.');
+    } catch (err) {
+      if (err.status === 401) {
+        say('err', 'Sesija je istekla. Prijavi se ponovno — skica ti ostaje spremljena.');
+        saveDraft(draft);
+        await auth.refresh();
+      } else {
+        say('err', err.message);
+      }
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const vratiNaObjavljeno = () => {
+    if (!confirm('Odbaciti skicu i vratiti se na objavljeni sadržaj?')) return;
+    discardDraft();
+    setDraft(clone(publishedContent()));
     setDirty(false);
-    setPoruka('Vraćeno na zadani sadržaj.');
+    say('ok', 'Skica je odbačena. Prikazuje se objavljeni sadržaj.');
+  };
+
+  const osvjezi = async () => {
+    await refreshPublished();
+    setInfo(publishedInfo());
+    if (!dirty) setDraft(clone(loadContent()));
+    say('ok', 'Učitana je zadnja objavljena inačica.');
   };
 
   const izvezi = () => {
@@ -166,18 +277,18 @@ function Ploca({ onOdjava }) {
     try {
       setDraft(fromJson(await file.text()));
       setDirty(true);
-      setPoruka('Datoteka je učitana. Provjeri sadržaj pa klikni Spremi.');
+      say('ok', 'Datoteka je učitana. Provjeri sadržaj pa klikni „Objavi“.');
     } catch (err) {
-      setPoruka(`Uvoz nije uspio: ${err.message}`);
+      say('err', `Uvoz nije uspio: ${err.message}`);
     } finally {
       if (fileRef.current) fileRef.current.value = '';
     }
   };
 
-  const odjava = () => {
-    if (dirty && !confirm('Imaš nespremljene izmjene. Odjaviti se?')) return;
-    sessionStorage.removeItem(KLJUC_PRIJAVE);
-    onOdjava();
+  const odjava = async () => {
+    if (dirty && !confirm('Imaš neobjavljene izmjene. Odjaviti se? Skica ostaje spremljena.')) return;
+    if (dirty) saveDraft(draft);
+    await auth.signOut();
   };
 
   const Aktivna = useMemo(
@@ -185,12 +296,17 @@ function Ploca({ onOdjava }) {
     [tab]
   );
 
+  const bezPohrane = auth.setup && !auth.setup.storage;
+
   return (
     <div className="adm">
       <header className="adm-top">
         <div className="adm-top__left">
           <span className="adm-top__mark">MNK Osijek Kandit</span>
           <h1 className="adm-top__title">Administracija</h1>
+          <span className="adm-top__who">
+            {auth.admin.name} · {auth.admin.phone}
+          </span>
         </div>
 
         <div className="adm-top__tools">
@@ -204,37 +320,55 @@ function Ploca({ onOdjava }) {
           <Link className="adm-btn adm-btn--ghost" to="/" target="_blank" rel="noreferrer">
             Otvori stranicu ↗
           </Link>
+          <button type="button" className="adm-btn adm-btn--ghost" onClick={osvjezi}>
+            Osvježi
+          </button>
           <button type="button" className="adm-btn adm-btn--ghost" onClick={() => fileRef.current?.click()}>
             Uvezi JSON
           </button>
           <button type="button" className="adm-btn adm-btn--ghost" onClick={izvezi}>
             Izvezi JSON
           </button>
-          <button type="button" className="adm-btn adm-btn--ghost" onClick={vrati}>
-            Vrati zadano
+          <button type="button" className="adm-btn adm-btn--ghost" onClick={vratiNaObjavljeno}>
+            Odbaci skicu
           </button>
           <button type="button" className="adm-btn adm-btn--ghost" onClick={odjava}>
             Odjava
           </button>
+          <button type="button" className="adm-btn adm-btn--soft" onClick={spremiSkicu}>
+            Spremi skicu
+          </button>
           <button
             type="button"
             className={`adm-btn adm-btn--primary${dirty ? ' is-dirty' : ''}`}
-            onClick={spremi}
+            onClick={objavi}
+            disabled={busy}
           >
-            {dirty ? 'Spremi izmjene' : 'Spremljeno'}
+            {busy ? 'Objavljujem…' : dirty ? 'Objavi izmjene' : 'Objavljeno'}
           </button>
         </div>
       </header>
 
-      <p className="adm-warn">
-        Izmjene se spremaju <b>u ovaj preglednik</b>, a ne na poslužitelj — stranica je
-        statična i nema bazu. Posjetitelji vide sadržaj iz koda. Da izmjene postanu
-        javne: klikni <b>Izvezi JSON</b> i pošalji datoteku onome tko održava stranicu
-        (sadržaj se ubaci u repozitorij), ili je na drugom računalu učitaj preko{' '}
-        <b>Uvezi JSON</b>.
-      </p>
+      <div className="adm-status">
+        <span className={`adm-pill${dirty ? ' adm-pill--draft' : ' adm-pill--live'}`}>
+          {dirty ? 'Skica — vidiš samo ti' : 'U skladu s objavljenim'}
+        </span>
+        {info?.updatedAt && (
+          <span className="adm-status__meta">
+            Zadnja objava: {new Date(info.updatedAt).toLocaleString('hr-HR')}
+          </span>
+        )}
+      </div>
 
-      {poruka && <p className="adm-msg">{poruka}</p>}
+      {bezPohrane && (
+        <p className="adm-warn">
+          Poslužitelj radi bez trajne pohrane (nema Upstash varijabli), pa objava{' '}
+          <b>nestaje s ponovnim pokretanjem</b>. Za pravu objavu spoji Upstash Redis —
+          upute su u README-u.
+        </p>
+      )}
+
+      {poruka && <p className={poruka.tone === 'err' ? 'adm-msg adm-msg--err' : 'adm-msg'}>{poruka.text}</p>}
 
       <div className="adm-body">
         <nav className="adm-tabs" aria-label="Dijelovi sadržaja">
@@ -256,14 +390,18 @@ function Ploca({ onOdjava }) {
         </div>
       </div>
 
-      {/* Ista radnja kao gore, nadohvat palca na mobitelu. */}
+      {/* Iste radnje, nadohvat palca na mobitelu. */}
       <div className="adm-sticky">
+        <button type="button" className="adm-btn adm-btn--soft" onClick={spremiSkicu}>
+          Spremi skicu
+        </button>
         <button
           type="button"
           className={`adm-btn adm-btn--primary${dirty ? ' is-dirty' : ''}`}
-          onClick={spremi}
+          onClick={objavi}
+          disabled={busy}
         >
-          {dirty ? 'Spremi izmjene' : 'Spremljeno'}
+          {busy ? 'Objavljujem…' : 'Objavi'}
         </button>
       </div>
     </div>

@@ -3,6 +3,7 @@ import BrushDefs from './components/BrushDefs';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import ScrollToTop from './components/ScrollToTop';
+import DraftBar from './components/DraftBar';
 import Partners from './sections/Partners';
 import Naslovnica from './pages/Naslovnica';
 import Klub from './pages/Klub';
@@ -43,6 +44,7 @@ export default function App() {
 
       <BrushDefs />
       <ScrollToTop />
+      <DraftBar />
 
       <div className="page">
         <Header />
