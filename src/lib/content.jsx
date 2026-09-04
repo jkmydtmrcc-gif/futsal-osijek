@@ -35,6 +35,7 @@ export function ContentProvider({ children }) {
     featured: FEATURED_FALLBACK,
     fixtures: FIXTURES_FALLBACK,
     standings: STANDINGS_FALLBACK,
+    shop: [],
     source: supabaseConfigured ? 'ucitavanje' : 'ugradeno',
     error: null,
   });
@@ -45,17 +46,18 @@ export function ContentProvider({ children }) {
     let otkazano = false;
 
     (async () => {
-      const [igraci, novosti, utakmice, tablica] = await Promise.all([
+      const [igraci, novosti, utakmice, tablica, artikli] = await Promise.all([
         supabase.from('igraci').select('*').order('sort_order'),
         supabase.from('novosti').select('*').order('sort_order'),
         supabase.from('utakmice').select('*').order('sort_order'),
         supabase.from('tablica').select('*').order('pos'),
+        supabase.from('shop').select('*').order('sort_order'),
       ]);
 
       if (otkazano) return;
 
       const greska =
-        igraci.error || novosti.error || utakmice.error || tablica.error || null;
+        igraci.error || novosti.error || utakmice.error || tablica.error || artikli.error || null;
 
       if (greska) {
         setData((d) => ({ ...d, source: 'ugradeno', error: greska.message }));
@@ -74,6 +76,7 @@ export function ContentProvider({ children }) {
           : d.featured,
         fixtures: utakmice.data?.length ? utakmice.data : d.fixtures,
         standings: tablica.data?.length ? decorateStandings(tablica.data) : d.standings,
+        shop: artikli.data ?? [],
         source: 'baza',
         error: null,
       }));

@@ -61,9 +61,22 @@ Otvori `/admin`, prijavi se, promijeni nešto i pogledaj stranicu.
 | Novosti  | Naslovnica i stranica Novosti. Označena vijest ide u veliki okvir — označi samo jednu |
 | Utakmice | Nadolazeće utakmice na naslovnici i u Rasporedu |
 | Tablica  | Tablica lige. Redak s klubom "Osijek Kandit" se sam ističe |
+| Fan Shop | Artikli na naslovnici (prva četiri) i na stranici Fan Shop |
 
 Ostalo (kontakti, tekstovi stranica, partneri, trake) i dalje stoji u
 `src/data/site.js` — to se mijenja jednom i nema smisla za bazu.
+
+## Slike artikala u Fan Shopu
+
+Ovdje slike **ideš stvarno ubaciti iz admina** — odabereš datoteku i ona
+ode u Supabase Storage. Alternativa je zalijepiti adresu slike s tuđe
+stranice (npr. sa SalaSporta); oboje završi kao obična adresa.
+
+Svaki artikl ima poveznicu — klik na kvadratić otvara tu adresu u novoj
+kartici. Obično je to stranica proizvoda u SalaSportu.
+
+Cijena je slobodan tekst, ne broj: klub ne vodi cjenik nego prepisuje ono
+što piše u trgovini. Zato može stajati i "Cijena u trgovini".
 
 ## Fotografije igrača
 

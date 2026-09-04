@@ -2,14 +2,18 @@ import Brush from '../components/Brush';
 import Pip from '../components/Pip';
 import Reveal from '../components/Reveal';
 import PageHero from '../components/PageHero';
-import { PAGES, SHOP_LINKS, SHOP_NOTE, SHOP_URL } from '../data/site';
+import ArtikliMreza from '../components/ArtikliMreza';
+import { useContent } from '../lib/content';
+import { PAGES, SHOP_NOTE, SHOP_URL } from '../data/site';
 
 /**
  * Fan Shop je razdjelnik prema SalaSportu — klub nema vlastitu naplatu.
- * Cijene i dostupnost stoje kod trgovine, pa se ovdje namjerno ne prepisuju:
- * prepisani podaci zastare i onda lažu.
+ * Artikli se uređuju u adminu; cijena je slobodan tekst jer klub ne vodi
+ * cjenik, nego prepisuje ono što piše u trgovini.
  */
 export default function Shop() {
+  const { shop } = useContent();
+
   return (
     <>
       <PageHero page={PAGES['/shop']}>
@@ -18,40 +22,20 @@ export default function Shop() {
         </a>
       </PageHero>
 
-      <section className="slab slab--blue" aria-labelledby="naslov-shop">
+      <section className="slab slab--blue" aria-labelledby="naslov-artikli">
         <div className="scanlines scanlines--shop" aria-hidden="true" />
         <Brush variant="shop-1" />
         <Brush variant="shop-2" />
 
         <div className="shell">
           <Reveal>
-            <span className="eyebrow eyebrow--sky">Kategorije</span>
-            <h2 className="section-title section-title--light" id="naslov-shop">
-              Što te zanima
+            <span className="eyebrow eyebrow--sky">Ponuda</span>
+            <h2 className="section-title section-title--light" id="naslov-artikli">
+              Artikli
             </h2>
           </Reveal>
 
-          <div className="shop-grid">
-            {SHOP_LINKS.map((item, i) => (
-              <Reveal
-                as="a"
-                variant="blur"
-                delay={i * 90}
-                className="shop-card notch-br-20"
-                key={item.href}
-                href={item.href}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <span className="shop-card__cat">{item.cat}</span>
-                <h3 className="shop-card__name">{item.name}</h3>
-                <span className="shop-card__note">{item.note}</span>
-                <span className="shop-card__go" aria-hidden="true">
-                  ↗
-                </span>
-              </Reveal>
-            ))}
-          </div>
+          <ArtikliMreza artikli={shop} />
 
           <Reveal delay={260}>
             <p className="slab__foot slab__foot--light">

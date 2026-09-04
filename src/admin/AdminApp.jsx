@@ -3,13 +3,14 @@ import { Link } from 'react-router-dom';
 import { supabase, supabaseConfigured } from '../lib/supabase';
 import Urednik from './Urednik';
 import Prijava from './Prijava';
-import { Polje, Tekst, Kvacica } from './Polja';
+import { Polje, Tekst, Kvacica, SlikaPolje } from './Polja';
 
 const KARTICE = [
   { id: 'igraci', label: 'Igrači' },
   { id: 'novosti', label: 'Novosti' },
   { id: 'utakmice', label: 'Utakmice' },
   { id: 'tablica', label: 'Tablica' },
+  { id: 'shop', label: 'Fan Shop' },
 ];
 
 export default function AdminApp() {
@@ -144,6 +145,25 @@ export default function AdminApp() {
                 <Polje label="Klub" value={n.club} onChange={set('club')} />
                 <Polje label="Odigrano" type="number" value={n.played} onChange={set('played')} />
                 <Polje label="Bodovi" type="number" value={n.points} onChange={set('points')} />
+              </>
+            )}
+          />
+        )}
+        {kartica === 'shop' && (
+          <Urednik
+            naslov="Fan Shop"
+            opis="Svaki artikl je kvadratić na stranici. Klik vodi na poveznicu koju upišeš — obično na stranicu artikla u SalaSportu."
+            tablica="shop"
+            opisRetka={(r) => r.name || 'Novi artikl'}
+            prazan={(r) => ({ sort_order: r.length + 1, name: 'Novi artikl', price: '', image: '', href: '', badge: '' })}
+            polja={(n, set) => (
+              <>
+                <Polje label="Naziv" value={n.name} onChange={set('name')} />
+                <Polje label="Cijena" value={n.price} onChange={set('price')} placeholder="29,90 €" />
+                <Polje label="Poveznica (kamo vodi klik)" type="url" value={n.href} onChange={set('href')} placeholder="https://salasport.hr/proizvod/…" />
+                <Polje label="Oznaka (nije obavezno)" value={n.badge} onChange={set('badge')} placeholder="Novo" />
+                <SlikaPolje label="Slika artikla" value={n.image} onChange={set('image')} />
+                <Polje label="Redoslijed" type="number" value={n.sort_order} onChange={set('sort_order')} />
               </>
             )}
           />

@@ -2467,43 +2467,117 @@ html { scroll-behavior: smooth; }
   align-items: start;
 }
 
-/* Fan Shop — razdjelnik prema trgovini. */
-.shop-grid {
+/* Fan Shop — artikli kao kvadratići. Cijela pločica je poveznica. */
+.artikli {
   margin-top: 34px;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 22px;
 }
-.shop-card {
-  position: relative;
+
+.artikl {
   display: flex;
   flex-direction: column;
-  gap: 9px;
-  min-height: 190px;
-  padding: 24px 26px 26px;
-  background: var(--white);
-  color: var(--ink);
-  transition: transform .3s cubic-bezier(.22,.61,.36,1), box-shadow .3s ease;
+  gap: 11px;
+  color: inherit;
+  transition: transform .3s cubic-bezier(.22,.61,.36,1);
 }
-.shop-card:hover { transform: translateY(-7px); box-shadow: 0 26px 54px rgba(6,16,36,.4); color: var(--ink); }
-.shop-card__cat { font-size: 10px; font-weight: 800; letter-spacing: 2.4px; text-transform: uppercase; color: var(--blue); }
-.shop-card__name {
+.artikl:hover { transform: translateY(-6px); color: inherit; }
+
+/* Kvadrat — omjer drži mrežu urednom bez obzira na oblik slike. */
+.artikl__okvir {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background: var(--white);
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 18px), calc(100% - 18px) 100%, 0 100%);
+  box-shadow: 0 12px 30px rgba(6,16,36,.24);
+  transition: box-shadow .3s ease;
+}
+.artikl:hover .artikl__okvir { box-shadow: 0 26px 52px rgba(6,16,36,.42); }
+
+.artikl__slika {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform .5s cubic-bezier(.22,.61,.36,1);
+}
+.artikl:hover .artikl__slika { transform: scale(1.07); }
+
+/* Bez slike — inicijal na dijagonalnoj podlozi, da rupa ne izgleda kao greška. */
+.artikl__bezslike {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: repeating-linear-gradient(45deg, #eef3fc 0 8px, #e2ebf9 8px 16px);
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 56px;
+  color: rgba(11,71,168,.28);
+}
+
+.artikl__oznaka {
+  position: absolute;
+  left: 0;
+  top: 14px;
+  background: var(--navy);
+  color: var(--white);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 6px 12px;
+}
+
+.artikl__strelica {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--blue);
+  color: var(--white);
+  font-size: 15px;
+  opacity: 0;
+  translate: 6px 6px;
+  transition: opacity .3s ease, translate .3s cubic-bezier(.22,.61,.36,1);
+}
+.artikl:hover .artikl__strelica { opacity: 1; translate: 0 0; }
+
+.artikl__ime {
   margin: 0;
   font-family: var(--font-display);
   font-weight: 900;
-  font-size: 24px;
-  line-height: 1.05;
+  font-size: 19px;
+  line-height: 1.1;
   text-transform: uppercase;
+  color: var(--white);
 }
-.shop-card__note { font-size: 13px; color: var(--muted); }
-.shop-card__go {
-  margin-top: auto;
-  align-self: flex-start;
-  font-size: 20px;
-  color: var(--blue);
-  transition: transform .3s cubic-bezier(.22,.61,.36,1);
+.artikl__cijena {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 17px;
+  color: var(--sky);
 }
-.shop-card:hover .shop-card__go { transform: translate(5px, -5px); }
+/* Na svijetloj plohi tekst mora pocrniti. */
+.slab--paper .artikl__ime, .impact .artikl__ime { color: var(--ink); }
+.slab--paper .artikl__cijena, .impact .artikl__cijena { color: var(--blue); }
+
+.artikli__prazno {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  font-size: 15px;
+  color: rgba(255,255,255,.72);
+}
+.artikli__prazno p { margin: 0; }
 
 /* Novosti na svojoj stranici. */
 .news-list { margin-top: 22px; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
@@ -2540,6 +2614,8 @@ html { scroll-behavior: smooth; }
   .slab { padding: 62px 0 66px; }
   .split { gap: 34px; }
   .squad-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  .artikli { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  .artikl__ime { font-size: 16px; }
   .honour { flex-direction: column; gap: 8px; }
   .honour__when { width: auto; }
 }
