@@ -13,6 +13,7 @@ import Novosti from './pages/Novosti';
 import Kontakt from './pages/Kontakt';
 import Ulaznice from './pages/Ulaznice';
 import NijePronadeno from './pages/NijePronadeno';
+import AdminApp from './admin/AdminApp';
 
 /**
  * Okvir stranice: zaglavlje, sadržaj, partneri i podnožje.
@@ -22,6 +23,16 @@ import NijePronadeno from './pages/NijePronadeno';
  */
 export default function App() {
   const { pathname } = useLocation();
+
+  // Admin ima vlastito sučelje — bez klupskog zaglavlja, podnožja i animacija.
+  if (pathname.startsWith('/admin')) {
+    return (
+      <>
+        <ScrollToTop />
+        <AdminApp />
+      </>
+    );
+  }
 
   return (
     <>

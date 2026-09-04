@@ -2,9 +2,12 @@ import Brush from '../components/Brush';
 import Pip from '../components/Pip';
 import Reveal from '../components/Reveal';
 import PageHero from '../components/PageHero';
-import { PAGES, STANDINGS, STANDINGS_NOTE, FIXTURES, CLUBS } from '../data/site';
+import { PAGES, STANDINGS_NOTE, CLUBS } from '../data/site';
+import { useContent } from '../lib/content';
 
 export default function Raspored() {
+  const { standings, fixtures } = useContent();
+
   return (
     <>
       <PageHero page={PAGES['/raspored']} />
@@ -31,7 +34,7 @@ export default function Raspored() {
                   <span style={{ textAlign: 'center' }}>Ut</span>
                   <span style={{ textAlign: 'right' }}>Bod</span>
                 </div>
-                {STANDINGS.map((row, i) => (
+                {standings.map((row, i) => (
                   <Reveal
                     variant="right"
                     delay={100 + i * 50}
@@ -56,7 +59,7 @@ export default function Raspored() {
 
             <div className="fixtures">
               <span className="eyebrow eyebrow--sky eyebrow--sm">Nadolazeće utakmice</span>
-              {FIXTURES.map((f, i) => (
+              {fixtures.map((f, i) => (
                 <Reveal variant="right" delay={i * 110} className="fixture notch-br-14" key={f.title}>
                   <div className="fixture__meta">
                     <span className="fixture__when">{f.when}</span>

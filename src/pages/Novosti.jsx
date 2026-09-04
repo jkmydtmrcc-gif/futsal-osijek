@@ -2,9 +2,12 @@ import Brush from '../components/Brush';
 import Pip from '../components/Pip';
 import Reveal from '../components/Reveal';
 import PageHero from '../components/PageHero';
-import { PAGES, FEATURED_NEWS, NEWS, IMAGES } from '../data/site';
+import { PAGES, IMAGES } from '../data/site';
+import { useContent } from '../lib/content';
 
 export default function Novosti() {
+  const { news, featured } = useContent();
+
   return (
     <>
       <PageHero page={PAGES['/novosti']} />
@@ -26,18 +29,18 @@ export default function Novosti() {
             <div className="feature__veil" aria-hidden="true" />
             <Brush variant="feature" />
             <div className="feature__body">
-              <span className="feature__flag">{FEATURED_NEWS.flag}</span>
-              <h3 className="feature__title">{FEATURED_NEWS.title}</h3>
-              <p className="feature__lead">{FEATURED_NEWS.lead}</p>
+              <span className="feature__flag">{featured.flag}</span>
+              <h3 className="feature__title">{featured.title}</h3>
+              <p className="feature__lead">{featured.lead}</p>
               <div className="feature__meta">
                 <Pip size="md" tone="sky" />
-                <span>{FEATURED_NEWS.meta}</span>
+                <span>{featured.meta}</span>
               </div>
             </div>
           </Reveal>
 
           <div className="news-list">
-            {NEWS.map((item, i) => (
+            {news.map((item, i) => (
               <Reveal as="article" variant="right" delay={i * 110} className="news-card" key={item.title}>
                 <div className="news-card__edge" aria-hidden="true" />
                 <span className="news-card__meta">

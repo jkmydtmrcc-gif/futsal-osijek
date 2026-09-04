@@ -2,9 +2,12 @@ import Reveal from '../components/Reveal';
 import PageHero from '../components/PageHero';
 import PlayerCard from '../components/PlayerCard';
 import Brush from '../components/Brush';
-import { PAGES, PLAYERS, STAFF } from '../data/site';
+import { PAGES, STAFF } from '../data/site';
+import { useContent } from '../lib/content';
 
 export default function Postava() {
+  const { players } = useContent();
+
   return (
     <>
       <PageHero page={PAGES['/postava']} />
@@ -21,7 +24,7 @@ export default function Postava() {
           </Reveal>
 
           <div className="squad-grid">
-            {PLAYERS.map((player, i) => (
+            {players.map((player, i) => (
               <PlayerCard player={player} index={i} key={player.name} />
             ))}
           </div>

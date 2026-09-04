@@ -2,9 +2,12 @@ import { Link } from 'react-router-dom';
 import Brush from '../components/Brush';
 import Pip from '../components/Pip';
 import Reveal from '../components/Reveal';
-import { STANDINGS, STANDINGS_NOTE, FIXTURES, TIMELINE, CLUBS } from '../data/site';
+import { STANDINGS_NOTE, TIMELINE, CLUBS } from '../data/site';
+import { useContent } from '../lib/content';
 
 export default function League() {
+  const { standings, fixtures } = useContent();
+
   return (
     <section className="league" id="raspored" aria-labelledby="naslov-liga">
       <div className="scanlines scanlines--wide" aria-hidden="true" />
@@ -29,7 +32,7 @@ export default function League() {
                 <span style={{ textAlign: 'right' }}>Bod</span>
               </div>
 
-              {STANDINGS.map((row, i) => (
+              {standings.map((row, i) => (
                 <Reveal
                   variant="right"
                   delay={120 + i * 55}
@@ -55,7 +58,7 @@ export default function League() {
 
           <div className="fixtures">
             <span className="eyebrow eyebrow--sky eyebrow--sm">Nadolazeće utakmice</span>
-            {FIXTURES.map((fixture, i) => (
+            {fixtures.map((fixture, i) => (
               <Reveal
                 variant="right"
                 delay={i * 110}

@@ -4,3 +4,7 @@ dist
 
 # originali fotografija (lokalno, ne ide na git)
 _originali-slike
+
+# lokalne tajne
+.env
+.env.local
