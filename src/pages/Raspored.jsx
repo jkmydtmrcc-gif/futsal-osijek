@@ -14,7 +14,7 @@ export default function Raspored() {
 
   return (
     <>
-      <PageHero page={pages['/raspored']}>
+      <PageHero page={pages['/raspored']} grafika={images.artRaspored}>
         {us && (
           <div className="phero__stats">
             <span className="phero__stat">

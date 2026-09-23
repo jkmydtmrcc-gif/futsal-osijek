@@ -81,9 +81,9 @@ export default function Footer() {
             © 2026 MNK Osijek Kandit. Sva prava pridržana.
           </span>
           <div className="footer-legal__links">
-            {LEGAL_LINKS.map((label) => (
-              <Link key={label} to={CONTACT_PATH}>
-                {label}
+            {LEGAL_LINKS.map((veza) => (
+              <Link key={veza.label} to={veza.to}>
+                {veza.label}
               </Link>
             ))}
           </div>

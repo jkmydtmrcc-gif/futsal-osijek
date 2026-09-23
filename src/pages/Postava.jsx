@@ -33,7 +33,7 @@ function groupByPosition(players) {
 }
 
 export default function Postava() {
-  const { pages, players, staff } = useContent();
+  const { pages, players, staff, images } = useContent();
   const groups = useMemo(() => groupByPosition(players), [players]);
   const [open, setOpen] = useState(null);
 
@@ -41,7 +41,7 @@ export default function Postava() {
 
   return (
     <>
-      <PageHero page={pages['/postava']}>
+      <PageHero page={pages['/postava']} grafika={images.artPostava}>
         <div className="phero__stats">
           <span className="phero__stat">
             <strong>{players.length}</strong> igrača

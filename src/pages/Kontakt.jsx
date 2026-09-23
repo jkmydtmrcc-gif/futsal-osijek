@@ -10,7 +10,7 @@ import { useContent } from '../lib/content';
 const TEME = ['Navijački upit', 'Mediji', 'Partnerstvo', 'Ulaznice', 'Ostalo'];
 
 export default function Kontakt() {
-  const { pages, contact, hero, map } = useContent();
+  const { pages, contact, hero, map, images } = useContent();
   const [tema, setTema] = useState(TEME[0]);
   const [ime, setIme] = useState('');
   const [poruka, setPoruka] = useState('');
@@ -26,7 +26,7 @@ export default function Kontakt() {
 
   return (
     <>
-      <PageHero page={pages['/kontakt']}>
+      <PageHero page={pages['/kontakt']} grafika={images.artKontakt}>
         <div className="phero__actions">
           <a className="btn btn--solid notch-12" href={`mailto:${contact.email}`}>
             {contact.email}

@@ -375,13 +375,15 @@ export const SPONSOR_TIERS = [
         href: 'https://www.kandit.hr/',
         note: 'Naziv sponzor kluba',
       },
-      { name: 'Saltas', logo: '', href: '', note: '' },
     ],
   },
   {
     id: 'gold',
     tag: 'Gold sponzori',
     size: 'md',
+    /* Razine s više sponzora klize kao traka — tako ih stane koliko god
+       treba, bez reda koji se lomi na pola ekrana. */
+    rotate: true,
     sponsors: [
       { name: 'Sponzor 1', logo: '', href: '', note: '' },
       { name: 'Sponzor 2', logo: '', href: '', note: '' },
@@ -397,6 +399,7 @@ export const SPONSOR_TIERS = [
     id: 'podupiratelji',
     tag: 'Podupiratelji',
     size: 'sm',
+    rotate: true,
     sponsors: [
       { name: 'Podupiratelj 1', logo: '', href: '', note: '' },
       { name: 'Podupiratelj 2', logo: '', href: '', note: '' },
@@ -448,12 +451,21 @@ export const CONTACT = {
 /* Potpis izrađivača u podnožju. */
 export const CREDIT = { prefix: 'Izrada', name: 'Flomis j.d.o.o.' };
 
-export const LEGAL_LINKS = ['Uvjeti korištenja', 'Privatnost', 'Kolačići'];
+export const LEGAL_LINKS = [
+  { label: 'Kolačići', to: '/kolacici' },
+  { label: 'Kontakt', to: '/kontakt' },
+];
 
 export const IMAGES = {
   crest: '/uploads/images.jpeg',
   /* Izrezani igrač (bez pozadine) koji stoji uz tablicu. */
   cutout: '/uploads/igraci/grafika-igrac.webp',
+  /* Grafike u vrhu podstranica — bez njih je tamo naslov u praznini. */
+  artNovosti: '/uploads/grafike/oko.webp',
+  artKontakt: '/uploads/grafike/srce.webp',
+  artRaspored: '/uploads/grafike/slavlje.webp',
+  artPostava: '/uploads/grafike/palci.webp',
+  artUlaznice: '/uploads/grafike/vratar.webp',
   celebration: '/uploads/S-oskanvma10_GOM_300525-970.webp',
   team: '/uploads/aa.jpg',
   kandit: '/uploads/kandit-logo.png',
@@ -508,6 +520,12 @@ export const PAGES = {
     eyebrow: 'Javi nam se',
     title: 'Kontakt',
     lead: 'Dvorana Zrinjevac, e-mail i telefon kluba — za navijače, medije i partnere.',
+  },
+  '/kolacici': {
+    navId: null,
+    eyebrow: 'Privatnost',
+    title: 'Kolačići',
+    lead: 'Što se sprema u tvoj preglednik i zašto. Kratko, jer je i popis kratak.',
   },
   '/ulaznice': {
     navId: null,

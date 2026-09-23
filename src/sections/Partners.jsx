@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import Brush from '../components/Brush';
 import Reveal from '../components/Reveal';
+import Marquee from '../components/Marquee';
 import { CONTACT_PATH } from '../data/site';
 import { useContent } from '../lib/content';
 
@@ -35,6 +36,18 @@ function SponsorCell({ sponsor, size }) {
       {sponsor.note && <span className="sponsor__note">{sponsor.note}</span>}
     </div>
   );
+}
+
+/**
+ * Traka kliže pomakom za pola staze, pa mora biti barem dvostruko šira od
+ * ekrana. S dva ili tri sponzora nije — popis se zato ponavlja dok ne bude
+ * dovoljno dug da petlja izgleda neprekinuto.
+ */
+function popuni(sponsors, najmanje = 8) {
+  if (sponsors.length === 0) return sponsors;
+  const out = [];
+  while (out.length < najmanje) out.push(...sponsors);
+  return out;
 }
 
 export default function Partners() {
@@ -81,19 +94,55 @@ export default function Partners() {
                 <span className="tier__line" aria-hidden="true" />
               </div>
 
-              <div className="tier__grid">
-                {tier.sponsors.map((sponsor, i) => (
-                  <Reveal
-                    as="div"
-                    variant="scale"
-                    delay={i * 45}
-                    key={`${sponsor.name}-${i}`}
-                    className="tier__cell"
-                  >
-                    <SponsorCell sponsor={sponsor} size={tier.size} />
-                  </Reveal>
-                ))}
-              </div>
+              {/* Razina označena za rotaciju klizi kao traka; ostale stoje u
+                  mreži. Traka se zaustavlja na prelazak mišem, da se logotip
+                  stigne pročitati i kliknuti. */}
+              {tier.rotate ? (
+                <>
+                  {/* Traka je ukras i `Marquee` je skriva čitačima ekrana — uz
+                      to da svakog sponzora prikazuje dvaput. Zato isti popis
+                      stoji i kao običan, nevidljiv popis poveznica. */}
+                  <ul className="sr-only">
+                    {tier.sponsors.map((sponsor, i) => (
+                      <li key={`${sponsor.name}-${i}-a11y`}>
+                        {sponsor.href ? (
+                          <a href={sponsor.href} target="_blank" rel="noopener noreferrer">
+                            {sponsor.name}
+                          </a>
+                        ) : (
+                          sponsor.name
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                <Marquee
+                  items={popuni(tier.sponsors)}
+                  className="tier__rail"
+                  trackClassName={`tier__track tier__track--${tier.size}`}
+                  faded
+                >
+                  {(sponsor, i) => (
+                    <span className="tier__cell tier__cell--rail" key={`${sponsor.name}-${i}`}>
+                      <SponsorCell sponsor={sponsor} size={tier.size} />
+                    </span>
+                  )}
+                </Marquee>
+                </>
+              ) : (
+                <div className="tier__grid">
+                  {tier.sponsors.map((sponsor, i) => (
+                    <Reveal
+                      as="div"
+                      variant="scale"
+                      delay={i * 45}
+                      key={`${sponsor.name}-${i}`}
+                      className="tier__cell"
+                    >
+                      <SponsorCell sponsor={sponsor} size={tier.size} />
+                    </Reveal>
+                  ))}
+                </div>
+              )}
             </Reveal>
           ))}
       </div>

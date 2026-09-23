@@ -130,7 +130,13 @@ export function tiersFromRows(rows) {
   rows.forEach((row) => {
     const id = row.tier || 'ostalo';
     if (!byTier.has(id)) {
-      byTier.set(id, { id, tag: row.tag || id, size: row.size || 'md', sponsors: [] });
+      byTier.set(id, {
+        id,
+        tag: row.tag || id,
+        size: row.size || 'md',
+        rotate: Boolean(row.rotate),
+        sponsors: [],
+      });
     }
     byTier.get(id).sponsors.push({
       name: row.name ?? '',

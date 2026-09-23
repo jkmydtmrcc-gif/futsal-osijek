@@ -91,6 +91,29 @@ Google i za karticu preglednika.
 ijednog od toga se namjerno ne zapisuje — kriva domena u sitemapu je gora nego
 nikakva.
 
+## Klupski asistent
+
+Gumb „Pitaj klub” dolje desno otvara asistenta koji odgovara na pitanja o
+rasporedu, tablici, dvorani, ulaznicama, postavi, Fan Shopu i kontaktu.
+
+**Nije jezični model.** Odgovore slaže iz podataka koji su već na stranici, pa
+ne košta ništa, radi bez interneta i ne može izmisliti termin utakmice. Kad ne
+prepozna pitanje, to i kaže i uputi na klub — nagađanje bi ovdje bilo gore od
+priznanja, jer bi posjetitelj krivi podatak shvatio ozbiljno.
+
+Teme su u `src/components/Asistent.jsx`; nova se doda kao još jedan unos s
+ključnim riječima i odgovorom.
+
+## Kolačići
+
+Stranica ne postavlja kolačiće za praćenje i nema analitiku, pa traka nije
+privola s „prihvati / odbij” — takva traka pita za nešto čega nema. Umjesto
+toga stoji obavijest što se stvarno sprema, uz stranicu `/kolacici` s
+popisom.
+
+Ako se ikad doda analitika ili ugradnja koja postavlja kolačiće bez pitanja,
+ovo treba pretvoriti u pravu privolu, s odbijanjem koje stvarno radi.
+
 ## Slike
 
 Slike idu u `public/uploads/` i upisuju se kao putanja (`/uploads/ime.webp`),

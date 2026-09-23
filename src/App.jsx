@@ -3,6 +3,8 @@ import BrushDefs from './components/BrushDefs';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import ScrollToTop from './components/ScrollToTop';
+import KolaciciTraka from './components/Kolacici';
+import Asistent from './components/Asistent';
 import Partners from './sections/Partners';
 import Naslovnica from './pages/Naslovnica';
 import Klub from './pages/Klub';
@@ -13,6 +15,7 @@ import Novosti from './pages/Novosti';
 import Novost from './pages/Novost';
 import Kontakt from './pages/Kontakt';
 import Ulaznice from './pages/Ulaznice';
+import Kolacici from './pages/Kolacici';
 import AdminApp from './admin/AdminApp';
 import NijePronadeno from './pages/NijePronadeno';
 
@@ -62,6 +65,7 @@ export default function App() {
               <Route path="/novosti/:id" element={<Novost />} />
               <Route path="/kontakt" element={<Kontakt />} />
               <Route path="/ulaznice" element={<Ulaznice />} />
+              <Route path="/kolacici" element={<Kolacici />} />
               <Route path="*" element={<NijePronadeno />} />
             </Routes>
           </div>
@@ -70,6 +74,11 @@ export default function App() {
         <Partners />
         <Footer />
       </div>
+
+      {/* Redoslijed je bitan: pravilo `.ck ~ .as-fab` skriva asistenta dok
+          obavijest o kolačićima stoji, a `~` hvata samo ono što slijedi. */}
+      <KolaciciTraka />
+      <Asistent />
     </>
   );
 }

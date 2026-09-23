@@ -10,7 +10,7 @@ import { useContent } from '../lib/content';
 const SVE = 'Sve';
 
 export default function Novosti() {
-  const { pages, news } = useContent();
+  const { pages, news, images } = useContent();
   const [filter, setFilter] = useState(SVE);
   const featured = news.featured;
 
@@ -29,7 +29,7 @@ export default function Novosti() {
 
   return (
     <>
-      <PageHero page={pages['/novosti']} />
+      <PageHero page={pages['/novosti']} grafika={images.artNovosti} />
 
       <section className="slab slab--paper" aria-labelledby="naslov-vijesti">
         <Brush variant="news-1" />

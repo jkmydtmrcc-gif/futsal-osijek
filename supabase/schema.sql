@@ -223,8 +223,12 @@ create table if not exists sponzori (
   logo        text not null default '',
   href        text not null default '',
   note        text not null default '',
+  rotate      boolean not null default false,
   created_at  timestamptz not null default now()
 );
+
+-- Razine dodane kasnije: stupac se dodaje i na postojeću bazu.
+alter table sponzori add column if not exists rotate boolean not null default false;
 
 -- 4.7 Postavke — ono čega ima po jedan komad
 --
@@ -258,12 +262,11 @@ begin
 end $$;
 
 -- 4.9 Početni sponzori — samo stvarni, bez rezerviranih mjesta
-insert into sponzori (sort_order, tier, tag, size, name, logo, href, note)
+insert into sponzori (sort_order, tier, tag, size, name, logo, href, note, rotate)
 select * from (values
   (1, 'glavni', 'Glavni sponzori', 'lg', 'Kandit', '/uploads/kandit-logo.png',
-      'https://www.kandit.hr/', 'Naziv sponzor kluba'),
-  (2, 'glavni', 'Glavni sponzori', 'lg', 'Saltas', '', '', '')
-) as v(sort_order, tier, tag, size, name, logo, href, note)
+      'https://www.kandit.hr/', 'Naziv sponzor kluba', false)
+) as v(sort_order, tier, tag, size, name, logo, href, note, rotate)
 where not exists (select 1 from sponzori);
 
 -- 4.10 Grb Osijeka u tablici (ostali klubovi pokazuju inicijale dok se

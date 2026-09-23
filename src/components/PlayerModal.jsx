@@ -146,6 +146,12 @@ export default function PlayerModal({ player, onClose }) {
 
           {/* --- Podaci ----------------------------------------------------- */}
           <div className="pm__body">
+            {player.number ? (
+              <div className="pm__badge">
+                <span className="pm__badge-hash">BROJ</span>
+                <span className="pm__badge-num">{player.number}</span>
+              </div>
+            ) : null}
             <span className="eyebrow eyebrow--sky">{player.pos}</span>
             <h2 className="pm__name">
               <span className="pm__first">

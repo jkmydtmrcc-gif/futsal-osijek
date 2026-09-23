@@ -18,7 +18,7 @@ export default function Ulaznice() {
 
   return (
     <>
-      <PageHero page={pages['/ulaznice']}>
+      <PageHero page={pages['/ulaznice']} grafika={images.artUlaznice}>
         <div className="phero__actions">
           <a className="btn btn--solid notch-12" href={`mailto:${contact.email}`}>
             Rezerviraj e-mailom
