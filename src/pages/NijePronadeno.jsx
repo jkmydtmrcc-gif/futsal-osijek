@@ -2,11 +2,13 @@ import { Link } from 'react-router-dom';
 import Brush from '../components/Brush';
 import Pip from '../components/Pip';
 import Reveal from '../components/Reveal';
+import Meta from '../components/Meta';
 import { NOT_FOUND, TICKETS_PATH, NAV_LINKS } from '../data/site';
 
 export default function NijePronadeno() {
   return (
     <section className="wip" aria-labelledby="wip-naslov">
+      <Meta title={NOT_FOUND.title} description={NOT_FOUND.lead} />
       <div className="scanlines scanlines--wide" aria-hidden="true" />
       <Brush variant="league-1" />
       <Brush variant="league-2" />

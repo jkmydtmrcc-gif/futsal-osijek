@@ -3,6 +3,7 @@ import Brush from '../components/Brush';
 import Pip from '../components/Pip';
 import Reveal from '../components/Reveal';
 import NewsCard from '../components/NewsCard';
+import Meta from '../components/Meta';
 import NijePronadeno from './NijePronadeno';
 import { useContent } from '../content/ContentContext';
 
@@ -18,6 +19,8 @@ export default function Novost() {
 
   return (
     <>
+      <Meta title={item.title} description={item.lead} image={item.image} type="article" />
+
       <article className="post">
         <section className="phero phero--post" aria-labelledby="post-naslov">
           <div className="scanlines scanlines--wide" aria-hidden="true" />

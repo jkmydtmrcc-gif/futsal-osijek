@@ -1,3 +1,5 @@
+import Meta from '../components/Meta';
+import { useContent } from '../content/ContentContext';
 import Hero from '../sections/Hero';
 import Ticker from '../sections/Ticker';
 import Impact from '../sections/Impact';
@@ -9,8 +11,11 @@ import News from '../sections/News';
 
 /** Naslovnica — implementacija dizajna Naslovnica.dc.html. */
 export default function Naslovnica() {
+  const { hero, images } = useContent();
+
   return (
     <>
+      <Meta description={hero.slogan} image={images.celebration} />
       <Hero />
       <Ticker />
       <Impact />

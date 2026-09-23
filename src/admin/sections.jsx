@@ -72,6 +72,12 @@ export function Naslovnica({ c, set }) {
       />
 
       <h3 className="adm-h3">Gornja traka u zaglavlju</h3>
+      <Tekst
+        label="Natpis uz točkicu"
+        hint="na dan utakmice npr. „Live“; inače nešto što je uvijek točno"
+        value={c.topbarBadge}
+        onChange={(v) => set('topbarBadge', v)}
+      />
       <PopisTeksta value={c.topbar} onChange={(v) => set('topbar', v)} label="Natpisi" />
 
       <h3 className="adm-h3">Traka ispod heroja</h3>

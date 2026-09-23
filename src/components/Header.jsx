@@ -15,7 +15,7 @@ import { useContent } from '../content/ContentContext';
  * se u izborniku i dalje normalno — samo vode na stranicu "u izgradnji".
  */
 export default function Header() {
-  const { topbar, images, pages } = useContent();
+  const { topbar, topbarBadge, images, pages } = useContent();
   const { pathname } = useLocation();
   const scrolled = useScrolled(24);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -41,7 +41,7 @@ export default function Header() {
         <div className="topbar__inner">
           <span className="topbar__live">
             <Pip tone="sky" />
-            Live
+            {topbarBadge}
           </span>
 
           <Marquee items={topbar} className="topbar__marquee" faded>

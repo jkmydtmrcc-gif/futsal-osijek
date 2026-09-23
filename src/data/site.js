@@ -24,6 +24,15 @@ export const NAV_LINKS = [
 export const TICKETS_PATH = '/ulaznice';
 export const CONTACT_PATH = '/kontakt';
 
+/**
+ * Natpis uz točkicu na lijevom kraju gornje trake.
+ *
+ * Prije je tu stalno pisalo „Live“, što na klupskoj stranici obećava prijenos
+ * kojeg nema. Sad je polje: na dan utakmice se upiše „Live“, inače stoji nešto
+ * što je uvijek točno.
+ */
+export const TOPBAR_BADGE = 'Novosti';
+
 export const TOPBAR_STRIP = [
   'MNK Osijek Kandit · Športska dvorana Zrinjevac',
   '2. mjesto regularnog dijela SuperSport HMNL-a 2025/26',

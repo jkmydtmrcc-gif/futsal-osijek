@@ -106,6 +106,19 @@ neupotrebljivo za pravi rad.
 
 Push na `main`. Nakon deploya otvori `/admin`, upiši svoj broj i prijavi se.
 
+### 6. Karta stranice (neobavezno)
+
+`sitemap.xml` se zapisuje pri buildu, ali traži punu domenu. Na Vercelu se ona
+zna sama (`VERCEL_PROJECT_PRODUCTION_URL`); drugdje postavi `SITE_URL`:
+
+```
+SITE_URL=https://mnk-osijek-kandit.hr npm run build
+```
+
+Bez ijednog od toga se karta **namjerno ne zapisuje** — kriva domena u
+sitemapu je gora nego nikakva, jer tražilica po njoj traži stranice kojih
+nema.
+
 ---
 
 # Kako se uređuje
@@ -156,6 +169,25 @@ učitava tek na klik — inače bi svaka stranica s podnožjem povlačila nekoli
 stotina kilobajta karte koju većina posjetitelja nikad ne otvori.
 
 Koordinate se mijenjaju u administraciji, pod **Kontakt i ulaznice**.
+
+## Dijeljenje i tražilice
+
+Svaka ruta postavlja svoj `<title>`, opis, `canonical` i Open Graph oznake, pa
+poveznica podijeljena na Facebooku ili u WhatsApp grupi stiže sa slikom,
+naslovom i opisom umjesto kao goli link. Pojedinačna novost pritom nosi svoj
+naslov i svoju fotografiju.
+
+Facebookov i WhatsAppov pregledavatelj ne izvršavaju JavaScript, pa im vrijedi
+ono što stoji u `index.html`; `components/Meta.jsx` te oznake zatim precizira
+po rutama za Google i za karticu preglednika.
+
+## Kad nešto pukne
+
+Ako pokvaren sadržaj sruši prikaz (npr. uvezena datoteka krivog oblika),
+umjesto bijele stranice se pojavi stranica s dva gumba: „Očisti i učitaj
+ponovno“ (briše samo lokalnu skicu i predmemoriju, objavljeno ostaje) i
+poveznica na administraciju. Bez toga bi i administracija bila bijela, pa se
+neispravan sadržaj ne bi imao gdje popraviti.
 
 ## Slike
 

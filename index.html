@@ -3,15 +3,42 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#061024">
+
 <title>MNK Osijek Kandit — službene stranice kluba</title>
 <meta name="description" content="MNK Osijek Kandit — futsal klub iz Osijeka, osnovan 2002. Domaći parket: Športska dvorana Zrinjevac. Momčad, raspored, tablica, novosti i Fan Shop.">
-<link rel="icon" href="/uploads/images.jpeg">
+
+<!-- Oznake za dijeljenje. Facebookov i WhatsAppov pregledavatelj ne
+     izvršavaju JavaScript, pa im vrijedi samo ono što stoji ovdje; po
+     rutama ih zatim precizira components/Meta.jsx. -->
+<meta property="og:site_name" content="MNK Osijek Kandit">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="hr_HR">
+<meta property="og:title" content="MNK Osijek Kandit — službene stranice kluba">
+<meta property="og:description" content="Futsal klub iz Osijeka, osnovan 2002. Momčad, raspored, tablica, novosti i Fan Shop.">
+<meta property="og:image" content="/uploads/S-oskanvma10_GOM_300525-970.webp">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="icon" href="/grb.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/uploads/images.jpeg">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@600;700;800;900&family=Saira:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<!-- Velika fotografija u heroju je prvo što se vidi; dohvaća se usporedo s
+     kodom umjesto da čeka na njega. -->
+<link rel="preload" as="image" href="/uploads/S-oskanvma10_GOM_300525-970.webp" fetchpriority="high">
 </head>
 <body>
 <div id="root"></div>
+<noscript>
+  <p style="font-family:system-ui;padding:24px;max-width:38rem;margin:0 auto">
+    Za prikaz stranice potreban je JavaScript. Klub je dostupan i na
+    <a href="mailto:osijek.kelme@gmail.com">osijek.kelme@gmail.com</a> te na
+    +385 31 227 503.
+  </p>
+</noscript>
 <script type="module" src="/src/main.jsx"></script>
 </body>
 </html>

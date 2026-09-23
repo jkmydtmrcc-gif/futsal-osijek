@@ -10,6 +10,7 @@ import {
   SLOGAN,
   VENUE,
   TOPBAR_STRIP,
+  TOPBAR_BADGE,
   TICKER,
   HERO_FACTS,
   IMPACT,
@@ -67,6 +68,7 @@ export const DEFAULT_CONTENT = clone({
   },
 
   topbar: TOPBAR_STRIP,
+  topbarBadge: TOPBAR_BADGE,
   ticker: TICKER,
   impact: IMPACT,
 
