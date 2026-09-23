@@ -16,17 +16,23 @@ function splitName(name) {
  * Portret je izrezan (bez pozadine) pa scenu radi kartica — tamna podloga
  * daje kontrast bijelim dresovima.
  */
-export default function PlayerCard({ player, index = 0 }) {
+export default function PlayerCard({ player, index = 0, onOpen }) {
   const [failed, setFailed] = useState(false);
   const showPhoto = Boolean(player.photo) && !failed;
   const { first, last } = splitName(player.name);
 
+  /* Kad se klikom otvara profil, kartica je gumb — ne `article` s `onClick`.
+     Tako radi i tipkovnica i čitač ekrana, bez ručnog dodavanja role i
+     rukovatelja za Enter i razmaknicu. */
   return (
     <Reveal
-      as="article"
+      as={onOpen ? 'button' : 'article'}
+      type={onOpen ? 'button' : undefined}
+      onClick={onOpen}
+      aria-label={onOpen ? `${player.name} — otvori profil` : undefined}
       variant="blur"
       delay={index * 70}
-      className={`player${showPhoto ? ' has-photo' : ''}`}
+      className={`player${showPhoto ? ' has-photo' : ''}${onOpen ? ' player--btn' : ''}`}
     >
       {/* Broj na dresu, ne redni broj u popisu. */}
       <span className={`player__num${String(player.number).length === 1 ? ' is-single' : ''}`} aria-hidden="true">
@@ -65,6 +71,12 @@ export default function PlayerCard({ player, index = 0 }) {
         </h3>
         <span className="player__note">{player.note}</span>
       </div>
+
+      {onOpen && (
+        <span className="player__more" aria-hidden="true">
+          Profil →
+        </span>
+      )}
     </Reveal>
   );
 }

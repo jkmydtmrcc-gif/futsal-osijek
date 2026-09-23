@@ -41,10 +41,12 @@ export default function Shop() {
         </div>
 
         <div className="shop__perks">
-          <Reveal as="span" className="shop__perk" delay={0}>
-            <Pip size="md" tone="sky" />
-            {shop.note}
-          </Reveal>
+          {shop.note && (
+            <Reveal as="span" className="shop__perk" delay={0}>
+              <Pip size="md" tone="sky" />
+              {shop.note}
+            </Reveal>
+          )}
           <Reveal
             as="a"
             className="shop__perk shop__perk--link"

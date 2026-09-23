@@ -1,11 +1,44 @@
 import { Link } from 'react-router-dom';
 import Brush from '../components/Brush';
 import Reveal from '../components/Reveal';
-import { PARTNER_COUNTS, PARTNER_ROWS, CONTACT_PATH } from '../data/site';
+import { CONTACT_PATH } from '../data/site';
 import { useContent } from '../content/ContentContext';
 
+/**
+ * Sponzori u razinama: glavni, gold, podupiratelji.
+ *
+ * Pločica pokaže logotip kad postoji, a kad ne — ime sponzora ispisano.
+ * Namjerno se ne podmeće tuđi logotip kao zamjena: to je izgledalo kao da
+ * klub ima osamnaest istih sponzora.
+ */
+function SponsorCell({ sponsor, size }) {
+  const inner = sponsor.logo ? (
+    <img src={sponsor.logo} alt={sponsor.name} loading="lazy" />
+  ) : (
+    <span className="sponsor__name">{sponsor.name}</span>
+  );
+
+  const className = `sponsor sponsor--${size}${sponsor.logo ? ' has-logo' : ''}`;
+
+  if (sponsor.href) {
+    return (
+      <a className={className} href={sponsor.href} target="_blank" rel="noopener noreferrer">
+        {inner}
+        {sponsor.note && <span className="sponsor__note">{sponsor.note}</span>}
+      </a>
+    );
+  }
+
+  return (
+    <div className={className}>
+      {inner}
+      {sponsor.note && <span className="sponsor__note">{sponsor.note}</span>}
+    </div>
+  );
+}
+
 export default function Partners() {
-  const { images } = useContent();
+  const { sponsors } = useContent();
 
   return (
     <section className="partners" aria-labelledby="naslov-partneri">
@@ -24,7 +57,7 @@ export default function Partners() {
         </Reveal>
 
         <div className="partners__counts">
-          {PARTNER_COUNTS.map((count, i) => (
+          {sponsors.counts.map((count, i) => (
             <Reveal key={count.label} delay={i * 100}>
               <span className="partners__count-n">{count.value}</span>
               <span className="partners__count-l">{count.label}</span>
@@ -38,40 +71,31 @@ export default function Partners() {
         </div>
       </div>
 
-      <div className="headline-partner">
-        <Reveal variant="scale" className="headline-partner__card notch-br-22">
-          <div className="headline-partner__edge" aria-hidden="true" />
-          <img
-            className="headline-partner__logo"
-            src={images.kandit}
-            alt="Kandit — glavni partner kluba"
-          />
-          <div className="headline-partner__copy">
-            <span className="eyebrow eyebrow--sm">Glavni partner kluba</span>
-            <p>
-              Kandit je naziv sponzor kluba — ime koje stoji uz Osijek u imenu MNK
-              Osijek Kandit.
-            </p>
-          </div>
-        </Reveal>
-      </div>
+      <div className="tiers">
+        {sponsors.tiers
+          .filter((tier) => tier.sponsors.length > 0)
+          .map((tier, t) => (
+            <Reveal className={`tier tier--${tier.size}`} delay={t * 90} key={tier.id}>
+              <div className="tier__head">
+                <span className="tier__tag">{tier.tag}</span>
+                <span className="tier__line" aria-hidden="true" />
+              </div>
 
-      {/* Logotipi ostalih partnera još nisu isporučeni. */}
-      <div className="partner-rows" aria-hidden="true">
-        {PARTNER_ROWS.map((row) => (
-          <div className={`partner-row partner-row--${row.modifier}`} key={row.id}>
-            <span className="partner-row__tag">{row.tag}</span>
-            <div className="partner-row__strip">
-              <div className="partner-row__track">
-                {Array.from({ length: row.count }, (_, i) => (
-                  <span className="partner-row__cell" key={i}>
-                    <img src={images.kandit} alt="" loading="lazy" />
-                  </span>
+              <div className="tier__grid">
+                {tier.sponsors.map((sponsor, i) => (
+                  <Reveal
+                    as="div"
+                    variant="scale"
+                    delay={i * 45}
+                    key={`${sponsor.name}-${i}`}
+                    className="tier__cell"
+                  >
+                    <SponsorCell sponsor={sponsor} size={tier.size} />
+                  </Reveal>
                 ))}
               </div>
-            </div>
-          </div>
-        ))}
+            </Reveal>
+          ))}
       </div>
     </section>
   );

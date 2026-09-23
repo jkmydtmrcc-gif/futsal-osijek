@@ -186,8 +186,9 @@ export function Slika({ label, hint, value, onChange }) {
  * `fields` opisuje koja polja stavka ima; `render` je izlaz za slučajeve
  * koje generički opis ne pokriva.
  */
-export function Popis({ items, onChange, novo, naslov, fields, render, prazno }) {
+export function Popis({ items, onChange, novo, naslov, fields, render, prazno, trazi }) {
   const list = items ?? [];
+  const [upit, setUpit] = useState('');
   // Stavke su sklopljene dok se ne otvore — popis s petnaest artikala inače
   // postane nepregledna traka polja dugačka nekoliko ekrana.
   const [otvoreno, setOtvoreno] = useState(() => new Set());
@@ -200,7 +201,19 @@ export function Popis({ items, onChange, novo, naslov, fields, render, prazno })
     });
 
   const set = (i, next) => onChange(list.map((item, j) => (i === j ? next : item)));
-  const remove = (i) => onChange(list.filter((_, j) => j !== i));
+  const remove = (i) => {
+    if (!confirm('Obrisati ovu stavku?')) return;
+    onChange(list.filter((_, j) => j !== i));
+  };
+  /* Umnožavanje: novi artikl ili igrač se najčešće radi po uzoru na
+     postojećeg, pa je kopiranje brže od upisivanja svega iznova. */
+  const duplicate = (i) => {
+    const copy = structuredClone(list[i]);
+    if (copy.id) copy.id = `${copy.id}-kopija`;
+    if (copy.name) copy.name = `${copy.name} (kopija)`;
+    onChange([...list.slice(0, i + 1), copy, ...list.slice(i + 1)]);
+    setOtvoreno((prev) => new Set(prev).add(i + 1));
+  };
   const move = (i, dir) => {
     const j = i + dir;
     if (j < 0 || j >= list.length) return;
@@ -209,11 +222,34 @@ export function Popis({ items, onChange, novo, naslov, fields, render, prazno })
     onChange(copy);
   };
 
+  /* Traži se po naslovu stavke — isti tekst koji stoji u traci. */
+  const match = (item, i) => {
+    if (!upit.trim()) return true;
+    const label = naslov ? String(naslov(item, i)) : `Stavka ${i + 1}`;
+    return label.toLocaleLowerCase('hr-HR').includes(upit.toLocaleLowerCase('hr-HR'));
+  };
+
+  const vidljivih = list.filter(match).length;
+
   return (
     <div className="adm-list">
+      {trazi && list.length > 4 && (
+        <div className="adm-search">
+          <input
+            className="adm-input"
+            type="search"
+            value={upit}
+            placeholder={`Traži (${list.length})…`}
+            onChange={(e) => setUpit(e.target.value)}
+          />
+          {upit && <span className="adm-search__count">{vidljivih} od {list.length}</span>}
+        </div>
+      )}
+
       {list.length === 0 && <p className="adm-empty">{prazno ?? 'Popis je prazan.'}</p>}
 
       {list.map((item, i) => (
+        match(item, i) && (
         <div className={`adm-item${otvoreno.has(i) ? ' is-open' : ''}`} key={i}>
           <div className="adm-item__bar">
             <button
@@ -248,9 +284,19 @@ export function Popis({ items, onChange, novo, naslov, fields, render, prazno })
               </button>
               <button
                 type="button"
+                className="adm-icon"
+                onClick={() => duplicate(i)}
+                aria-label="Umnoži"
+                title="Umnoži"
+              >
+                ⧉
+              </button>
+              <button
+                type="button"
                 className="adm-icon adm-icon--danger"
                 onClick={() => remove(i)}
                 aria-label="Obriši"
+                title="Obriši"
               >
                 ✕
               </button>
@@ -260,26 +306,30 @@ export function Popis({ items, onChange, novo, naslov, fields, render, prazno })
           {otvoreno.has(i) && (
           <div className="adm-item__body">
             {(fields ?? []).map((f) => {
+              const wide = f.type === 'area' || f.type === 'odlomci' || f.type === 'slika';
               const value = item[f.key];
               const change = (v) => set(i, { ...item, [f.key]: v });
 
+              const wrap = (node) => (
+                <div className={wide ? 'adm-cell adm-cell--wide' : 'adm-cell'} key={f.key}>
+                  {node}
+                </div>
+              );
+
               if (f.type === 'area')
-                return (
-                  <Odlomak key={f.key} label={f.label} hint={f.hint} value={value} onChange={change} />
+                return wrap(
+                  <Odlomak label={f.label} hint={f.hint} value={value} onChange={change} />
                 );
               if (f.type === 'odlomci')
-                return (
-                  <Odlomci key={f.key} label={f.label} hint={f.hint} value={value} onChange={change} />
+                return wrap(
+                  <Odlomci label={f.label} hint={f.hint} value={value} onChange={change} />
                 );
               if (f.type === 'broj')
-                return <Broj key={f.key} label={f.label} hint={f.hint} value={value} onChange={change} />;
+                return wrap(<Broj label={f.label} hint={f.hint} value={value} onChange={change} />);
               if (f.type === 'slika')
-                return (
-                  <Slika key={f.key} label={f.label} hint={f.hint} value={value} onChange={change} />
-                );
-              return (
+                return wrap(<Slika label={f.label} hint={f.hint} value={value} onChange={change} />);
+              return wrap(
                 <Tekst
-                  key={f.key}
                   label={f.label}
                   hint={f.hint}
                   value={value}
@@ -288,10 +338,13 @@ export function Popis({ items, onChange, novo, naslov, fields, render, prazno })
                 />
               );
             })}
-            {render?.(item, (next) => set(i, next), i)}
+            {render && (
+              <div className="adm-cell adm-cell--wide">{render(item, (next) => set(i, next), i)}</div>
+            )}
           </div>
           )}
         </div>
+        )
       ))}
 
       {novo && (

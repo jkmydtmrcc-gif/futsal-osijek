@@ -5,7 +5,7 @@ import Pip from './Pip';
 import Marquee from './Marquee';
 import MobileNav from './MobileNav';
 import useScrolled from '../hooks/useScrolled';
-import { NAV_LINKS, TICKETS_PATH, CONTACT_PATH } from '../data/site';
+import { NAV_LINKS, CONTACT_PATH } from '../data/site';
 import { useContent } from '../content/ContentContext';
 
 /**
@@ -95,11 +95,6 @@ export default function Header() {
               );
             })}
           </nav>
-
-          <Link className="masthead__cta" to={TICKETS_PATH}>
-            <span className="masthead__cta-text">Kupi ulaznicu</span>
-            <Pip size="md" tone="sky" />
-          </Link>
 
           {/* Vidljiv tek ispod 980px; iznad toga je izbornik u traci. */}
           <button

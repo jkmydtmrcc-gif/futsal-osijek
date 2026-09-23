@@ -24,6 +24,7 @@ const KARTICE = [
   { id: 'liga', label: 'Tablica i raspored', Component: S.Liga },
   { id: 'shop', label: 'Fan Shop', Component: S.Shop },
   { id: 'klub', label: 'O klubu', Component: S.Klub },
+  { id: 'sponzori', label: 'Sponzori', Component: S.Sponzori },
   { id: 'kontakt', label: 'Kontakt i ulaznice', Component: S.Kontakt },
   { id: 'stranice', label: 'Zaglavlja stranica', Component: S.Stranice },
 ];

@@ -5,7 +5,7 @@ import Reveal from '../components/Reveal';
 import { useContent, useStandings } from '../content/ContentContext';
 
 export default function League() {
-  const { league } = useContent();
+  const { league, images } = useContent();
   const standings = useStandings();
 
   return (
@@ -74,6 +74,21 @@ export default function League() {
                 <span className="fixture__venue">{fixture.venue}</span>
               </Reveal>
             ))}
+
+            <Reveal variant="right" delay={220} className="league__figure">
+              <span className="league__figure-glow" aria-hidden="true" />
+              <img
+                className="league__cutout"
+                src={images.cutout}
+                alt=""
+                aria-hidden="true"
+                loading="lazy"
+              />
+              <div className="league__figure-tag">
+                <span className="league__figure-comp">SuperSport HMNL</span>
+                <span className="league__figure-club">Osijek Kandit</span>
+              </div>
+            </Reveal>
           </div>
         </div>
 

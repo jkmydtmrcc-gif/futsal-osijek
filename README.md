@@ -123,7 +123,39 @@ Uz to: **Izvezi/Uvezi JSON** (sigurnosna kopija ili prijenos na drugo računalo)
 je netko drugi nešto mijenjao).
 
 Uređuje se: slike, novosti, igrači i stožer, tablica, utakmice, Fan Shop,
-podaci o klubu, kontakt, česta pitanja i zaglavlja svih stranica.
+podaci o klubu, **sponzori**, kontakt, karta dvorane, česta pitanja i zaglavlja
+svih stranica.
+
+Popisi su sklopljeni dok ih ne otvoriš, imaju tražilicu (od pet stavki
+naviše), pomicanje gore/dolje, umnožavanje i brisanje uz potvrdu.
+
+## Kartica igrača
+
+Klik na igrača — na naslovnici ili na stranici Postava — otvara karticu preko
+cijelog ekrana: portret, broj, pozicija, datum rođenja, odakle je, visina,
+noga, u klubu od, i statistika po sezonama i natjecanjima (utakmice, golovi,
+golovi iz penala, autogolovi).
+
+Sve se upisuje u administraciji, pod **Momčad**. Polje koje ostaviš prazno se
+u kartici ne prikazuje — prazan redak „Visina —“ ne govori ništa, a izgleda
+kao greška. Ako igrač nema upisanu statistiku, kartica to i kaže umjesto da
+pokaže same nule.
+
+## Sponzori
+
+Tri razine: glavni sponzori, gold sponzori i podupiratelji. Razina bez
+sponzora se ne prikazuje. Pločica bez logotipa pokaže ime sponzora ispisano —
+namjerno, jer je prije toga svaka traka ponavljala isti tuđi logotip kao
+zamjenu, pa je izgledalo kao da klub ima osamnaest istih sponzora.
+
+## Karta dvorane
+
+OpenStreetMap, ne Google Maps: ugrađuje se bez ključa i bez kolačića za
+praćenje, pa stranica zbog karte ne treba privolu za kolačiće. Okvir se
+učitava tek na klik — inače bi svaka stranica s podnožjem povlačila nekoliko
+stotina kilobajta karte koju većina posjetitelja nikad ne otvori.
+
+Koordinate se mijenjaju u administraciji, pod **Kontakt i ulaznice**.
 
 ## Slike
 

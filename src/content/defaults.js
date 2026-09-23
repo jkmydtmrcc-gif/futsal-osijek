@@ -40,6 +40,9 @@ import {
   TICKET_FAQ,
   IMAGES,
   PAGES,
+  SPONSOR_TIERS,
+  PARTNER_COUNTS,
+  VENUE_MAP,
 } from '../data/site';
 
 /** Duboka kopija — zadane vrijednosti se nikad ne smiju mijenjati u mjestu. */
@@ -102,7 +105,13 @@ export const DEFAULT_CONTENT = clone({
     steps: SHOP_STEPS,
   },
 
+  sponsors: {
+    counts: PARTNER_COUNTS,
+    tiers: SPONSOR_TIERS,
+  },
+
   contact: CONTACT,
+  map: VENUE_MAP,
 
   tickets: {
     info: VENUE_INFO,
@@ -113,4 +122,4 @@ export const DEFAULT_CONTENT = clone({
 });
 
 /** Verzija zapisa u pregledniku — mijenja se ako se oblik sadržaja promijeni. */
-export const CONTENT_VERSION = 1;
+export const CONTENT_VERSION = 2;

@@ -1,4 +1,5 @@
 import { Tekst, Broj, Odlomak, Odlomci, Slika, Popis, PopisTeksta } from './fields';
+import { COMPETITIONS, STAT_FIELDS } from '../data/site';
 
 /* ==========================================================================
    Kartice administracije. Svaka dobiva `c` (nacrt sadržaja) i `set(putanja,
@@ -24,6 +25,12 @@ export function Slike({ c, set }) {
       />
       <Slika label="Fotografija momčadi" value={c.images.team} onChange={(v) => set('images.team', v)} />
       <Slika label="Logotip Kandita" value={c.images.kandit} onChange={(v) => set('images.kandit', v)} />
+      <Slika
+        label="Izrezani igrač uz tablicu"
+        hint="fotografija bez pozadine (PNG ili WEBP)"
+        value={c.images.cutout}
+        onChange={(v) => set('images.cutout', v)}
+      />
     </>
   );
 }
@@ -144,26 +151,78 @@ export function Novosti({ c, set }) {
 }
 
 /* --- Momčad --------------------------------------------------------------- */
+
+/** Statistika jednog igrača — redak po sezoni i natjecanju. */
+function StatistikaIgraca({ player, onChange }) {
+  return (
+    <>
+      <h4 className="adm-h4">Statistika po sezonama</h4>
+      <p className="adm-note">
+        Jedan redak = jedna sezona u jednom natjecanju. Redak koji upišeš pojavi se
+        u izborniku na kartici igrača.
+      </p>
+      <Popis
+        items={player.stats}
+        onChange={(v) => onChange({ ...player, stats: v })}
+        naslov={(x) => `${x.season || 'sezona?'} · ${x.comp || COMPETITIONS[0]}`}
+        prazno="Nema upisane statistike — kartica će to i reći."
+        novo={() => ({
+          season: '',
+          comp: COMPETITIONS[0],
+          ...Object.fromEntries(STAT_FIELDS.map((f) => [f.id, 0])),
+        })}
+        fields={[
+          { key: 'season', label: 'Sezona', placeholder: '25/26' },
+          { key: 'comp', label: 'Natjecanje', placeholder: COMPETITIONS[0] },
+          ...STAT_FIELDS.map((f) => ({ key: f.id, label: f.label, type: 'broj' })),
+        ]}
+      />
+    </>
+  );
+}
+
 export function Momcad({ c, set }) {
   return (
     <>
       <h3 className="adm-h3">Igrači</h3>
       <p className="adm-note">
+        Sve odavde vidi se u kartici koja se otvori klikom na igrača.{' '}
         <b>Pozicija</b> određuje skupinu na stranici Postava: upiši točno „Vratar“,
-        „Igrač u polju“ ili „Kapetan“. Bilo što drugo dobiva vlastitu skupinu.
+        „Igrač u polju“ ili „Kapetan“. Prazna polja se u kartici ne prikazuju.
       </p>
       <Popis
+        trazi
         items={c.players}
         onChange={(v) => set('players', v)}
         naslov={(x) => `${x.number ?? '–'} · ${x.name || 'Novi igrač'}`}
-        novo={() => ({ name: '', number: 0, pos: 'Igrač u polju', note: 'Hrvatska', photo: '' })}
+        novo={() => ({
+          id: `igrac-${Date.now()}`,
+          name: '',
+          number: 0,
+          pos: 'Igrač u polju',
+          note: 'Hrvatska',
+          photo: '',
+          birth: '',
+          from: '',
+          height: '',
+          foot: '',
+          joined: '',
+          stats: [],
+        })}
         fields={[
           { key: 'name', label: 'Ime i prezime' },
           { key: 'number', label: 'Broj na dresu', type: 'broj' },
           { key: 'pos', label: 'Pozicija' },
-          { key: 'note', label: 'Napomena', placeholder: 'Hrvatska' },
+          { key: 'note', label: 'Napomena na kartici', placeholder: 'Hrvatska' },
+          { key: 'birth', label: 'Datum rođenja', placeholder: '14. 3. 1998.' },
+          { key: 'from', label: 'Odakle je', placeholder: 'Osijek, Hrvatska' },
+          { key: 'height', label: 'Visina', placeholder: '182 cm' },
+          { key: 'foot', label: 'Noga', placeholder: 'Desna' },
+          { key: 'joined', label: 'U klubu od', placeholder: '2021.' },
           { key: 'photo', label: 'Portret', type: 'slika', hint: '/uploads/igraci/ime.webp' },
+          { key: 'id', label: 'Oznaka', hint: 'bez razmaka' },
         ]}
+        render={(item, change) => <StatistikaIgraca player={item} onChange={change} />}
       />
 
       <h3 className="adm-h3">Stručni stožer</h3>
@@ -441,6 +500,29 @@ export function Kontakt({ c, set }) {
         onChange={(v) => set('contact.phoneHref', v)}
       />
 
+      <h3 className="adm-h3">Karta dvorane</h3>
+      <p className="adm-note">
+        Zemljopisna širina i dužina. Nađeš ih desnim klikom na mjesto u Google
+        Maps ili OpenStreetMap — prvi broj je širina.
+      </p>
+      <div className="adm-grid2">
+        <Tekst
+          label="Širina (lat)"
+          value={String(c.map.lat)}
+          onChange={(v) => set('map.lat', Number(v) || 0)}
+        />
+        <Tekst
+          label="Dužina (lon)"
+          value={String(c.map.lon)}
+          onChange={(v) => set('map.lon', Number(v) || 0)}
+        />
+      </div>
+      <div className="adm-grid2">
+        <Broj label="Približavanje (zoom)" value={c.map.zoom} onChange={(v) => set('map.zoom', v)} />
+        <Tekst label="Natpis" value={c.map.label} onChange={(v) => set('map.label', v)} />
+      </div>
+      <Tekst label="Poveznica na upute" value={c.map.link} onChange={(v) => set('map.link', v)} />
+
       <h3 className="adm-h3">Podaci o dvorani (Ulaznice)</h3>
       <Popis
         items={c.tickets.info}
@@ -495,6 +577,64 @@ export function Stranice({ c, set }) {
           </div>
         </div>
       ))}
+    </>
+  );
+}
+
+/* --- Sponzori --------------------------------------------------------------- */
+export function Sponzori({ c, set }) {
+  return (
+    <>
+      <p className="adm-note">
+        Sponzori su u razinama (glavni, gold, podupiratelji). Pločica bez logotipa
+        pokaže ime ispisano — namjerno, da se ne podmeće tuđi logotip kao zamjena.
+        <b> Veličina</b> može biti <code>lg</code>, <code>md</code> ili{' '}
+        <code>sm</code>.
+      </p>
+
+      <h3 className="adm-h3">Brojke uz naslov</h3>
+      <Popis
+        items={c.sponsors.counts}
+        onChange={(v) => set('sponsors.counts', v)}
+        naslov={(x) => x.label || 'Brojka'}
+        novo={() => ({ value: '', label: '' })}
+        fields={[
+          { key: 'value', label: 'Vrijednost' },
+          { key: 'label', label: 'Opis' },
+        ]}
+      />
+
+      <h3 className="adm-h3">Razine</h3>
+      <Popis
+        items={c.sponsors.tiers}
+        onChange={(v) => set('sponsors.tiers', v)}
+        naslov={(x) => `${x.tag || 'Razina'} (${x.sponsors?.length ?? 0})`}
+        novo={() => ({ id: `razina-${Date.now()}`, tag: '', size: 'md', sponsors: [] })}
+        fields={[
+          { key: 'tag', label: 'Naziv razine', placeholder: 'Gold sponzori' },
+          { key: 'size', label: 'Veličina pločica (lg/md/sm)' },
+          { key: 'id', label: 'Oznaka' },
+        ]}
+        render={(tier, change) => (
+          <>
+            <h4 className="adm-h4">Sponzori u ovoj razini</h4>
+            <Popis
+              trazi
+              items={tier.sponsors}
+              onChange={(v) => change({ ...tier, sponsors: v })}
+              naslov={(x) => x.name || 'Sponzor'}
+              prazno="Razina je prazna — neće se prikazati na stranici."
+              novo={() => ({ name: '', logo: '', href: '', note: '' })}
+              fields={[
+                { key: 'name', label: 'Ime' },
+                { key: 'href', label: 'Poveznica', placeholder: 'https://' },
+                { key: 'note', label: 'Napomena' },
+                { key: 'logo', label: 'Logotip', type: 'slika' },
+              ]}
+            />
+          </>
+        )}
+      />
     </>
   );
 }

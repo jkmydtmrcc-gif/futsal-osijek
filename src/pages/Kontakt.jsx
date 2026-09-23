@@ -3,13 +3,14 @@ import Brush from '../components/Brush';
 import Pip from '../components/Pip';
 import Reveal from '../components/Reveal';
 import PageHero from '../components/PageHero';
+import VenueMap from '../components/VenueMap';
 import { SOCIALS } from '../data/site';
 import { useContent } from '../content/ContentContext';
 
 const TEME = ['Navijački upit', 'Mediji', 'Partnerstvo', 'Ulaznice', 'Ostalo'];
 
 export default function Kontakt() {
-  const { pages, contact, hero } = useContent();
+  const { pages, contact, hero, map } = useContent();
   const [tema, setTema] = useState(TEME[0]);
   const [ime, setIme] = useState('');
   const [poruka, setPoruka] = useState('');
@@ -154,26 +155,7 @@ export default function Kontakt() {
           </Reveal>
 
           <Reveal variant="right" delay={130} className="split__side">
-            <div className="mapcard notch-br-22">
-              <div className="mapcard__grid" aria-hidden="true" />
-              <Brush variant="map" />
-              <div className="mapcard__body">
-                <span className="mapcard__label">Dvorana Zrinjevac</span>
-                <p className="mapcard__addr">
-                  {contact.address[1]}
-                  <br />
-                  {contact.address[2]}
-                </p>
-                <a
-                  className="mapcard__link"
-                  href="https://www.openstreetmap.org/search?query=Zrinjevac%2011%2C%2031000%20Osijek"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Otvori kartu ↗
-                </a>
-              </div>
-            </div>
+            <VenueMap map={map} height={300} />
 
             <p className="slab__foot slab__foot--light">
               <Pip tone="sky" /> Za dogovor termina snimanja i intervjua javi se e-mailom

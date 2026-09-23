@@ -1,12 +1,15 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Brush from '../components/Brush';
 import PlayerCard from '../components/PlayerCard';
 import Rail from '../components/Rail';
 import Reveal from '../components/Reveal';
+import PlayerModal from '../components/PlayerModal';
 import { useContent } from '../content/ContentContext';
 
 export default function Squad() {
   const { players } = useContent();
+  const [open, setOpen] = useState(null);
 
   return (
     <section className="squad" id="postava" aria-labelledby="naslov-momcad">
@@ -33,11 +36,13 @@ export default function Squad() {
           ekrana, ali se prva poravnava s ostatkom sadržaja. */}
       <Rail label="Igrači prve postave" className="squad__rail">
         {players.map((player, i) => (
-          <div className="squad__slide" data-rail-item key={player.name}>
-            <PlayerCard player={player} index={i} />
+          <div className="squad__slide" data-rail-item key={player.id ?? player.name}>
+            <PlayerCard player={player} index={i} onOpen={() => setOpen(player)} />
           </div>
         ))}
       </Rail>
+
+      {open && <PlayerModal player={open} onClose={() => setOpen(null)} />}
     </section>
   );
 }

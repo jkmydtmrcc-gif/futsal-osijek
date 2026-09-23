@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom';
 import Brush from '../components/Brush';
 import Pip from '../components/Pip';
-import { TICKETS_PATH } from '../data/site';
 import { useContent } from '../content/ContentContext';
 
 /**
@@ -54,8 +53,8 @@ export default function Hero() {
             <Link className="btn btn--solid notch-12" to="/postava">
               Upoznaj momčad
             </Link>
-            <Link className="btn btn--ghost" to={TICKETS_PATH}>
-              Kupi ulaznicu
+            <Link className="btn btn--ghost" to="/raspored">
+              Raspored i tablica
             </Link>
           </div>
         </div>

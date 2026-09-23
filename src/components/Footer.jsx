@@ -1,10 +1,11 @@
 import { Link } from 'react-router-dom';
 import Brush from './Brush';
+import VenueMap from './VenueMap';
 import { FOOTER_LINKS, SOCIALS, CONTACT_PATH, LEGAL_LINKS, CREDIT } from '../data/site';
 import { useContent } from '../content/ContentContext';
 
 export default function Footer() {
-  const { contact, images } = useContent();
+  const { contact, images, map } = useContent();
 
   return (
     <footer className="site-footer">
@@ -70,14 +71,7 @@ export default function Footer() {
 
         <div className="footer-col">
           <span className="footer-col__title">Lokacija dvorane</span>
-          {/* Ugradnja karte dolazi uz stranicu Kontakt. */}
-          <div className="footer-map">
-            <div className="footer-map__grid" aria-hidden="true" />
-            <Brush variant="map" />
-            <span className="footer-map__label" aria-hidden="true">
-              [ mapa ]
-            </span>
-          </div>
+          <VenueMap map={map} className="vmap--footer" height={190} />
         </div>
       </div>
 

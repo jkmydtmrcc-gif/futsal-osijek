@@ -7,7 +7,7 @@ import { TICKETS_PATH } from '../data/site';
 import { useContent, useStandings } from '../content/ContentContext';
 
 export default function Raspored() {
-  const { pages, league } = useContent();
+  const { pages, league, images } = useContent();
   const standings = useStandings();
   const us = standings.find((row) => row.isUs);
 
@@ -107,6 +107,22 @@ export default function Raspored() {
                   <Pip size="lg" tone="cur" />
                 </Link>
               </Reveal>
+
+            <Reveal variant="right" delay={220} className="league__figure">
+              <span className="league__figure-glow" aria-hidden="true" />
+              <img
+                className="league__cutout"
+                src={images.cutout}
+                alt=""
+                aria-hidden="true"
+                loading="lazy"
+              />
+              <div className="league__figure-tag">
+                <span className="league__figure-comp">SuperSport HMNL</span>
+                <span className="league__figure-club">Osijek Kandit</span>
+              </div>
+            </Reveal>
+
             </div>
           </div>
         </div>

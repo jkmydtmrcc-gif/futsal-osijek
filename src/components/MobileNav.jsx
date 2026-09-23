@@ -1,8 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import Brush from './Brush';
-import Pip from './Pip';
-import { NAV_LINKS, TICKETS_PATH, CONTACT_PATH, SOCIALS } from '../data/site';
+import { NAV_LINKS, CONTACT_PATH, SOCIALS } from '../data/site';
 import { useContent } from '../content/ContentContext';
 
 /**
@@ -82,11 +81,6 @@ export default function MobileNav({ open, onClose, activeId, returnFocusRef }) {
         </nav>
 
         <div className="mobile-nav__foot" style={{ '--i': NAV_LINKS.length }}>
-          <Link className="mobile-nav__cta" to={TICKETS_PATH} onClick={onClose}>
-            Kupi ulaznicu
-            <Pip size="md" tone="sky" />
-          </Link>
-
           <div className="mobile-nav__socials">
             {SOCIALS.map((s) => (
               <Link key={s.id} to={CONTACT_PATH} onClick={onClose} aria-label={s.name}>

@@ -65,54 +65,122 @@ export const IMPACT = [
  */
 export const PLAYERS = [
   {
+    id: 'franko-jamicic',
     name: 'Franko Jamičić',
     number: 1,
     pos: 'Vratar',
     note: 'Hrvatska',
     photo: '/uploads/igraci/franko-jamicic.webp',
+    birth: '',
+    from: 'Hrvatska',
+    height: '',
+    foot: '',
+    joined: '',
+    stats: [],
   },
   {
+    id: 'andrej-pandurevic',
     name: 'Andrej Pandurević',
     number: 8,
     pos: 'Kapetan',
     note: 'Hrvatska',
     photo: '/uploads/igraci/andrej-pandurevic.webp',
+    birth: '',
+    from: 'Hrvatska',
+    height: '',
+    foot: '',
+    joined: '',
+    stats: [],
   },
   {
+    id: 'filip-petrusic',
     name: 'Filip Petrušić',
     number: 19,
     pos: 'Igrač u polju',
     note: 'Hrvatska',
     photo: '/uploads/igraci/filip-petrusic.webp',
+    birth: '',
+    from: 'Hrvatska',
+    height: '',
+    foot: '',
+    joined: '',
+    stats: [],
   },
   {
+    id: 'josip-salaj',
     name: 'Josip Šalaj',
     number: 7,
     pos: 'Igrač u polju',
     note: 'Hrvatska',
     photo: '/uploads/igraci/josip-salaj.webp',
+    birth: '',
+    from: 'Hrvatska',
+    height: '',
+    foot: '',
+    joined: '',
+    stats: [],
   },
   {
+    id: 'nejc-hozjan',
     name: 'Nejc Hozjan',
     number: 77,
     pos: 'Igrač u polju',
     note: 'Slovenija',
     photo: '/uploads/igraci/nejc-hozjan.webp',
+    birth: '',
+    from: 'Slovenija',
+    height: '',
+    foot: '',
+    joined: '',
+    stats: [],
   },
   {
+    id: 'matias-mijic',
     name: 'Matias Mijić',
     number: 4,
     pos: 'Igrač u polju',
     note: 'Hrvatska',
     photo: '/uploads/igraci/matias-mijic.webp',
+    birth: '',
+    from: 'Hrvatska',
+    height: '',
+    foot: '',
+    joined: '',
+    stats: [],
   },
   {
+    id: 'antonio-sekulic',
     name: 'Antonio Sekulić',
     number: 23,
     pos: 'Igrač u polju',
     note: 'Hrvatska',
     photo: '/uploads/igraci/antonio-sekulic.webp',
+    birth: '',
+    from: 'Hrvatska',
+    height: '',
+    foot: '',
+    joined: '',
+    stats: [],
   },
+];
+
+/**
+ * Natjecanja u kojima se vodi statistika. Redoslijed je i redoslijed
+ * izbornika u kartici igrača.
+ */
+export const COMPETITIONS = ['SuperSport HMNL', 'Hrvatski kup'];
+
+/**
+ * Polja statistike igrača — ista za svaku sezonu i natjecanje.
+ *
+ * `id` je ključ u zapisu sezone, `label` je ono što piše u kartici. Novo
+ * polje se doda ovdje i pojavi se i u kartici i u administraciji.
+ */
+export const STAT_FIELDS = [
+  { id: 'games', label: 'Utakmice' },
+  { id: 'goals', label: 'Golovi' },
+  { id: 'penalties', label: 'Golovi iz penala' },
+  { id: 'ownGoals', label: 'Autogolovi' },
 ];
 
 /* Ime kluba po kojem se redak u tablici ističe. */
@@ -271,12 +339,56 @@ export const PARTNER_COUNTS = [
   { value: '1.160', label: 'Kapacitet Zrinjevca' },
 ];
 
-/* Logotipi ostalih partnera još nisu isporučeni; do tada svaka traka
-   ponavlja Kanditov logotip kao rezervirano mjesto. */
-export const PARTNER_ROWS = [
-  { id: 'momcadi', tag: 'Partneri momčadi', modifier: 'a', count: 18 },
-  { id: 'dvorane', tag: 'Partneri dvorane', modifier: 'b', count: 18 },
-  { id: 'podupiratelji', tag: 'Podupiratelji', modifier: 'c', count: 18 },
+/**
+ * Sponzori u razinama.
+ *
+ * `logo` je putanja do logotipa; dok ga nema, pločica pokaže ime sponzora
+ * ispisano — bolje nego prazan okvir ili tuđi logotip kao zamjena.
+ * `href` je neobavezan.
+ */
+export const SPONSOR_TIERS = [
+  {
+    id: 'glavni',
+    tag: 'Glavni sponzori',
+    size: 'lg',
+    sponsors: [
+      {
+        name: 'Kandit',
+        logo: '/uploads/kandit-logo.png',
+        href: 'https://www.kandit.hr/',
+        note: 'Naziv sponzor kluba',
+      },
+      { name: 'Saltas', logo: '', href: '', note: '' },
+    ],
+  },
+  {
+    id: 'gold',
+    tag: 'Gold sponzori',
+    size: 'md',
+    sponsors: [
+      { name: 'Sponzor 1', logo: '', href: '', note: '' },
+      { name: 'Sponzor 2', logo: '', href: '', note: '' },
+      { name: 'Sponzor 3', logo: '', href: '', note: '' },
+      { name: 'Sponzor 4', logo: '', href: '', note: '' },
+      { name: 'Sponzor 5', logo: '', href: '', note: '' },
+      { name: 'Sponzor 6', logo: '', href: '', note: '' },
+      { name: 'Sponzor 7', logo: '', href: '', note: '' },
+      { name: 'Sponzor 8', logo: '', href: '', note: '' },
+    ],
+  },
+  {
+    id: 'podupiratelji',
+    tag: 'Podupiratelji',
+    size: 'sm',
+    sponsors: [
+      { name: 'Podupiratelj 1', logo: '', href: '', note: '' },
+      { name: 'Podupiratelj 2', logo: '', href: '', note: '' },
+      { name: 'Podupiratelj 3', logo: '', href: '', note: '' },
+      { name: 'Podupiratelj 4', logo: '', href: '', note: '' },
+      { name: 'Podupiratelj 5', logo: '', href: '', note: '' },
+      { name: 'Podupiratelj 6', logo: '', href: '', note: '' },
+    ],
+  },
 ];
 
 export const FOOTER_LINKS = [
@@ -294,6 +406,21 @@ export const SOCIALS = [
   { id: 'tt', label: 'TT', name: 'TikTok' },
 ];
 
+/**
+ * Karta dvorane.
+ *
+ * OpenStreetMap se ugrađuje bez ključa i bez kolačića za praćenje, pa ne
+ * traži privolu za kolačiće kao Google Maps. `link` vodi na otvaranje u
+ * novoj kartici s uputama.
+ */
+export const VENUE_MAP = {
+  lat: 45.5608,
+  lon: 18.6754,
+  zoom: 16,
+  label: 'Športska dvorana Zrinjevac',
+  link: 'https://www.openstreetmap.org/search?query=Zrinjevac%2011%2C%2031000%20Osijek',
+};
+
 export const CONTACT = {
   address: ['Dvorana Zrinjevac', 'Zrinjevac 11', '31000 Osijek'],
   email: 'osijek.kelme@gmail.com',
@@ -308,6 +435,8 @@ export const LEGAL_LINKS = ['Uvjeti korištenja', 'Privatnost', 'Kolačići'];
 
 export const IMAGES = {
   crest: '/uploads/images.jpeg',
+  /* Izrezani igrač (bez pozadine) koji stoji uz tablicu. */
+  cutout: '/uploads/igraci/grafika-igrac.webp',
   celebration: '/uploads/S-oskanvma10_GOM_300525-970.webp',
   team: '/uploads/aa.jpg',
   kandit: '/uploads/kandit-logo.png',
@@ -544,8 +673,7 @@ export const SHOP_CUSTOM = {
   href: 'https://salasport.hr/proizvod/dres-domaci-mnk-osijek/',
 };
 
-export const SHOP_NOTE =
-  'SalaSport vodi Sportos j.d.o.o. Cijene, veličine i dostupnost stoje u trgovini. Za upite o klupskoj opremi javite se klubu na osijek.kelme@gmail.com, a za narudžbe u trgovini na prodaja@salasport.hr.';
+export const SHOP_NOTE = '';
 
 /** Koraci narudžbe — da bude jasno tko što radi. */
 export const SHOP_STEPS = [

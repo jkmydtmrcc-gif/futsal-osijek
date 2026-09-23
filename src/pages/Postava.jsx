@@ -1,8 +1,9 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Reveal from '../components/Reveal';
 import PageHero from '../components/PageHero';
 import PlayerCard from '../components/PlayerCard';
+import PlayerModal from '../components/PlayerModal';
 import Pip from '../components/Pip';
 import Brush from '../components/Brush';
 import { POSITION_GROUPS } from '../data/site';
@@ -34,6 +35,7 @@ function groupByPosition(players) {
 export default function Postava() {
   const { pages, players, staff } = useContent();
   const groups = useMemo(() => groupByPosition(players), [players]);
+  const [open, setOpen] = useState(null);
 
   const keepers = players.filter((p) => p.pos === 'Vratar').length;
 
@@ -89,7 +91,12 @@ export default function Postava() {
 
               <div className="squad-grid">
                 {group.players.map((player, i) => (
-                  <PlayerCard player={player} index={i} key={player.name} />
+                  <PlayerCard
+                    player={player}
+                    index={i}
+                    key={player.id ?? player.name}
+                    onOpen={() => setOpen(player)}
+                  />
                 ))}
               </div>
             </div>
@@ -128,6 +135,8 @@ export default function Postava() {
           </Reveal>
         </div>
       </section>
+
+      {open && <PlayerModal player={open} onClose={() => setOpen(null)} />}
     </>
   );
 }

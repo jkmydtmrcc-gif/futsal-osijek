@@ -229,11 +229,13 @@ export default function Shop() {
             ))}
           </div>
 
-          <Reveal delay={260}>
-            <p className="slab__foot">
-              <Pip /> {shop.note}
-            </p>
-          </Reveal>
+          {shop.note && (
+            <Reveal delay={260}>
+              <p className="slab__foot">
+                <Pip /> {shop.note}
+              </p>
+            </Reveal>
+          )}
         </div>
       </section>
     </>
