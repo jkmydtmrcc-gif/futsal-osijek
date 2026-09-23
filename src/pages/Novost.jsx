@@ -5,7 +5,7 @@ import Reveal from '../components/Reveal';
 import NewsCard from '../components/NewsCard';
 import Meta from '../components/Meta';
 import NijePronadeno from './NijePronadeno';
-import { useContent } from '../content/ContentContext';
+import { useContent } from '../lib/content';
 
 /** Pojedinačna novost — `/novosti/{id}`. */
 export default function Novost() {

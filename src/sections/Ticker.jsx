@@ -1,6 +1,6 @@
 import Marquee from '../components/Marquee';
 import Pip from '../components/Pip';
-import { useContent } from '../content/ContentContext';
+import { useContent } from '../lib/content';
 
 export default function Ticker() {
   const { ticker } = useContent();

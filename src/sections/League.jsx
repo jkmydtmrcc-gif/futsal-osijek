@@ -3,7 +3,7 @@ import Brush from '../components/Brush';
 import Pip from '../components/Pip';
 import Reveal from '../components/Reveal';
 import ClubBadge from '../components/ClubBadge';
-import { useContent, useStandings } from '../content/ContentContext';
+import { useContent, useStandings } from '../lib/content';
 
 export default function League() {
   const { league, images } = useContent();

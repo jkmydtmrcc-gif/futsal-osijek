@@ -5,7 +5,7 @@ import Pip from '../components/Pip';
 import Reveal from '../components/Reveal';
 import PageHero from '../components/PageHero';
 import NewsCard from '../components/NewsCard';
-import { useContent } from '../content/ContentContext';
+import { useContent } from '../lib/content';
 
 const SVE = 'Sve';
 

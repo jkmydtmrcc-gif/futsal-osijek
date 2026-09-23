@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import Brush from './Brush';
 import VenueMap from './VenueMap';
 import { FOOTER_LINKS, SOCIALS, CONTACT_PATH, LEGAL_LINKS, CREDIT } from '../data/site';
-import { useContent } from '../content/ContentContext';
+import { useContent } from '../lib/content';
 
 export default function Footer() {
   const { contact, images, map } = useContent();

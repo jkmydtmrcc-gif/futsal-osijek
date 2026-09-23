@@ -1,6 +1,6 @@
 import Brush from '../components/Brush';
 import Reveal from '../components/Reveal';
-import { useContent } from '../content/ContentContext';
+import { useContent } from '../lib/content';
 
 export default function Impact() {
   const { impact } = useContent();

@@ -3,7 +3,6 @@ import BrushDefs from './components/BrushDefs';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import ScrollToTop from './components/ScrollToTop';
-import DraftBar from './components/DraftBar';
 import Partners from './sections/Partners';
 import Naslovnica from './pages/Naslovnica';
 import Klub from './pages/Klub';
@@ -14,7 +13,7 @@ import Novosti from './pages/Novosti';
 import Novost from './pages/Novost';
 import Kontakt from './pages/Kontakt';
 import Ulaznice from './pages/Ulaznice';
-import Admin from './pages/Admin';
+import AdminApp from './admin/AdminApp';
 import NijePronadeno from './pages/NijePronadeno';
 
 /**
@@ -27,11 +26,12 @@ import NijePronadeno from './pages/NijePronadeno';
 export default function App() {
   const { pathname } = useLocation();
 
-  if (pathname === '/admin') {
+  // Administracija ima vlastito sučelje — bez klupskog zaglavlja i animacija.
+  if (pathname.startsWith('/admin')) {
     return (
       <>
         <ScrollToTop />
-        <Admin />
+        <AdminApp />
       </>
     );
   }
@@ -44,7 +44,6 @@ export default function App() {
 
       <BrushDefs />
       <ScrollToTop />
-      <DraftBar />
 
       <div className="page">
         <Header />

@@ -1,5 +1,5 @@
 import Meta from '../components/Meta';
-import { useContent } from '../content/ContentContext';
+import { useContent } from '../lib/content';
 import Hero from '../sections/Hero';
 import Ticker from '../sections/Ticker';
 import Impact from '../sections/Impact';

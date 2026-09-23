@@ -3,7 +3,7 @@ import Brush from '../components/Brush';
 import Pip from '../components/Pip';
 import Reveal from '../components/Reveal';
 import ProductCard from '../components/ProductCard';
-import { useContent } from '../content/ContentContext';
+import { useContent } from '../lib/content';
 
 /**
  * Klub nema vlastitu naplatu — sekcija vodi na SalaSport. Zato ovdje nema

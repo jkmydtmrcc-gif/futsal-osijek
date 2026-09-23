@@ -7,7 +7,7 @@ import PlayerModal from '../components/PlayerModal';
 import Pip from '../components/Pip';
 import Brush from '../components/Brush';
 import { POSITION_GROUPS } from '../data/site';
-import { useContent } from '../content/ContentContext';
+import { useContent } from '../lib/content';
 
 /**
  * Igrači se dijele po pozicijama iz `POSITION_GROUPS`. Ako netko u

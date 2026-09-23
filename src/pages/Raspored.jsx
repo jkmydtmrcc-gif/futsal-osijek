@@ -5,7 +5,7 @@ import Reveal from '../components/Reveal';
 import PageHero from '../components/PageHero';
 import ClubBadge from '../components/ClubBadge';
 import { TICKETS_PATH } from '../data/site';
-import { useContent, useStandings } from '../content/ContentContext';
+import { useContent, useStandings } from '../lib/content';
 
 export default function Raspored() {
   const { pages, league, images } = useContent();

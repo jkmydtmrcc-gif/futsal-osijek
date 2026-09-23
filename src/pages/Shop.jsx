@@ -5,7 +5,7 @@ import Reveal from '../components/Reveal';
 import PageHero from '../components/PageHero';
 import ProductCard from '../components/ProductCard';
 import ProductArt from '../components/ProductArt';
-import { useContent } from '../content/ContentContext';
+import { useContent } from '../lib/content';
 
 const SVE = 'Sve';
 

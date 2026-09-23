@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import Brush from '../components/Brush';
 import Pip from '../components/Pip';
-import { useContent } from '../content/ContentContext';
+import { useContent } from '../lib/content';
 
 /**
  * Hero ne koristi <Reveal> — sadržaj je odmah u kadru, pa ulazne animacije

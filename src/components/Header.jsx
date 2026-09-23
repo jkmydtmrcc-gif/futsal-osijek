@@ -6,7 +6,7 @@ import Marquee from './Marquee';
 import MobileNav from './MobileNav';
 import useScrolled from '../hooks/useScrolled';
 import { NAV_LINKS, CONTACT_PATH } from '../data/site';
-import { useContent } from '../content/ContentContext';
+import { useContent } from '../lib/content';
 
 /**
  * Zaglavlje s gornjom trakom vijesti i glavnom navigacijom.

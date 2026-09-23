@@ -1,18 +1,15 @@
 import { Component } from 'react';
-import { DRAFT_KEY, CACHE_KEY } from '../content/store';
 
 /**
  * Hvata pad prikaza i nudi izlaz.
  *
- * Sadržaj stranice dolazi izvana — s poslužitelja ili iz uvezenog JSON-a — i
- * spaja se preko zadanog. Ako se tamo nađe nešto neočekivano (popis koji je
- * postao tekst, polje koje je nestalo), React sruši cijelo stablo i ostane
- * bijela stranica. Bez ovoga bi bila bijela i administracija, pa se
- * neispravan sadržaj ne bi imao gdje popraviti — jedini izlaz bilo bi ručno
- * brisanje pohrane preglednika.
+ * Sadržaj stranice dolazi iz baze i spaja se preko ugrađenog. Ako se tamo
+ * nađe nešto neočekivano (popis koji je postao tekst, polje koje je nestalo),
+ * React sruši cijelo stablo i ostane bijela stranica — bez ikakve naznake
+ * što je pošlo po zlu.
  *
- * Zato ovdje stoje dva gumba: jedan miče lokalnu skicu i predmemoriju, drugi
- * vodi u administraciju.
+ * Zato ovdje stoje izlaz na naslovnicu i poveznica na administraciju, gdje se
+ * neispravan unos može popraviti.
  */
 export default class ErrorBoundary extends Component {
   constructor(props) {
@@ -30,12 +27,6 @@ export default class ErrorBoundary extends Component {
   }
 
   handleReset = () => {
-    try {
-      localStorage.removeItem(DRAFT_KEY);
-      localStorage.removeItem(CACHE_KEY);
-    } catch {
-      /* i bez pohrane ponovno učitavanje ima smisla */
-    }
     window.location.href = '/';
   };
 
@@ -49,12 +40,12 @@ export default class ErrorBoundary extends Component {
           <h1 className="crash__title">Nešto je puklo</h1>
           <p className="crash__lead">
             Stranica se nije uspjela prikazati. Najčešći uzrok je neispravan sadržaj —
-            npr. uvezena datoteka koja nije u očekivanom obliku.
+            npr. unos koji nije u obliku koji stranica očekuje.
           </p>
 
           <div className="crash__actions">
             <button type="button" className="btn btn--solid notch-12" onClick={this.handleReset}>
-              Očisti i učitaj ponovno
+              Natrag na naslovnicu
             </button>
             <a className="btn btn--ghost" href="/admin">
               Administracija
@@ -62,8 +53,8 @@ export default class ErrorBoundary extends Component {
           </div>
 
           <p className="crash__note">
-            „Očisti“ briše samo lokalnu skicu i predmemoriju ovog preglednika.
-            Objavljeni sadržaj ostaje netaknut.
+            Ako se ponavlja, provjeri zadnji unos u administraciji — najčešće je
+            uzrok polje ostavljeno u obliku koji stranica ne očekuje.
           </p>
 
           <details className="crash__details">

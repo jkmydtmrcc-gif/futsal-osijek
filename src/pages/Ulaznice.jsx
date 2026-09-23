@@ -5,7 +5,7 @@ import Pip from '../components/Pip';
 import Reveal from '../components/Reveal';
 import PageHero from '../components/PageHero';
 import { CONTACT_PATH } from '../data/site';
-import { useContent } from '../content/ContentContext';
+import { useContent } from '../lib/content';
 
 /**
  * Klub nema online prodaju ulaznica koju bismo ovdje mogli vezati, pa

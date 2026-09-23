@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import Brush from '../components/Brush';
 import Reveal from '../components/Reveal';
 import { TICKETS_PATH } from '../data/site';
-import { useContent } from '../content/ContentContext';
+import { useContent } from '../lib/content';
 
 export default function Venue() {
   const { hero, images } = useContent();

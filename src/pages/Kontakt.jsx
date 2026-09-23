@@ -5,7 +5,7 @@ import Reveal from '../components/Reveal';
 import PageHero from '../components/PageHero';
 import VenueMap from '../components/VenueMap';
 import { SOCIALS } from '../data/site';
-import { useContent } from '../content/ContentContext';
+import { useContent } from '../lib/content';
 
 const TEME = ['Navijački upit', 'Mediji', 'Partnerstvo', 'Ulaznice', 'Ostalo'];
 

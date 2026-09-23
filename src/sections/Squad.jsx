@@ -5,7 +5,7 @@ import PlayerCard from '../components/PlayerCard';
 import Rail from '../components/Rail';
 import Reveal from '../components/Reveal';
 import PlayerModal from '../components/PlayerModal';
-import { useContent } from '../content/ContentContext';
+import { useContent } from '../lib/content';
 
 export default function Squad() {
   const { players } = useContent();

@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import Brush from './Brush';
 import { NAV_LINKS, CONTACT_PATH, SOCIALS } from '../data/site';
-import { useContent } from '../content/ContentContext';
+import { useContent } from '../lib/content';
 
 /**
  * Mobilni izbornik — zavjesa koja se spušta ispod zaglavlja.

@@ -4,7 +4,7 @@ import Pip from '../components/Pip';
 import Reveal from '../components/Reveal';
 import PageHero from '../components/PageHero';
 import { TICKETS_PATH } from '../data/site';
-import { useContent } from '../content/ContentContext';
+import { useContent } from '../lib/content';
 
 export default function Klub() {
   const { pages, club, staff, league, contact, images, hero } = useContent();

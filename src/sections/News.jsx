@@ -3,7 +3,7 @@ import Brush from '../components/Brush';
 import Pip from '../components/Pip';
 import Reveal from '../components/Reveal';
 import NewsCard from '../components/NewsCard';
-import { useContent } from '../content/ContentContext';
+import { useContent } from '../lib/content';
 
 export default function News() {
   const { news } = useContent();
