@@ -11,7 +11,7 @@ export default function Klub() {
 
   return (
     <>
-      <PageHero page={pages['/klub']}>
+      <PageHero page={pages['/klub']} grafika={images.artKlub}>
         <div className="phero__actions">
           <Link className="btn btn--solid notch-12" to="/postava">
             Prva postava

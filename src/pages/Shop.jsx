@@ -20,7 +20,7 @@ function tidy(value) {
  * netko ne upiše u administraciji: prepisani podaci zastare i onda lažu.
  */
 export default function Shop() {
-  const { shop, players, pages } = useContent();
+  const { shop, players, pages, images } = useContent();
   const [filter, setFilter] = useState(SVE);
   const [name, setName] = useState(shop.custom.defaultName);
   const [number, setNumber] = useState(shop.custom.defaultNumber);
@@ -40,7 +40,7 @@ export default function Shop() {
 
   return (
     <>
-      <PageHero page={pages['/shop']}>
+      <PageHero page={pages['/shop']} grafika={images.artShop}>
         <div className="phero__actions">
           <a
             className="btn btn--solid notch-12"

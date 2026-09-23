@@ -73,8 +73,8 @@ osamnaest istih sponzora.
 ## Karta dvorane
 
 OpenStreetMap, ne Google Maps: ugrađuje se bez ključa i bez kolačića za
-praćenje, pa stranica zbog karte ne treba privolu za kolačiće. Okvir se
-učitava tek na klik — inače bi ga povlačila svaka stranica s podnožjem.
+praćenje. Karta se učitava odmah, pa OpenStreetMap vidi IP posjetitelja —
+stranica `/kolacici` to i piše, umjesto da prešuti.
 
 ## Dijeljenje i tražilice
 

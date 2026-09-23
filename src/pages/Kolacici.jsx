@@ -26,9 +26,9 @@ const STAVKE = [
   },
   {
     naziv: 'Karta dvorane (OpenStreetMap)',
-    vrsta: 'Vanjska ugradnja · učitava se tek na klik',
+    vrsta: 'Vanjska ugradnja · učitava se sa stranicom',
     svrha:
-      'Karta se ne učitava sama. Dok ne klikneš „Prikaži kartu“, OpenStreetMap ne dobiva ništa o tebi — zato je odabran umjesto Google Maps.',
+      'Karta u podnožju učitava se odmah, pa OpenStreetMap vidi tvoju IP adresu — kao i svaki poslužitelj s kojeg preglednik nešto dohvaća. Odabran je umjesto Google Maps jer ne postavlja kolačiće za praćenje niti povezuje posjet s računom.',
   },
 ];
 

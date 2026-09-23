@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useContent, useStandings } from '../lib/content';
+import AsistentIkona from './AsistentIkona';
 
 /**
  * Klupski asistent.
@@ -213,11 +214,15 @@ export default function Asistent() {
         onClick={() => setOtvoren((v) => !v)}
         aria-expanded={otvoren}
         aria-controls="klupski-asistent"
+        aria-label={otvoren ? 'Zatvori asistenta' : 'Otvori klupskog asistenta'}
       >
-        <span className="as-fab__ikona" aria-hidden="true">
-          {otvoren ? '✕' : '?'}
-        </span>
-        <span className="as-fab__tekst">{otvoren ? 'Zatvori' : 'Pitaj klub'}</span>
+        {otvoren ? (
+          <span className="as-fab__x" aria-hidden="true">
+            ✕
+          </span>
+        ) : (
+          <AsistentIkona className="as-fab__ikona" />
+        )}
       </button>
 
       <div
@@ -228,33 +233,31 @@ export default function Asistent() {
         hidden={!otvoren}
       >
         <div className="as__vrh">
-          <div>
+          <span className="as__avatar">
+            <AsistentIkona />
+            <span className="as__tocka" aria-hidden="true" />
+          </span>
+          <div className="as__ime">
             <span className="as__naslov">Klupski asistent</span>
             <span className="as__pod">Odgovara iz podataka na stranici</span>
           </div>
+          <button
+            type="button"
+            className="as__zatvori"
+            onClick={() => setOtvoren(false)}
+            aria-label="Zatvori asistenta"
+          >
+            ✕
+          </button>
         </div>
 
         <div className="as__tok">
-          {razgovor.length === 0 && (
-            <>
-              <p className="as__uvod">
-                Pitaj me nešto o klubu. Odgovaram iz onoga što piše na ovoj stranici —
-                ako ne znam, reći ću ti.
-              </p>
-              <div className="as__prijedlozi">
-                {teme.slice(0, 5).map((tema) => (
-                  <button
-                    type="button"
-                    className="as__prijedlog"
-                    key={tema.id}
-                    onClick={() => posalji(tema.pitanje)}
-                  >
-                    {tema.pitanje}
-                  </button>
-                ))}
-              </div>
-            </>
-          )}
+          <div className="as__poruka as__poruka--bot">
+            <p>
+              Bok! 👋 Ja sam klupski asistent. Pitaj me o rasporedu, tablici,
+              dvorani ili opremi — odgovaram iz onoga što piše na ovoj stranici.
+            </p>
+          </div>
 
           {razgovor.map((poruka, i) => (
             <div className={`as__poruka as__poruka--${poruka.tko}`} key={i}>
@@ -276,6 +279,21 @@ export default function Asistent() {
           <div ref={krajRef} />
         </div>
 
+        {razgovor.length === 0 && (
+          <div className="as__prijedlozi">
+            {teme.slice(0, 4).map((tema) => (
+              <button
+                type="button"
+                className="as__prijedlog"
+                key={tema.id}
+                onClick={() => posalji(tema.pitanje)}
+              >
+                {tema.pitanje}
+              </button>
+            ))}
+          </div>
+        )}
+
         <form
           className="as__unos"
           onSubmit={(e) => {
@@ -288,11 +306,11 @@ export default function Asistent() {
             type="text"
             value={upit}
             onChange={(e) => setUpit(e.target.value)}
-            placeholder="Npr. kad je sljedeća utakmica?"
+            placeholder="Napiši pitanje…"
             aria-label="Pitanje"
           />
-          <button type="submit" disabled={!upit.trim()}>
-            Pitaj
+          <button type="submit" disabled={!upit.trim()} aria-label="Pošalji pitanje">
+            <span aria-hidden="true">↗</span>
           </button>
         </form>
       </div>

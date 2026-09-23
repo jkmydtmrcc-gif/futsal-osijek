@@ -466,6 +466,8 @@ export const IMAGES = {
   artRaspored: '/uploads/grafike/slavlje.webp',
   artPostava: '/uploads/grafike/palci.webp',
   artUlaznice: '/uploads/grafike/vratar.webp',
+  artKlub: '/uploads/grafike/prst.webp',
+  artShop: '/uploads/grafike/grb-pokaz.webp',
   celebration: '/uploads/S-oskanvma10_GOM_300525-970.webp',
   team: '/uploads/aa.jpg',
   kandit: '/uploads/kandit-logo.png',
