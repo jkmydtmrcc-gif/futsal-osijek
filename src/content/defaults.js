@@ -51,11 +51,12 @@ const clone = (value) => JSON.parse(JSON.stringify(value));
 
 /* `STANDINGS` već ima izračunata polja (isUs, isPlayoff); u pohranu ide samo
    ono što se stvarno upisuje, a izvedeno se računa pri čitanju. */
-const standingsRows = STANDINGS.map(({ pos, club, played, points }) => ({
+const standingsRows = STANDINGS.map(({ pos, club, played, points, logo }) => ({
   pos,
   club,
   played,
   points,
+  logo,
 }));
 
 export const DEFAULT_CONTENT = clone({
@@ -124,4 +125,4 @@ export const DEFAULT_CONTENT = clone({
 });
 
 /** Verzija zapisa u pregledniku — mijenja se ako se oblik sadržaja promijeni. */
-export const CONTENT_VERSION = 2;
+export const CONTENT_VERSION = 3;

@@ -3,6 +3,7 @@ import Brush from '../components/Brush';
 import Pip from '../components/Pip';
 import Reveal from '../components/Reveal';
 import PageHero from '../components/PageHero';
+import ClubBadge from '../components/ClubBadge';
 import { TICKETS_PATH } from '../data/site';
 import { useContent, useStandings } from '../content/ContentContext';
 
@@ -66,7 +67,10 @@ export default function Raspored() {
                     key={row.club}
                   >
                     <span className="standings__pos">{row.pos}</span>
-                    <span className="standings__club">{row.club}</span>
+                    <span className="standings__team">
+                      <ClubBadge club={row.club} logo={row.logo} />
+                      <span className="standings__club">{row.club}</span>
+                    </span>
                     <span className="standings__played">{row.played}</span>
                     <span className="standings__pts">{row.points}</span>
                   </Reveal>

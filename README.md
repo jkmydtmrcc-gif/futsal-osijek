@@ -154,6 +154,16 @@ u kartici ne prikazuje — prazan redak „Visina —“ ne govori ništa, a izg
 kao greška. Ako igrač nema upisanu statistiku, kartica to i kaže umjesto da
 pokaže same nule.
 
+## Tablica
+
+Uređuje se u administraciji, pod **Tablica i raspored**: pozicija, ime kluba,
+odigrano, bodovi i grb — za svaki klub. Gumb „Posloži po bodovima i
+prenumeriraj“ posloži tablicu i preračuna pozicije.
+
+Grbovi klubova idu u `public/uploads/grbovi/`. Dok grb nije upisan, redak
+pokaže inicijale kluba u pločici; grbovi drugih klubova nisu klupsko
+vlasništvo, pa se namjerno ne preuzimaju s interneta.
+
 ## Sponzori
 
 Tri razine: glavni sponzori, gold sponzori i podupiratelji. Razina bez

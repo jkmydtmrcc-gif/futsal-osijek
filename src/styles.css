@@ -1340,6 +1340,33 @@ html { scroll-behavior: smooth; }
 .standings__inner { min-width: 520px; }
 .standings__head,
 .standings__row { display: grid; grid-template-columns: 48px 1fr 92px 92px; }
+
+/* Grb i ime kluba dijele stupac „Klub“. */
+.standings__team { display: flex; align-items: center; gap: 12px; min-width: 0; }
+
+.cbadge {
+  flex: none;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: rgba(255,255,255,.1);
+  border: 1px solid rgba(255,255,255,.16);
+  clip-path: polygon(5px 0, 100% 0, 100% calc(100% - 5px), calc(100% - 5px) 100%, 0 100%, 0 5px);
+}
+.cbadge--md { width: 30px; height: 30px; }
+.cbadge--sm { width: 22px; height: 22px; }
+.cbadge img { width: 100%; height: 100%; object-fit: contain; }
+/* S logotipom pločica je samo okvir — grb nosi svoju boju. */
+.cbadge.has-logo { background: rgba(255,255,255,.94); border-color: rgba(255,255,255,.3); }
+.cbadge__txt {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 12px;
+  letter-spacing: .4px;
+  color: rgba(255,255,255,.62);
+}
+.cbadge--sm .cbadge__txt { font-size: 10px; }
+.standings__row.is-us .cbadge__txt { color: var(--white); }
 .standings__head {
   padding: 16px 22px;
   border-bottom: 1px solid rgba(255,255,255,.16);
@@ -1363,7 +1390,27 @@ html { scroll-behavior: smooth; }
 }
 .standings__row.is-top .standings__pos { color: var(--sky); }
 .standings__row.is-us  .standings__pos { color: var(--white); }
+/* Na uskom ekranu stupci se stisnu da bodovi ostanu u kadru — prije je
+   redak bio 520px širok u 390px ekranu, pa se do bodova moralo klizati. */
+@media (max-width: 560px) {
+  /* Bez ovoga tablica ostaje 520px široka i kliže se vodoravno. */
+  .standings__inner { min-width: 0; }
+  .standings__head,
+  .standings__row { grid-template-columns: 26px 1fr 34px 44px; column-gap: 10px; padding-left: 14px; padding-right: 14px; }
+  .standings__team { gap: 9px; }
+  .cbadge--md { width: 24px; height: 24px; }
+  .cbadge__txt { font-size: 10px; }
+  .standings__club { font-size: 15px; letter-spacing: 0; }
+  .standings__pos { font-size: 15px; }
+  .standings__played { font-size: 12px; }
+  .standings__pts { font-size: 18px; }
+}
+
 .standings__club {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   font-family: var(--font-display);
   font-weight: 900;
   font-size: 18px;
@@ -3569,6 +3616,8 @@ a.sponsor:hover { transform: translateY(-4px); border-color: var(--blue); box-sh
 .adm-btn--primary.is-dirty { background: #ffd44d; border-color: #ffd44d; }
 .adm-btn--soft { background: rgba(255,255,255,.16); border-color: rgba(255,255,255,.3); color: var(--white); }
 .adm-btn--soft:hover { background: rgba(255,255,255,.28); color: var(--white); }
+.adm-btn--wide { width: 100%; border-color: rgba(11,71,168,.3); color: var(--blue); }
+.adm-btn--wide:hover { background: rgba(11,71,168,.08); color: var(--blue); }
 .adm-btn--add { width: 100%; margin-top: 4px; border: 1px dashed rgba(11,71,168,.4); background: transparent; color: var(--blue); padding: 13px; font-weight: 800; }
 .adm-btn--add:hover { background: rgba(11,71,168,.06); }
 

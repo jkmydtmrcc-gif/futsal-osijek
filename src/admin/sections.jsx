@@ -270,18 +270,49 @@ export function Liga({ c, set }) {
         onChange={(v) => set('league.note', v)}
         rows={3}
       />
+      <p className="adm-note">
+        Redak po klub. <b>Pozicija</b> određuje mjesto u tablici, a redoslijed u
+        ovom popisu je ono što se prikazuje — koristi strelice gore/dolje nakon
+        promjene bodova. Grbovi drugih klubova nisu klupsko vlasništvo, pa dok
+        logotip nije upisan redak pokaže inicijale kluba.
+      </p>
       <Popis
+        trazi
         items={c.league.standings}
         onChange={(v) => set('league.standings', v)}
-        naslov={(x) => `${x.pos}. ${x.club || ''}`}
-        novo={() => ({ pos: (c.league.standings?.length ?? 0) + 1, club: '', played: 0, points: 0 })}
+        naslov={(x) => `${x.pos}. ${x.club || 'Klub'} — ${x.points ?? 0} bod.`}
+        novo={() => ({
+          pos: (c.league.standings?.length ?? 0) + 1,
+          club: '',
+          played: 0,
+          points: 0,
+          logo: '',
+        })}
         fields={[
           { key: 'pos', label: 'Pozicija', type: 'broj' },
           { key: 'club', label: 'Klub' },
           { key: 'played', label: 'Odigrano', type: 'broj' },
           { key: 'points', label: 'Bodovi', type: 'broj' },
+          { key: 'logo', label: 'Grb kluba', type: 'slika', hint: '/uploads/grbovi/klub.png' },
         ]}
       />
+
+      <p className="adm-note">
+        Tablicu možeš i posložiti po bodovima jednim klikom — pozicije se tada
+        preračunaju same.
+      </p>
+      <button
+        type="button"
+        className="adm-btn adm-btn--ghost adm-btn--wide"
+        onClick={() => {
+          const sorted = [...(c.league.standings ?? [])]
+            .sort((a, b) => (b.points ?? 0) - (a.points ?? 0))
+            .map((row, i) => ({ ...row, pos: i + 1 }));
+          set('league.standings', sorted);
+        }}
+      >
+        Posloži po bodovima i prenumeriraj
+      </button>
 
       <h3 className="adm-h3">Nadolazeće utakmice</h3>
       <Popis

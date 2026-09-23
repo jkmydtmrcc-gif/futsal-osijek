@@ -198,16 +198,24 @@ export const OUR_CLUB = 'Osijek Kandit';
 /* Mjesta koja vode u doigravanje — dobivaju svjetliju boju pozicije. */
 export const PLAYOFF_CUTOFF = 4;
 
+/**
+ * Tablica.
+ *
+ * `logo` je putanja do grba kluba. Grbovi ostalih klubova nisu klupsko
+ * vlasništvo, pa se ne podmeću — dok logotip nije upisan, redak pokaže
+ * inicijale kluba u pločici. Upisuje se u administraciji, pod „Tablica i
+ * raspored“.
+ */
 const STANDINGS_ROWS = [
-  { pos: 1, club: 'Olmissum', played: 6, points: 16 },
-  { pos: 2, club: 'Osijek Kandit', played: 6, points: 13 },
-  { pos: 3, club: 'Futsal Dinamo', played: 6, points: 12 },
-  { pos: 4, club: 'Rijeka', played: 6, points: 11 },
-  { pos: 5, club: 'Novo vrijeme', played: 6, points: 9 },
-  { pos: 6, club: 'Torcida Biberon', played: 6, points: 7 },
-  { pos: 7, club: 'Square', played: 6, points: 6 },
-  { pos: 8, club: 'Crnica', played: 6, points: 4 },
-  { pos: 9, club: 'Vrgorac', played: 6, points: 2 },
+  { pos: 1, club: 'Olmissum', played: 6, points: 16, logo: '' },
+  { pos: 2, club: 'Osijek Kandit', played: 6, points: 13, logo: '/uploads/images.jpeg' },
+  { pos: 3, club: 'Futsal Dinamo', played: 6, points: 12, logo: '' },
+  { pos: 4, club: 'Rijeka', played: 6, points: 11, logo: '' },
+  { pos: 5, club: 'Novo vrijeme', played: 6, points: 9, logo: '' },
+  { pos: 6, club: 'Torcida Biberon', played: 6, points: 7, logo: '' },
+  { pos: 7, club: 'Square', played: 6, points: 6, logo: '' },
+  { pos: 8, club: 'Crnica', played: 6, points: 4, logo: '' },
+  { pos: 9, club: 'Vrgorac', played: 6, points: 2, logo: '' },
 ];
 
 export const STANDINGS = STANDINGS_ROWS.map((row) => ({
