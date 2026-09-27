@@ -239,10 +239,21 @@ otisak, sadržaj se ne mijenja), dan uz `stale-while-revalidate` na
 `/uploads` (slike se mogu zamijeniti pod istim imenom preko administracije),
 i `must-revalidate` na `index.html`.
 
-Pri buildu se u `index.html` upisuje puna adresa u `og:image`, `og:url` i
-`canonical`. S relativnom putanjom Facebook i WhatsApp pokažu poveznicu bez
-slike — domena se zna tek pri objavi, pa se uzima iz `SITE_URL` ili
-`VERCEL_PROJECT_PRODUCTION_URL`.
+Pri buildu svaka ruta dobiva **vlastiti `index.html`** s upisanim naslovom,
+opisom i slikom za dijeljenje — uključujući svaku pojedinu novost, sa svojom
+fotografijom i `og:type: article`. `components/Meta.jsx` to isto radi u
+pregledniku, ali Facebookov i WhatsAppov pregledavatelj ne izvršavaju
+JavaScript: njima vrijedi samo ono što stoji u datoteci. Bez ovoga bi svaka
+podijeljena poveznica stigla s naslovom i slikom naslovnice.
+
+Vercel prvo traži datoteku, pa tek onda primjenjuje prepisivanje na
+`index.html`, tako da `/klub/index.html` sam preuzme rutu `/klub`. Provjereno
+lokalno s poslužiteljem koji se ponaša isto: svih deset ruta vraća svoj
+naslov, aplikacija se digne iz svake i konzola je čista.
+
+Domena se zna tek pri objavi, pa se uzima iz `SITE_URL` ili
+`VERCEL_PROJECT_PRODUCTION_URL`. Bez ijednog od ta dva se ni karta ni oznake
+po rutama namjerno ne zapisuju — kriva domena je gora nego nikakva.
 
 Pričuvna pisma imaju podešene mjere (`size-adjust`, `ascent-override`), pa se
 zamjena sistemskog pisma Sairom ne vidi kao poskakivanje teksta. Brojke su

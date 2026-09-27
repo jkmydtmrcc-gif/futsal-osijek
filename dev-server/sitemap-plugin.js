@@ -12,8 +12,9 @@
  * zapisuje: kriva domena u sitemapu je gore nego nikakva — tražilica po njoj
  * traži stranice kojih nema.
  */
-import { writeFileSync, existsSync, readFileSync } from 'node:fs';
+import { writeFileSync, existsSync, readFileSync, mkdirSync } from 'node:fs';
 import { join } from 'node:path';
+import { pathToFileURL } from 'node:url';
 
 /* Rute koje postoje bez obzira na sadržaj. Pojedinačne novosti se dodaju iz
    zadanog sadržaja; one upisane kasnije tražilica nađe preko poveznica. */
@@ -75,6 +76,86 @@ function apsolutneOznake(dir, base) {
   writeFileSync(put, html);
 }
 
+/** Znakovi koji u HTML atributu moraju biti pisani zamjenom. */
+const escape = (t) =>
+  String(t ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+
+/** Skraćuje opis na duljinu koju tražilice još prikazuju cijelu. */
+function skrati(tekst, max = 160) {
+  const t = String(tekst ?? '').replace(/\s+/g, ' ').trim();
+  return t.length <= max ? t : `${t.slice(0, max - 1).replace(/[\s,;:.–—-]+\S*$/, '')}…`;
+}
+
+/**
+ * Za svaku rutu zapisuje vlastiti `index.html` s upisanim naslovom i
+ * oznakama za dijeljenje.
+ *
+ * `components/Meta.jsx` to isto radi u pregledniku, ali Facebookov i
+ * WhatsAppov pregledavatelj ne izvršavaju JavaScript — njima vrijedi samo
+ * ono što stoji u datoteci. Bez ovoga svaka podijeljena poveznica, i ona na
+ * pojedinu novost, stiže s naslovom i slikom naslovnice.
+ *
+ * Vercel prvo traži datoteku, pa tek onda primjenjuje prepisivanje na
+ * `index.html`, tako da `/klub/index.html` sam preuzme rutu `/klub`.
+ */
+async function poRutama(root, dir, base) {
+  const izvor = join(dir, 'index.html');
+  if (!existsSync(izvor)) return 0;
+  const predlozak = readFileSync(izvor, 'utf8');
+
+  let PAGES = {};
+  let NEWS = [];
+  try {
+    ({ PAGES = {}, NEWS = [] } = await import(pathToFileURL(join(root, 'src/data/site.js')).href));
+  } catch {
+    return 0;
+  }
+
+  const KLUB = 'MNK Osijek Kandit';
+  const zadanaSlika = `${base}/uploads/S-oskanvma10_GOM_300525-970.webp`;
+
+  const rute = [
+    ...Object.entries(PAGES).map(([put, p]) => ({
+      put,
+      naslov: `${p.title} — ${KLUB}`,
+      opis: skrati(p.lead),
+      slika: zadanaSlika,
+      vrsta: 'website',
+    })),
+    ...NEWS.filter((n) => n.id).map((n) => ({
+      put: `/novosti/${n.id}`,
+      naslov: `${n.title} — ${KLUB}`,
+      opis: skrati(n.lead),
+      slika: n.image ? new URL(n.image, `${base}/`).href : zadanaSlika,
+      vrsta: 'article',
+    })),
+  ];
+
+  let zapisano = 0;
+  for (const r of rute) {
+    const url = `${base}${r.put}`;
+    let html = predlozak
+      .replace(/<title>[^<]*<\/title>/, `<title>${escape(r.naslov)}</title>`)
+      .replace(/(<meta name="description" content=")[^"]*(")/, `$1${escape(r.opis)}$2`)
+      .replace(/(<meta property="og:title" content=")[^"]*(")/, `$1${escape(r.naslov)}$2`)
+      .replace(/(<meta property="og:description" content=")[^"]*(")/, `$1${escape(r.opis)}$2`)
+      .replace(/(<meta property="og:type" content=")[^"]*(")/, `$1${r.vrsta}$2`)
+      .replace(/(<meta property="og:image" content=")[^"]*(")/, `$1${escape(r.slika)}$2`)
+      .replace(/(<meta property="og:url" content=")[^"]*(")/, `$1${escape(url)}$2`)
+      .replace(/(<link rel="canonical" href=")[^"]*(")/, `$1${escape(url)}$2`);
+
+    const mapa = join(dir, ...r.put.split('/').filter(Boolean));
+    mkdirSync(mapa, { recursive: true });
+    writeFileSync(join(mapa, 'index.html'), html);
+    zapisano += 1;
+  }
+  return zapisano;
+}
+
 export default function sitemapPlugin() {
   let root = process.cwd();
   let outDir = 'dist';
@@ -88,7 +169,7 @@ export default function sitemapPlugin() {
       outDir = config.build.outDir;
     },
 
-    closeBundle() {
+    async closeBundle() {
       const base = baseUrl();
       const dir = join(root, outDir);
 
@@ -121,12 +202,16 @@ ${entries
 `;
       writeFileSync(join(dir, 'sitemap.xml'), xml);
       apsolutneOznake(dir, base);
+      const stranica = await poRutama(root, dir, base);
 
       const robotsPath = join(dir, 'robots.txt');
       const robots = existsSync(robotsPath) ? readFileSync(robotsPath, 'utf8').trimEnd() : 'User-agent: *\nAllow: /';
       writeFileSync(robotsPath, `${robots.replace(/\nSitemap:.*$/m, '')}\n\nSitemap: ${base}/sitemap.xml\n`);
 
-      console.log(`\n  sitemap  ${entries.length} adresa na ${base}\n`);
+      console.log(
+        `\n  sitemap  ${entries.length} adresa na ${base}` +
+          `\n  oznake   ${stranica} stranica s vlastitim naslovom i slikom za dijeljenje\n`
+      );
     },
   };
 }

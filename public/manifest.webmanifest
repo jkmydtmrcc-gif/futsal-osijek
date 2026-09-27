@@ -1,0 +1,17 @@
+{
+  "name": "MNK Osijek Kandit",
+  "short_name": "Kandit",
+  "description": "Futsal klub iz Osijeka — momčad, raspored, tablica, novosti i Fan Shop.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "lang": "hr",
+  "dir": "ltr",
+  "background_color": "#061024",
+  "theme_color": "#061024",
+  "icons": [
+    { "src": "/grb-180.png", "sizes": "180x180", "type": "image/png" },
+    { "src": "/grb-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/grb-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
