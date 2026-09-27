@@ -10,7 +10,7 @@ npm install
 cp .env.example .env      # Supabase ključevi (neobavezno)
 npm run dev
 npm run build
-npm test                  # provjera pretvorbe baza ⇄ sučelje
+npm test                  # pretvorbe, asistent, rez pozadine, čitač baze
 ```
 
 Stranica radi i **bez** Supabasea — tada prikazuje ugrađeni sadržaj iz
@@ -206,6 +206,22 @@ Provjereno u `test/pozadina.test.mjs` na izmišljenim slikama — greška je uvi
 ista, ili se rez ne uhvati ili procuri kroz lik, a oboje se na stranici vidi
 tek kad je kasno.
 
+## Prije objave
+
+1. **Supabase** — pokreni `supabase/schema.sql` u SQL Editoru, cijelu datoteku
+   od prvog retka (na GitHubu: Raw → Ctrl+A → Ctrl+C).
+2. **Urednik** — Authentication → Users → Add user, uz uključen *Auto Confirm
+   User*. Lozinke nema nigdje u kodu; postavlja se ovdje.
+3. **Vercel → Settings → Environment Variables** — `VITE_SUPABASE_URL` i
+   `VITE_SUPABASE_ANON_KEY`. Anon ključ je javan po namjeni i siguran u
+   `VITE_` varijabli; **`service_role` ključ ne smije** ići u `VITE_` —
+   zaobilazi sva pravila pristupa.
+4. Te se varijable **upisuju u build**, ne čitaju u pregledniku. Nakon svake
+   promjene treba novi deploy da bi proradila.
+5. **Domena** — kad je spojiš, `VERCEL_PROJECT_PRODUCTION_URL` se postavlja
+   sam, pa `sitemap.xml` i pune adrese u `og:image` rade bez ičega. Za drugu
+   domenu postavi `SITE_URL`.
+
 ## Brzina i objava
 
 Posjetitelj **ne skida Supabase SDK**. Javni dio čita bazu običnim GET-om na
@@ -228,8 +244,15 @@ Pri buildu se u `index.html` upisuje puna adresa u `og:image`, `og:url` i
 slike — domena se zna tek pri objavi, pa se uzima iz `SITE_URL` ili
 `VERCEL_PROJECT_PRODUCTION_URL`.
 
+Pričuvna pisma imaju podešene mjere (`size-adjust`, `ascent-override`), pa se
+zamjena sistemskog pisma Sairom ne vidi kao poskakivanje teksta. Brojke su
+izmjerene u pregledniku, ne procijenjene: uz pisma zakašnjela 1,5 s visina
+naslova i položaj slogana ostaju isti do piksela.
+
 Izmjereno na produkcijskom buildu, s istim zaglavljima kakva piše
-`vercel.json`: CLS 0,0001 na mobilnom i 0,023 na stolnom (prag je 0,1).
+`vercel.json`: CLS 0,0015 (0,0029 uz zakašnjela pisma), prag je 0,1.
+Provjera pristupačnosti na svih deset ruta: jedan `h1` po stranici, bez
+preskočenih razina naslova, sve slike s `alt`, sva polja s oznakom.
 
 ## Kako je složeno
 

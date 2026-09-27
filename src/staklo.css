@@ -804,3 +804,47 @@ a.sponsor:hover {
   height: auto;
   opacity: .17;
 }
+
+/* --------------------------------------------------------------------------
+   13. Heroj: dah i pomak
+   Fotografija u vrhu je stajala kao plakat. Dvije stvari je oživljavaju, a
+   nijedna ne dira prvo bojanje — slika je ovdje najveći element na ekranu
+   (LCP), pa se ne smije uvoditi iz prozirnosti ni iz zamućenja: to bi
+   odgodilo mjerenje koje tražilice gledaju.
+   -------------------------------------------------------------------------- */
+
+/* Polagano disanje. Samo `scale`, da pomak ostane slobodan za paralaksu. */
+.hero__photo {
+  scale: 1.1;
+  animation: herojDah 28s ease-in-out infinite alternate;
+}
+@keyframes herojDah {
+  from { scale: 1.1; }
+  to   { scale: 1.17; }
+}
+
+/* Paralaksa vezana uz listanje, bez ijednog retka JavaScripta. Preglednik
+   koji `view()` ne zna jednostavno je nema — disanje ostaje. Uvećanje od
+   10% daje zraka, pa pomak nikad ne otkrije rub fotografije. */
+@supports (animation-timeline: view()) {
+  /* Vremenska crta se imenuje na heroju, a ne uzima s `view()` na samoj
+     fotografiji: heroj ima `overflow: hidden` i time je i sam spremnik za
+     listanje, pa bi `view()` mjerio pomak fotografije unutar njega — a ona
+     se ondje ne miče. Ovako se mjeri koliko je heroj otišao s ekrana. */
+  .hero { view-timeline-name: --heroj; }
+  .hero__photo {
+    animation:
+      herojDah 28s ease-in-out infinite alternate,
+      herojPomak linear both;
+    animation-timeline: auto, --heroj;
+    animation-range: normal, cover 0% cover 100%;
+  }
+  @keyframes herojPomak {
+    from { translate: 0 -3.5%; }
+    to   { translate: 0 3.5%; }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__photo { animation: none; scale: 1.1; translate: none; }
+}

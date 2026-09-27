@@ -22,8 +22,10 @@
   --muted-soft:  #7d8ca6;
   --slate:       #33405a;
 
-  --font-body:    Saira, system-ui, sans-serif;
-  --font-display: 'Saira Condensed', 'Saira', system-ui, sans-serif;
+  /* Pričuve imaju podešene mjere (vidi `fonts.css`), pa se zamjena pisma ne
+     vidi kao poskakivanje teksta. */
+  --font-body:    Saira, 'Saira pricuva', system-ui, sans-serif;
+  --font-display: 'Saira Condensed', 'Saira Condensed pricuva', Saira, system-ui, sans-serif;
   --font-mono:    ui-monospace, Menlo, monospace;
 
   --shell: 1360px;   /* maksimalna širina sadržaja */
