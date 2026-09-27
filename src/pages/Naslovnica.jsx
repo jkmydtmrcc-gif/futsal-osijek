@@ -1,7 +1,6 @@
 import Meta from '../components/Meta';
 import { useContent } from '../lib/content';
 import Hero from '../sections/Hero';
-import Ticker from '../sections/Ticker';
 import Impact from '../sections/Impact';
 import Squad from '../sections/Squad';
 import League from '../sections/League';
@@ -17,7 +16,6 @@ export default function Naslovnica() {
     <>
       <Meta description={hero.slogan} image={images.celebration} />
       <Hero />
-      <Ticker />
       <Impact />
       <Squad />
       <League />

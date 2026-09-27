@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import Reveal from './Reveal';
-import ProductArt from './ProductArt';
+import ProductPlaceholder from './ProductPlaceholder';
 
 /**
  * Kartica artikla u Fan Shopu.
@@ -21,7 +21,7 @@ export default function ProductCard({ product, index = 0 }) {
       as="a"
       variant="blur"
       delay={index * 70}
-      className="product notch-br-18"
+      className="product"
       href={product.href}
       target="_blank"
       rel="noopener noreferrer"
@@ -38,7 +38,7 @@ export default function ProductCard({ product, index = 0 }) {
             onError={() => setImgFailed(true)}
           />
         ) : (
-          <ProductArt kind={product.art} name={product.artName} number={product.artNumber} />
+          <ProductPlaceholder />
         )}
 
         <span className="product__zoom" aria-hidden="true">

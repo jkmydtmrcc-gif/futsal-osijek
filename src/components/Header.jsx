@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
-import Brush from './Brush';
 import Pip from './Pip';
 import Marquee from './Marquee';
 import MobileNav from './MobileNav';
@@ -37,7 +36,6 @@ export default function Header() {
       className={`site-header${scrolled ? ' is-scrolled' : ''}${menuOpen ? ' is-menu-open' : ''}`}
     >
       <div className="topbar">
-        <Brush variant="topbar" />
         <div className="topbar__inner">
           <span className="topbar__live">
             <Pip tone="sky" />
@@ -62,12 +60,10 @@ export default function Header() {
       </div>
 
       <header className="masthead">
-        <Brush variant="masthead-1" />
-        <Brush variant="masthead-2" />
         <div className="masthead__inner">
           <Link className="brand" to="/">
             <img
-              className="brand__crest notch-8"
+              className="brand__crest"
               src={images.crest}
               alt="Grb Futsal kluba Osijek"
               width="56"
@@ -89,7 +85,6 @@ export default function Header() {
                   to={link.to}
                   aria-current={isActive ? 'page' : undefined}
                 >
-                  {isActive && <Pip tone="cur" />}
                   {link.label}
                 </NavLink>
               );

@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import Brush from '../components/Brush';
 import Pip from '../components/Pip';
 import Reveal from '../components/Reveal';
 import PageHero from '../components/PageHero';
@@ -28,7 +27,7 @@ export default function Kontakt() {
     <>
       <PageHero page={pages['/kontakt']} grafika={images.artKontakt}>
         <div className="phero__actions">
-          <a className="btn btn--solid notch-12" href={`mailto:${contact.email}`}>
+          <a className="btn btn--solid" href={`mailto:${contact.email}`}>
             {contact.email}
           </a>
           <a className="btn btn--ghost" href={`tel:${contact.phoneHref}`}>
@@ -39,7 +38,6 @@ export default function Kontakt() {
 
       {/* --- Podaci -------------------------------------------------------- */}
       <section className="slab slab--paper" aria-labelledby="naslov-kontakt">
-        <Brush variant="squad-1" />
         <div className="shell">
           <Reveal>
             <span className="eyebrow">Podaci</span>
@@ -49,7 +47,7 @@ export default function Kontakt() {
           </Reveal>
 
           <div className="contact">
-            <Reveal className="contact__card notch-br-20" variant="left">
+            <Reveal className="contact__card" variant="left">
               <span className="contact__label">Dvorana</span>
               <p className="contact__value">
                 {contact.address.map((line, i) => (
@@ -62,7 +60,7 @@ export default function Kontakt() {
               <span className="contact__note">{hero.venue}</span>
             </Reveal>
 
-            <Reveal className="contact__card notch-br-20" delay={110}>
+            <Reveal className="contact__card" delay={110}>
               <span className="contact__label">E-mail</span>
               <a className="contact__link" href={`mailto:${contact.email}`}>
                 {contact.email}
@@ -70,7 +68,7 @@ export default function Kontakt() {
               <span className="contact__note">Upiti navijača, medija i partnera</span>
             </Reveal>
 
-            <Reveal className="contact__card notch-br-20" delay={220} variant="right">
+            <Reveal className="contact__card" delay={220} variant="right">
               <span className="contact__label">Telefon</span>
               <a className="contact__link" href={`tel:${contact.phoneHref}`}>
                 {contact.phone}
@@ -94,8 +92,6 @@ export default function Kontakt() {
 
       {/* --- Poruka klubu -------------------------------------------------- */}
       <section className="slab slab--dark" aria-labelledby="naslov-poruka">
-        <div className="scanlines scanlines--wide" aria-hidden="true" />
-        <Brush variant="league-1" />
 
         <div className="shell split">
           <Reveal variant="left" className="split__main">
@@ -148,7 +144,7 @@ export default function Kontakt() {
                 />
               </label>
 
-              <a className="btn btn--solid notch-12" href={mailto}>
+              <a className="btn btn--solid" href={mailto}>
                 Otvori e-mail ↗
               </a>
             </div>

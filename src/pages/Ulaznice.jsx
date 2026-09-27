@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import Brush from '../components/Brush';
 import Pip from '../components/Pip';
 import Reveal from '../components/Reveal';
 import PageHero from '../components/PageHero';
@@ -20,7 +19,7 @@ export default function Ulaznice() {
     <>
       <PageHero page={pages['/ulaznice']} grafika={images.artUlaznice}>
         <div className="phero__actions">
-          <a className="btn btn--solid notch-12" href={`mailto:${contact.email}`}>
+          <a className="btn btn--solid" href={`mailto:${contact.email}`}>
             Rezerviraj e-mailom
           </a>
           <Link className="btn btn--ghost" to="/raspored">
@@ -31,7 +30,6 @@ export default function Ulaznice() {
 
       {/* --- Dvorana ------------------------------------------------------- */}
       <section className="slab slab--paper" aria-labelledby="naslov-ulaznice">
-        <Brush variant="squad-2" />
         <div className="shell split">
           <Reveal variant="left" className="split__main">
             <span className="eyebrow">Dolazak</span>
@@ -57,7 +55,7 @@ export default function Ulaznice() {
             </div>
 
             <div className="btn-row">
-              <a className="btn btn--blue notch-12" href={`mailto:${contact.email}`}>
+              <a className="btn btn--blue" href={`mailto:${contact.email}`}>
                 {contact.email}
               </a>
               <Link className="btn btn--ghost btn--ink" to={CONTACT_PATH}>
@@ -68,7 +66,7 @@ export default function Ulaznice() {
 
           <Reveal variant="right" delay={130} className="split__side">
             <img
-              className="split__img notch-br-22"
+              className="split__img"
               src={images.celebration}
               alt="Navijači na tribini dvorane Zrinjevac"
               loading="lazy"
@@ -83,8 +81,6 @@ export default function Ulaznice() {
       {/* --- Nadolazeće utakmice ------------------------------------------- */}
       {league.fixtures.length > 0 && (
         <section className="slab slab--dark" aria-labelledby="naslov-termini">
-          <div className="scanlines scanlines--wide" aria-hidden="true" />
-          <Brush variant="league-1" />
 
           <div className="shell">
             <div className="section-head">
@@ -103,7 +99,7 @@ export default function Ulaznice() {
 
             <div className="fixtures fixtures--row">
               {league.fixtures.map((f, i) => (
-                <Reveal className="fixture notch-br-14" delay={i * 100} key={f.title}>
+                <Reveal className="fixture" delay={i * 100} key={f.title}>
                   <div className="fixture__meta">
                     <span className="fixture__when">{f.when}</span>
                     <Pip size="sm" />

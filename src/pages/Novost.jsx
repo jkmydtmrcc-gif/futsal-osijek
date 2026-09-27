@@ -1,5 +1,4 @@
 import { Link, useParams } from 'react-router-dom';
-import Brush from '../components/Brush';
 import Pip from '../components/Pip';
 import Reveal from '../components/Reveal';
 import NewsCard from '../components/NewsCard';
@@ -23,9 +22,6 @@ export default function Novost() {
 
       <article className="post">
         <section className="phero phero--post" aria-labelledby="post-naslov">
-          <div className="scanlines scanlines--wide" aria-hidden="true" />
-          <Brush variant="league-1" />
-          <Brush variant="hero-2" />
 
           <div className="shell phero__inner">
             <Reveal>
@@ -46,13 +42,12 @@ export default function Novost() {
         </section>
 
         <section className="slab slab--paper">
-          <Brush variant="squad-2" />
           <div className="shell post__grid">
             <div className="post__main">
               {item.image && (
                 <Reveal variant="scale">
                   <img
-                    className="post__photo notch-br-22"
+                    className="post__photo"
                     src={item.image}
                     alt={item.title}
                     loading="lazy"
@@ -77,7 +72,7 @@ export default function Novost() {
                 <span className="post__meta-value">{item.cat}</span>
               </div>
               <div className="btn-row">
-                <Link className="btn btn--blue notch-12" to="/novosti">
+                <Link className="btn btn--blue" to="/novosti">
                   Sve novosti
                 </Link>
               </div>

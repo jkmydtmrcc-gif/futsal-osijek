@@ -1,6 +1,5 @@
 import { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import Brush from './Brush';
 import { NAV_LINKS, CONTACT_PATH, SOCIALS } from '../data/site';
 import { useContent } from '../lib/content';
 
@@ -56,9 +55,6 @@ export default function MobileNav({ open, onClose, activeId, returnFocusRef }) {
       inert={!open}
       aria-hidden={!open}
     >
-      <div className="scanlines scanlines--wide" aria-hidden="true" />
-      <Brush variant="league-1" />
-      <Brush variant="hero-2" />
 
       <div className="mobile-nav__panel" ref={panelRef}>
         <nav className="mobile-nav__list" aria-label="Mobilna navigacija">

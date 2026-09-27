@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom';
-import Brush from '../components/Brush';
 import Reveal from '../components/Reveal';
 import Marquee from '../components/Marquee';
 import { CONTACT_PATH } from '../data/site';
@@ -51,43 +50,31 @@ function popuni(sponsors, najmanje = 8) {
 }
 
 export default function Partners() {
-  const { sponsors } = useContent();
+  const { sponsors, hero } = useContent();
+
+  // Razina bez ijednog sponzora se ne prikazuje. Prazna razina s natpisom
+  // „Gold sponzori“ i ničim ispod izgleda kao da je nešto otpalo.
+  const razine = sponsors.tiers.filter((tier) => tier.sponsors.length > 0);
 
   return (
     <section className="partners" aria-labelledby="naslov-partneri">
-      <Brush variant="partners-1" />
-      <Brush variant="partners-2" />
-
-      <div className="partners__head">
-        <Reveal style={{ position: 'relative' }}>
-          <Brush variant="partners-head" />
-          <span className="eyebrow" style={{ position: 'relative' }}>
-            Uz nas su
-          </span>
-          <h2 className="partners__title" id="naslov-partneri">
-            Partneri kluba
-          </h2>
-        </Reveal>
-
-        <div className="partners__counts">
-          {sponsors.counts.map((count, i) => (
-            <Reveal key={count.label} delay={i * 100}>
-              <span className="partners__count-n">{count.value}</span>
-              <span className="partners__count-l">{count.label}</span>
-            </Reveal>
-          ))}
-          <Reveal variant="right" delay={220}>
+      <div className="shell">
+        <div className="section-head">
+          <Reveal>
+            <span className="eyebrow">Uz nas su</span>
+            <h2 className="partners__title" id="naslov-partneri">
+              Partneri kluba
+            </h2>
+          </Reveal>
+          <Reveal variant="right" delay={140}>
             <Link className="link-underline" to={CONTACT_PATH}>
               Postani partner →
             </Link>
           </Reveal>
         </div>
-      </div>
 
-      <div className="tiers">
-        {sponsors.tiers
-          .filter((tier) => tier.sponsors.length > 0)
-          .map((tier, t) => (
+        <div className="tiers">
+          {razine.map((tier, t) => (
             <Reveal className={`tier tier--${tier.size}`} delay={t * 90} key={tier.id}>
               <div className="tier__head">
                 <span className="tier__tag">{tier.tag}</span>
@@ -96,8 +83,9 @@ export default function Partners() {
 
               {/* Razina označena za rotaciju klizi kao traka; ostale stoje u
                   mreži. Traka se zaustavlja na prelazak mišem, da se logotip
-                  stigne pročitati i kliknuti. */}
-              {tier.rotate ? (
+                  stigne pročitati i kliknuti. Traka ima smisla tek kad ima
+                  što klizati — s dva sponzora ostaje mreža. */}
+              {tier.rotate && tier.sponsors.length > 4 ? (
                 <>
                   {/* Traka je ukras i `Marquee` je skriva čitačima ekrana — uz
                       to da svakog sponzora prikazuje dvaput. Zato isti popis
@@ -115,18 +103,18 @@ export default function Partners() {
                       </li>
                     ))}
                   </ul>
-                <Marquee
-                  items={popuni(tier.sponsors)}
-                  className="tier__rail"
-                  trackClassName={`tier__track tier__track--${tier.size}`}
-                  faded
-                >
-                  {(sponsor, i) => (
-                    <span className="tier__cell tier__cell--rail" key={`${sponsor.name}-${i}`}>
-                      <SponsorCell sponsor={sponsor} size={tier.size} />
-                    </span>
-                  )}
-                </Marquee>
+                  <Marquee
+                    items={popuni(tier.sponsors)}
+                    className="tier__rail"
+                    trackClassName={`tier__track tier__track--${tier.size}`}
+                    faded
+                  >
+                    {(sponsor, i) => (
+                      <span className="tier__cell tier__cell--rail" key={`${sponsor.name}-${i}`}>
+                        <SponsorCell sponsor={sponsor} size={tier.size} />
+                      </span>
+                    )}
+                  </Marquee>
                 </>
               ) : (
                 <div className="tier__grid">
@@ -145,6 +133,24 @@ export default function Partners() {
               )}
             </Reveal>
           ))}
+        </div>
+
+        {/* Poziv partnerima stoji uvijek. Prije su prazne razine punili
+            „Sponzor 1 … Sponzor 8“ — izmišljena imena koja su kliznula
+            preko ekrana i odavala da klub nema sponzore. */}
+        <Reveal className="partners__cta" delay={razine.length * 90 + 80}>
+          <div className="partners__cta-copy">
+            <h3 className="partners__cta-title">Mjesto za tvoj logotip</h3>
+            <p className="partners__cta-note">
+              Domaće utakmice igraju se na Zrinjevcu — {hero.venue}. Za uvjete
+              partnerstva i vidljivost na dresu, u dvorani i na ovoj stranici javi
+              se klubu.
+            </p>
+          </div>
+          <Link className="btn btn--blue" to={CONTACT_PATH}>
+            Uvjeti partnerstva
+          </Link>
+        </Reveal>
       </div>
     </section>
   );

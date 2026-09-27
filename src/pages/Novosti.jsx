@@ -1,6 +1,5 @@
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import Brush from '../components/Brush';
 import Pip from '../components/Pip';
 import Reveal from '../components/Reveal';
 import PageHero from '../components/PageHero';
@@ -32,8 +31,6 @@ export default function Novosti() {
       <PageHero page={pages['/novosti']} grafika={images.artNovosti} />
 
       <section className="slab slab--paper" aria-labelledby="naslov-vijesti">
-        <Brush variant="news-1" />
-        <Brush variant="news-2" />
 
         <div className="shell">
           <Reveal>
@@ -47,7 +44,7 @@ export default function Novosti() {
             as={Link}
             to={featured.id ? `/novosti/${featured.id}` : '/novosti'}
             variant="scale"
-            className="feature feature--link notch-br-24"
+            className="feature feature--link"
             delay={100}
           >
             <img
@@ -57,7 +54,6 @@ export default function Novosti() {
               loading="lazy"
             />
             <div className="feature__veil" aria-hidden="true" />
-            <Brush variant="feature" />
             <div className="feature__body">
               <span className="feature__flag">{featured.flag}</span>
               <h3 className="feature__title">{featured.title}</h3>

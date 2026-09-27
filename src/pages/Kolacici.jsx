@@ -1,4 +1,3 @@
-import Brush from '../components/Brush';
 import Pip from '../components/Pip';
 import Reveal from '../components/Reveal';
 import PageHero from '../components/PageHero';
@@ -25,6 +24,12 @@ const STAVKE = [
       'Kad se urednik prijavi, Supabase sprema žeton prijave. Posjetitelji koji ne uređuju stranicu ovo nikad ne dobiju.',
   },
   {
+    naziv: 'Pisma (Saira)',
+    vrsta: 'Nije vanjsko · posluženo s ove stranice',
+    svrha:
+      'Pisma se dohvaćaju s ovog poslužitelja, a ne s Googleovog. Zato Google ne vidi ni tvoju IP adresu ni koju si stranicu otvorio.',
+  },
+  {
     naziv: 'Karta dvorane (OpenStreetMap)',
     vrsta: 'Vanjska ugradnja · učitava se sa stranicom',
     svrha:
@@ -40,7 +45,6 @@ export default function Kolacici() {
       <PageHero page={pages['/kolacici']} grafika={images.artKontakt} />
 
       <section className="slab slab--paper" aria-labelledby="naslov-kolacici">
-        <Brush variant="squad-1" />
         <div className="shell">
           <Reveal>
             <span className="eyebrow">Ukratko</span>
@@ -50,7 +54,8 @@ export default function Kolacici() {
             <p className="prose prose--wide">
               Nema Google Analyticsa, nema oglasnih mreža, nema piksela za
               praćenje i nema prodaje podataka. Ono malo što se sprema, sprema se
-              da bi stranica radila.
+              da bi stranica radila. Jedina stvar koja se dohvaća s tuđeg
+              poslužitelja je karta dvorane u podnožju.
             </p>
           </Reveal>
 

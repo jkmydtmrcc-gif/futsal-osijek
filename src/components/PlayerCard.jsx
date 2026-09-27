@@ -66,7 +66,6 @@ export default function PlayerCard({ player, index = 0, onOpen }) {
       <div className="player__plate">
         {first && <span className="player__first">{first}</span>}
         <h3 className="player__last">
-          <span className="player__wash" aria-hidden="true" />
           {last}
         </h3>
         <span className="player__note">{player.note}</span>

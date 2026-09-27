@@ -61,14 +61,23 @@ artikl stvarno kupuje u trgovini **SalaSport**.
   u trgovini vodi na kategoriju ili na pretragu „kandit”, nikad na izmišljeni
   URL koji završi na 404.
 
-Bez fotografije kartica nacrta artikl sama (`ProductArt.jsx`).
+Bez fotografije kartica pokaže grb kao vodeni žig (`ProductPlaceholder.jsx`).
+Prije je na tom mjestu stajao nacrtani dres — izgledao je kao sličica iz zbirke
+ikona. Crtež je ostao samo tamo gdje nešto radi: u personalizaciji na `/shop`
+ispisuje upisano prezime i broj na dres (`ProductArt.jsx`).
 
 ## Sponzori
 
-Tri razine: glavni, gold, podupiratelji. Razina bez sponzora se ne prikazuje.
+Tri razine: glavni, gold, podupiratelji. Razina bez sponzora se ne prikazuje, a
+ugrađeni sadržaj više ne nosi rezervirana mjesta: „Sponzor 1 … Sponzor 8“ su
+klizili preko ekrana i odavali da klub nema sponzore. Umjesto njih na dnu
+odsječka stoji poziv partnerima, koji je istinit i kad razina ima jednog
+sponzora.
+
 Pločica bez logotipa pokaže ime ispisano — namjerno, jer je prije svaka traka
 ponavljala isti tuđi logotip kao zamjenu, pa je izgledalo kao da klub ima
-osamnaest istih sponzora.
+osamnaest istih sponzora. Traka klizi tek kad razina ima više od četiri
+sponzora; s dva bi se isti logotip vrtio u krug.
 
 ## Karta dvorane
 
@@ -113,6 +122,25 @@ popisom.
 
 Ako se ikad doda analitika ili ugradnja koja postavlja kolačiće bez pitanja,
 ovo treba pretvoriti u pravu privolu, s odbijanjem koje stvarno radi.
+
+## Pisma
+
+Saira i Saira Condensed poslužuju se iz `public/fonts/`, a ne s
+`fonts.gstatic.com`. Google inače vidi IP adresu svakog posjetitelja, što je
+bila jedina vanjska usluga bez potrebe — stranica nema ni analitiku ni oglase.
+Uzeti su samo podskupovi `latin` i `latin-ext`; `latin-ext` nosi č, ć, š, ž i đ.
+Popis je u `src/fonts.css`.
+
+## Izgled
+
+`styles.css` opisuje raspored, `staklo.css` površinu (svjetlo iza ploha, staklo
+na plutajućim slojevima, rub i sjena na karticama). Podjela znači da se izgled
+može mijenjati bez straha da će se nešto pomaknuti.
+
+Iz ranije verzije su izbačeni ukrasi koji su stranicu činili neozbiljnom:
+potezi kistom (SVG turbulencija), dijagonalne crte preko ploha, nasumični nagib
+kartica igrača i odsječeni kut na svakoj kartici. Ostao je jedan veliki
+dijagonalni rez ispod naslovnice — na toj veličini djeluje namjerno.
 
 ## Slike
 

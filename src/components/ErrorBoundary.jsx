@@ -44,7 +44,7 @@ export default class ErrorBoundary extends Component {
           </p>
 
           <div className="crash__actions">
-            <button type="button" className="btn btn--solid notch-12" onClick={this.handleReset}>
+            <button type="button" className="btn btn--solid" onClick={this.handleReset}>
               Natrag na naslovnicu
             </button>
             <a className="btn btn--ghost" href="/admin">

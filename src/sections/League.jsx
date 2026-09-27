@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom';
-import Brush from '../components/Brush';
 import Pip from '../components/Pip';
 import Reveal from '../components/Reveal';
 import ClubBadge from '../components/ClubBadge';
@@ -11,9 +10,6 @@ export default function League() {
 
   return (
     <section className="league" id="raspored" aria-labelledby="naslov-liga">
-      <div className="scanlines scanlines--wide" aria-hidden="true" />
-      <Brush variant="league-1" />
-      <Brush variant="league-2" />
 
       <div className="shell">
         <Reveal>
@@ -66,7 +62,7 @@ export default function League() {
               <Reveal
                 variant="right"
                 delay={i * 110}
-                className="fixture notch-br-14"
+                className="fixture"
                 key={fixture.title}
               >
                 <div className="fixture__meta">
@@ -115,7 +111,7 @@ export default function League() {
           </Reveal>
 
           <div className="league__side">
-            <Reveal variant="right" className="clubs notch-br-16">
+            <Reveal variant="right" className="clubs">
               <span className="eyebrow eyebrow--sm">Klubovi lige</span>
               <div className="clubs__list">
                 {league.clubs.map((club, i) => (

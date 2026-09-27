@@ -5,7 +5,6 @@ import PageHero from '../components/PageHero';
 import PlayerCard from '../components/PlayerCard';
 import PlayerModal from '../components/PlayerModal';
 import Pip from '../components/Pip';
-import Brush from '../components/Brush';
 import { POSITION_GROUPS } from '../data/site';
 import { useContent } from '../lib/content';
 
@@ -71,8 +70,6 @@ export default function Postava() {
 
       {/* --- Igrači po pozicijama ------------------------------------------ */}
       <section className="slab slab--paper" aria-labelledby="naslov-igraci">
-        <Brush variant="squad-1" />
-        <Brush variant="squad-2" />
         <div className="shell">
           <Reveal>
             <span className="eyebrow">Igrači</span>
@@ -106,8 +103,6 @@ export default function Postava() {
 
       {/* --- Stožer -------------------------------------------------------- */}
       <section className="slab slab--dark" aria-labelledby="naslov-stozer">
-        <div className="scanlines scanlines--wide" aria-hidden="true" />
-        <Brush variant="league-1" />
         <div className="shell">
           <Reveal>
             <span className="eyebrow eyebrow--sky">Stručni stožer</span>
@@ -118,7 +113,7 @@ export default function Postava() {
 
           <div className="staff-grid">
             {staff.map((s, i) => (
-              <Reveal className="staff-card notch-br-16" delay={i * 110} key={s.role}>
+              <Reveal className="staff-card" delay={i * 110} key={s.role}>
                 <span className="staff-card__role">{s.role}</span>
                 <h3 className="staff-card__name">{s.name}</h3>
               </Reveal>

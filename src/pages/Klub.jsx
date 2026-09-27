@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom';
-import Brush from '../components/Brush';
 import Pip from '../components/Pip';
 import Reveal from '../components/Reveal';
 import PageHero from '../components/PageHero';
@@ -13,7 +12,7 @@ export default function Klub() {
     <>
       <PageHero page={pages['/klub']} grafika={images.artKlub}>
         <div className="phero__actions">
-          <Link className="btn btn--solid notch-12" to="/postava">
+          <Link className="btn btn--solid" to="/postava">
             Prva postava
           </Link>
           <Link className="btn btn--ghost" to={TICKETS_PATH}>
@@ -24,7 +23,6 @@ export default function Klub() {
 
       {/* --- Brojke -------------------------------------------------------- */}
       <section className="slab" aria-label="Klub u brojkama">
-        <Brush variant="impact" />
         <div className="shell facts">
           {club.facts.map((f, i) => (
             <Reveal className="facts__cell" key={f.label} delay={i * 90}>
@@ -37,7 +35,6 @@ export default function Klub() {
 
       {/* --- Priča --------------------------------------------------------- */}
       <section className="slab slab--paper" aria-labelledby="naslov-prica">
-        <Brush variant="squad-1" />
         <div className="shell split">
           <Reveal variant="left" className="split__main">
             <span className="eyebrow">Klub</span>
@@ -53,7 +50,7 @@ export default function Klub() {
             ))}
 
             <div className="btn-row">
-              <Link className="btn btn--blue notch-12" to="/raspored">
+              <Link className="btn btn--blue" to="/raspored">
                 Raspored i tablica
               </Link>
               <Link className="btn btn--ghost btn--ink" to="/novosti">
@@ -64,7 +61,7 @@ export default function Klub() {
 
           <Reveal variant="right" delay={120} className="split__side">
             <img
-              className="split__img notch-br-22"
+              className="split__img"
               src={images.team}
               alt="Momčad Kandita slavi pobjedu"
               loading="lazy"
@@ -83,8 +80,6 @@ export default function Klub() {
 
       {/* --- Uspjesi ------------------------------------------------------- */}
       <section className="slab slab--dark" aria-labelledby="naslov-uspjesi">
-        <div className="scanlines scanlines--wide" aria-hidden="true" />
-        <Brush variant="league-1" />
         <div className="shell">
           <Reveal>
             <span className="eyebrow eyebrow--sky">Rezultati</span>
@@ -115,7 +110,6 @@ export default function Klub() {
 
       {/* --- Kroz sezone --------------------------------------------------- */}
       <section className="slab slab--paper" aria-labelledby="naslov-kroz-sezone">
-        <Brush variant="squad-2" />
         <div className="shell">
           <Reveal>
             <span className="eyebrow">Kronologija</span>
@@ -151,8 +145,6 @@ export default function Klub() {
           loading="lazy"
         />
         <div className="venue__veil" aria-hidden="true" />
-        <Brush variant="venue-1" />
-        <Brush variant="venue-2" />
 
         <div className="venue__inner">
           <Reveal>
@@ -166,7 +158,7 @@ export default function Klub() {
             </h2>
           </Reveal>
           <Reveal delay={230}>
-            <Link className="venue__cta notch-12" to={TICKETS_PATH}>
+            <Link className="venue__cta" to={TICKETS_PATH}>
               Kako doći na utakmicu
             </Link>
           </Reveal>

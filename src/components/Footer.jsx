@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom';
-import Brush from './Brush';
 import VenueMap from './VenueMap';
 import { FOOTER_LINKS, SOCIALS, CONTACT_PATH, LEGAL_LINKS, CREDIT } from '../data/site';
 import { useContent } from '../lib/content';
@@ -9,15 +8,12 @@ export default function Footer() {
 
   return (
     <footer className="site-footer">
-      <Brush variant="footer-1" />
-      <Brush variant="footer-2" />
-      <Brush variant="footer-3" />
 
       <div className="site-footer__grid">
         <div className="footer-brand">
           <div className="footer-brand__row">
             <img
-              className="footer-brand__crest notch-8"
+              className="footer-brand__crest"
               src={images.crest}
               alt="Grb Futsal kluba Osijek"
               width="56"

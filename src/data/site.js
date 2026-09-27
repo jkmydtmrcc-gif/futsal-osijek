@@ -41,16 +41,6 @@ export const TOPBAR_STRIP = [
   'Vitor Lima ponovno u klubu',
 ];
 
-export const TICKER = [
-  { text: 'MNK Osijek Kandit · Zrinjevac', accent: false },
-  { text: '2. mjesto regularnog dijela 2025/26', accent: true },
-  { text: 'Finalist doigravanja 2024/25', accent: false },
-  { text: 'Trener: Carmine Tarantino', accent: true },
-  { text: 'Kapetan: Andrej Pandurević', accent: false },
-  { text: 'Vitor Lima ponovno u klubu', accent: true },
-  { text: 'SuperSport HMNL', accent: false },
-];
-
 export const HERO_FACTS = [
   { value: '2.', label: 'Regularni dio HMNL-a' },
   { value: '2024/25', label: 'Finale doigravanja' },
@@ -384,30 +374,14 @@ export const SPONSOR_TIERS = [
     /* Razine s više sponzora klize kao traka — tako ih stane koliko god
        treba, bez reda koji se lomi na pola ekrana. */
     rotate: true,
-    sponsors: [
-      { name: 'Sponzor 1', logo: '', href: '', note: '' },
-      { name: 'Sponzor 2', logo: '', href: '', note: '' },
-      { name: 'Sponzor 3', logo: '', href: '', note: '' },
-      { name: 'Sponzor 4', logo: '', href: '', note: '' },
-      { name: 'Sponzor 5', logo: '', href: '', note: '' },
-      { name: 'Sponzor 6', logo: '', href: '', note: '' },
-      { name: 'Sponzor 7', logo: '', href: '', note: '' },
-      { name: 'Sponzor 8', logo: '', href: '', note: '' },
-    ],
+    sponsors: [],
   },
   {
     id: 'podupiratelji',
     tag: 'Podupiratelji',
     size: 'sm',
     rotate: true,
-    sponsors: [
-      { name: 'Podupiratelj 1', logo: '', href: '', note: '' },
-      { name: 'Podupiratelj 2', logo: '', href: '', note: '' },
-      { name: 'Podupiratelj 3', logo: '', href: '', note: '' },
-      { name: 'Podupiratelj 4', logo: '', href: '', note: '' },
-      { name: 'Podupiratelj 5', logo: '', href: '', note: '' },
-      { name: 'Podupiratelj 6', logo: '', href: '', note: '' },
-    ],
+    sponsors: [],
   },
 ];
 
@@ -457,7 +431,7 @@ export const LEGAL_LINKS = [
 ];
 
 export const IMAGES = {
-  crest: '/uploads/images.jpeg',
+  crest: '/grb.png',
   /* Izrezani igrač (bez pozadine) koji stoji uz tablicu. */
   cutout: '/uploads/igraci/grafika-igrac.webp',
   /* Grafike u vrhu podstranica — bez njih je tamo naslov u praznini. */

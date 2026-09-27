@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import Brush from './Brush';
 import Reveal from './Reveal';
 import Meta from './Meta';
 
@@ -23,9 +22,6 @@ export default function PageHero({ page, children, metaImage, grafika }) {
           meta oznake održavaju same. */}
       <Meta title={page.title} description={page.lead} image={metaImage} />
 
-      <div className="scanlines scanlines--wide" aria-hidden="true" />
-      <Brush variant="league-1" />
-      <Brush variant="hero-2" />
 
       {/* Grafika je ukras i stoji izvan toka: da je u mreži, njezina bi
           visina razvukla cijeli vrh stranice i gurnula naslov na dno. */}

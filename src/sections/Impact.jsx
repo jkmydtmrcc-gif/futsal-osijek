@@ -1,4 +1,3 @@
-import Brush from '../components/Brush';
 import Reveal from '../components/Reveal';
 import { useContent } from '../lib/content';
 
@@ -7,7 +6,6 @@ export default function Impact() {
 
   return (
     <section className="impact" aria-label="Klub u brojkama">
-      <Brush variant="impact" />
       <div className="shell impact__grid">
         {impact.map((stat, i) => (
           <Reveal className="impact__cell" key={stat.label} delay={i * 90}>

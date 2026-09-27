@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom';
-import Brush from '../components/Brush';
 import Pip from '../components/Pip';
 import { useContent } from '../lib/content';
 
@@ -19,22 +18,11 @@ export default function Hero() {
         fetchPriority="high"
       />
       <div className="hero__veil" aria-hidden="true" />
-      <div className="scanlines" style={{ mixBlendMode: 'overlay' }} aria-hidden="true" />
-      <Brush variant="hero-1" />
-      <Brush variant="hero-2" />
-      <Brush variant="hero-3" />
 
       <div className="hero__inner">
         <div className="hero__lead">
           <div className="hero__badgerow">
-            <img
-              className="hero__crest notch-10"
-              src={images.crest}
-              alt="Grb Futsal kluba Osijek"
-              width="96"
-              height="96"
-            />
-            <div className="hero__league notch-8">
+            <div className="hero__league">
               <Pip blink />
               <span>SuperSport HMNL · 2026/27</span>
             </div>
@@ -50,7 +38,7 @@ export default function Hero() {
           <p className="hero__slogan">{hero.slogan}</p>
 
           <div className="hero__actions">
-            <Link className="btn btn--solid notch-12" to="/postava">
+            <Link className="btn btn--solid" to="/postava">
               Upoznaj momčad
             </Link>
             <Link className="btn btn--ghost" to="/raspored">
@@ -61,16 +49,15 @@ export default function Hero() {
 
         <div className="hero__aside">
           <div className="hero__frame">
-            <div className="hero__frame-wash" aria-hidden="true" />
             <img
-              className="hero__frame-img notch-br-14"
+              className="hero__frame-img"
               src={images.team}
               alt="Momčad Kandita slavi pobjedu"
             />
             <span className="hero__frame-tag">Zrinjevac · bijelo-plavi</span>
           </div>
 
-          <div className="hero__facts notch-br-18">
+          <div className="hero__facts">
             <span className="eyebrow eyebrow--sm">Sezona 2025/26</span>
             <div className="hero__facts-list">
               {hero.facts.map((fact, i) => (

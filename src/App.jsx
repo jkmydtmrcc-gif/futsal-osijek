@@ -1,5 +1,4 @@
 import { Routes, Route, useLocation } from 'react-router-dom';
-import BrushDefs from './components/BrushDefs';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import ScrollToTop from './components/ScrollToTop';
@@ -45,7 +44,6 @@ export default function App() {
         Preskoči na sadržaj
       </a>
 
-      <BrushDefs />
       <ScrollToTop />
 
       <div className="page">

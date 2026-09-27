@@ -1,5 +1,4 @@
 import { useMemo, useState } from 'react';
-import Brush from '../components/Brush';
 import Pip from '../components/Pip';
 import Reveal from '../components/Reveal';
 import PageHero from '../components/PageHero';
@@ -43,7 +42,7 @@ export default function Shop() {
       <PageHero page={pages['/shop']} grafika={images.artShop}>
         <div className="phero__actions">
           <a
-            className="btn btn--solid notch-12"
+            className="btn btn--solid"
             href={shop.searchUrl}
             target="_blank"
             rel="noopener noreferrer"
@@ -58,8 +57,6 @@ export default function Shop() {
 
       {/* --- Artikli ------------------------------------------------------ */}
       <section className="slab slab--paper" aria-labelledby="naslov-artikli">
-        <Brush variant="squad-1" />
-        <Brush variant="squad-2" />
 
         <div className="shell">
           <div className="section-head">
@@ -111,9 +108,6 @@ export default function Shop() {
 
       {/* --- Dres s imenom ----------------------------------------------- */}
       <section className="slab slab--blue custom" aria-labelledby="naslov-personalizacija">
-        <div className="scanlines scanlines--shop" aria-hidden="true" />
-        <Brush variant="shop-1" />
-        <Brush variant="shop-2" />
 
         <div className="shell custom__inner">
           <Reveal variant="left" className="custom__form">
@@ -169,7 +163,7 @@ export default function Shop() {
             </div>
 
             <a
-              className="btn btn--solid notch-12"
+              className="btn btn--solid"
               href={shop.custom.href}
               target="_blank"
               rel="noopener noreferrer"
@@ -178,7 +172,7 @@ export default function Shop() {
             </a>
           </Reveal>
 
-          <Reveal variant="right" delay={140} className="custom__preview notch-br-22">
+          <Reveal variant="right" delay={140} className="custom__preview">
             <ProductArt kind="dres" name={name} number={number} className="product-art--lg" />
             <span className="custom__tag">
               <Pip tone="sky" /> Domaći dres · {name || 'PREZIME'} {number}
@@ -203,7 +197,7 @@ export default function Shop() {
                 as="a"
                 variant="blur"
                 delay={i * 90}
-                className="shop-card shop-card--paper notch-br-20"
+                className="shop-card shop-card--paper"
                 key={item.href}
                 href={item.href}
                 target="_blank"

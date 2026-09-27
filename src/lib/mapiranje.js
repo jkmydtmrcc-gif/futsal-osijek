@@ -31,7 +31,6 @@ export function zadaniSadrzaj() {
     hero: { slogan: SITE.SLOGAN, venue: SITE.VENUE, facts: SITE.HERO_FACTS },
     topbar: SITE.TOPBAR_STRIP,
     topbarBadge: SITE.TOPBAR_BADGE,
-    ticker: SITE.TICKER,
     impact: SITE.IMPACT,
     players: SITE.PLAYERS,
     staff: SITE.STAFF,

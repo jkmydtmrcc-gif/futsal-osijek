@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import Pip from './Pip';
-import Brush from './Brush';
 import { COMPETITIONS, STAT_FIELDS } from '../data/site';
 
 /**
@@ -121,9 +120,7 @@ export default function PlayerModal({ player, onClose }) {
           čitači ekrana preskaču — zatvaranje ima i pravi gumb. */}
       <div className="pm__scrim" onClick={onClose} aria-hidden="true" />
 
-      <div className="pm__panel notch-br-24" ref={panelRef}>
-        <div className="scanlines scanlines--wide" aria-hidden="true" />
-        <Brush variant="pm" />
+      <div className="pm__panel" ref={panelRef}>
 
         <button type="button" className="pm__close" onClick={onClose} ref={closeRef}>
           Zatvori ✕

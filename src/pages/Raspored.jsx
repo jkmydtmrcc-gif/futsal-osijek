@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom';
-import Brush from '../components/Brush';
 import Pip from '../components/Pip';
 import Reveal from '../components/Reveal';
 import PageHero from '../components/PageHero';
@@ -32,9 +31,6 @@ export default function Raspored() {
 
       {/* --- Tablica i nadolazeće ------------------------------------------ */}
       <section className="slab slab--dark" aria-labelledby="naslov-tablica">
-        <div className="scanlines scanlines--wide" aria-hidden="true" />
-        <Brush variant="league-1" />
-        <Brush variant="league-2" />
 
         <div className="shell">
           <Reveal>
@@ -94,7 +90,7 @@ export default function Raspored() {
             <div className="fixtures">
               <span className="eyebrow eyebrow--sky eyebrow--sm">Nadolazeće utakmice</span>
               {league.fixtures.map((f, i) => (
-                <Reveal variant="right" delay={i * 110} className="fixture notch-br-14" key={f.title}>
+                <Reveal variant="right" delay={i * 110} className="fixture" key={f.title}>
                   <div className="fixture__meta">
                     <span className="fixture__when">{f.when}</span>
                     <Pip size="sm" />
@@ -135,7 +131,6 @@ export default function Raspored() {
       {/* --- Odigrano ------------------------------------------------------ */}
       {league.results.length > 0 && (
         <section className="slab slab--paper" aria-labelledby="naslov-rezultati">
-          <Brush variant="squad-1" />
           <div className="shell">
             <Reveal>
               <span className="eyebrow">Odigrano</span>
@@ -146,7 +141,7 @@ export default function Raspored() {
 
             <div className="results">
               {league.results.map((r, i) => (
-                <Reveal className="result notch-br-14" delay={i * 90} key={`${r.when}-${r.title}`}>
+                <Reveal className="result" delay={i * 90} key={`${r.when}-${r.title}`}>
                   <span className="result__when">{r.when}</span>
                   <h3 className="result__title">{r.title}</h3>
                   <span className={`result__score result__score--${r.outcome || 'n'}`}>
@@ -170,7 +165,7 @@ export default function Raspored() {
             </h2>
           </Reveal>
 
-          <Reveal className="clubs clubs--paper notch-br-16" delay={140}>
+          <Reveal className="clubs clubs--paper" delay={140}>
             <div className="clubs__list">
               {league.clubs.map((c, i) => (
                 <Reveal as="span" variant="scale" delay={120 + i * 40} className="clubs__chip" key={c}>

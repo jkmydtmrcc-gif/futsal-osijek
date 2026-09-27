@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom';
-import Brush from '../components/Brush';
 import Pip from '../components/Pip';
 import Reveal from '../components/Reveal';
 import ProductCard from '../components/ProductCard';
@@ -14,10 +13,6 @@ export default function Shop() {
 
   return (
     <section className="shop" id="shop" aria-labelledby="naslov-shop">
-      <div className="scanlines scanlines--shop" aria-hidden="true" />
-      <Brush variant="shop-1" />
-      <Brush variant="shop-2" />
-      <Brush variant="shop-3" />
 
       <div className="shell">
         <div className="section-head">

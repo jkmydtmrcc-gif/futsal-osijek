@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom';
-import Brush from '../components/Brush';
 import Pip from '../components/Pip';
 import Reveal from '../components/Reveal';
 import NewsCard from '../components/NewsCard';
@@ -11,16 +10,11 @@ export default function News() {
 
   return (
     <section className="news" id="novosti" aria-labelledby="naslov-novosti">
-      <Brush variant="news-1" />
-      <Brush variant="news-2" />
-      <Brush variant="news-3" />
-      <Brush variant="news-4" />
 
       <div className="shell">
         <div className="section-head news__head">
           <Reveal className="news__head-titles">
-            <Brush variant="news-head" />
-            <span className="eyebrow" style={{ position: 'relative' }}>
+            <span className="eyebrow">
               Novosti
             </span>
             <h2 className="news__title" id="naslov-novosti">
@@ -39,7 +33,7 @@ export default function News() {
             as={Link}
             to={featured.id ? `/novosti/${featured.id}` : '/novosti'}
             variant="scale"
-            className="feature feature--link notch-br-24"
+            className="feature feature--link"
           >
             <img
               className="feature__photo"
@@ -48,7 +42,6 @@ export default function News() {
               loading="lazy"
             />
             <div className="feature__veil" aria-hidden="true" />
-            <Brush variant="feature" />
             <div className="feature__body">
               <span className="feature__flag">{featured.flag}</span>
               <h3 className="feature__title">{featured.title}</h3>

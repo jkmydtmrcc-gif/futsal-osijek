@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import Brush from '../components/Brush';
 import PlayerCard from '../components/PlayerCard';
 import Rail from '../components/Rail';
 import Reveal from '../components/Reveal';
@@ -13,8 +12,6 @@ export default function Squad() {
 
   return (
     <section className="squad" id="postava" aria-labelledby="naslov-momcad">
-      <Brush variant="squad-1" />
-      <Brush variant="squad-2" />
 
       <div className="shell">
         <div className="section-head">

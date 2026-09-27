@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom';
-import Brush from '../components/Brush';
 import Reveal from '../components/Reveal';
 import { TICKETS_PATH } from '../data/site';
 import { useContent } from '../lib/content';
@@ -16,8 +15,6 @@ export default function Venue() {
         loading="lazy"
       />
       <div className="venue__veil" aria-hidden="true" />
-      <Brush variant="venue-1" />
-      <Brush variant="venue-2" />
 
       <div className="venue__inner">
         <Reveal>
@@ -31,7 +28,7 @@ export default function Venue() {
           </h2>
         </Reveal>
         <Reveal delay={230}>
-          <Link className="venue__cta notch-12" to={TICKETS_PATH}>
+          <Link className="venue__cta" to={TICKETS_PATH}>
             Budi na tribini
           </Link>
         </Reveal>

@@ -4,6 +4,7 @@ import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 import { ContentProvider } from './lib/content';
 import ErrorBoundary from './components/ErrorBoundary';
+import './fonts.css';
 import './styles.css';
 import './staklo.css';
 import './admin/admin.css';
