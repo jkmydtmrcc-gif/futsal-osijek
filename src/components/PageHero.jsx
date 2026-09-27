@@ -1,6 +1,8 @@
 import { useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import Reveal from './Reveal';
 import Meta from './Meta';
+import { NAV_LINKS } from '../data/site';
 
 /**
  * Zajednički vrh svake podstranice — ista tema kao tamne sekcije naslovnice.
@@ -15,6 +17,11 @@ import Meta from './Meta';
 export default function PageHero({ page, children, metaImage, grafika }) {
   const [failed, setFailed] = useState(false);
   const showArt = Boolean(grafika) && !failed;
+
+  // Putanja u vrhu: kratka, ali kaže gdje si. Stranice izvan izbornika
+  // (ulaznice, kolačići, pojedina novost) uzimaju vlastiti naslov.
+  const { pathname } = useLocation();
+  const ovdje = NAV_LINKS.find((l) => l.to === pathname)?.label ?? page.title;
 
   return (
     <section className={`phero${showArt ? ' phero--art' : ''}`} aria-labelledby="phero-naslov">
@@ -39,6 +46,12 @@ export default function PageHero({ page, children, metaImage, grafika }) {
       )}
 
       <div className="shell">
+        <nav className="phero__staza" aria-label="Putanja">
+          <Link to="/">Početna</Link>
+          <span className="phero__staza-crta" aria-hidden="true" />
+          <span aria-current="page">{ovdje}</span>
+        </nav>
+
         <div className="phero__inner">
           <Reveal>
             <span className="eyebrow eyebrow--sky">{page.eyebrow}</span>
@@ -49,8 +62,15 @@ export default function PageHero({ page, children, metaImage, grafika }) {
           <Reveal delay={130}>
             <p className="phero__lead">{page.lead}</p>
           </Reveal>
-          {children && <Reveal delay={230}>{children}</Reveal>}
         </div>
+
+        {/* Brojke i gumbi stoje u vlastitoj traci pod crtom — prije su
+            visjeli odmah ispod uvoda i vrh stranice je završavao nasumično. */}
+        {children && (
+          <Reveal className="phero__traka" delay={230}>
+            {children}
+          </Reveal>
+        )}
       </div>
     </section>
   );

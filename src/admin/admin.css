@@ -231,7 +231,7 @@
 /* ─────────────────────────────────────────────────────────────
    Podsadržaj retka (statistika igrača) i skupine postavki
    ───────────────────────────────────────────────────────────── */
-.akartica__pod { margin-top: 14px; padding-top: 14px; border-top: 1px solid rgba(0, 0, 0, .08); }
+.akartica__pod { margin-top: 14px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,.1); }
 .agumb--pod { background: none; border: 0; padding: 4px 0; font-weight: 700; cursor: pointer; }
 
 .astat { margin-top: 12px; display: flex; flex-direction: column; gap: 12px; }
@@ -242,21 +242,74 @@
   grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
   gap: 10px;
   padding: 12px;
-  background: rgba(0, 0, 0, .03);
-  border: 1px solid rgba(0, 0, 0, .08);
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.1);
   border-radius: 6px;
 }
 .astat__radnje { display: flex; align-items: flex-end; gap: 8px; }
-.agumb--opasno { color: #b0202a; border-color: rgba(176, 32, 42, .35); }
+.agumb--opasno { color: #ff9b9b; border-color: rgba(226, 88, 88, .45); }
 
 .aredak {
   margin-top: 14px;
   padding: 16px;
-  background: #fff;
-  border: 1px solid rgba(0, 0, 0, .1);
+  /* Bilo je `#fff` usred tamnog sučelja, pa je naslov skupine bio bijel
+     na bijelom. Ista ploha kao kartica retka. */
+  background: #101c33;
+  border: 1px solid rgba(255,255,255,.1);
   border-radius: 8px;
 }
 .aredak__vrh { margin-bottom: 12px; }
 .aredak__naslov { font-weight: 800; font-size: 15px; }
 .aredak__polja { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
 .aredak__radnje { margin-top: 14px; }
+
+/* --------------------------------------------------------------------------
+   Rez pozadine na portretu igrača
+   Original i rez stoje jedan uz drugi. Rez je na kariranoj podlozi — na
+   punoj se ne vidi što je prozirno, a to je jedino što se ovdje provjerava.
+   -------------------------------------------------------------------------- */
+.arez {
+  margin-top: 12px;
+  padding: 14px;
+  background: #101c33;
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 8px;
+}
+.arez__par { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.arez__stavka { margin: 0; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.arez__stavka img {
+  width: 100%;
+  height: 220px;
+  object-fit: contain;
+  background: #0a1220;
+  border: 1px solid rgba(255,255,255,.12);
+}
+/* Srednje sivo kockasto platno: vidi se i svijetli i tamni dio izreza. */
+.arez__stavka--rez img {
+  background-color: #8b93a3;
+  background-image:
+    linear-gradient(45deg, #6f7787 25%, transparent 25%, transparent 75%, #6f7787 75%),
+    linear-gradient(45deg, #6f7787 25%, transparent 25%, transparent 75%, #6f7787 75%);
+  background-size: 16px 16px;
+  background-position: 0 0, 8px 8px;
+}
+.arez__stavka figcaption {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  color: #94a8c8;
+}
+.arez__ocjena { margin: 12px 0 0; font-size: 13px; line-height: 1.5; color: #c8d6ec; }
+.arez__ocjena--pazi { color: #ffc46b; font-weight: 600; }
+
+.arez__klizac { display: flex; flex-direction: column; gap: 6px; margin-top: 14px; font-size: 12px; }
+.arez__klizac input { width: 100%; accent-color: #2a7ef0; }
+.arez__savjet { color: #94a8c8; }
+
+.arez__gumbi { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+
+@media (max-width: 560px) {
+  .arez__par { grid-template-columns: 1fr; }
+  .arez__stavka img { height: 180px; }
+}

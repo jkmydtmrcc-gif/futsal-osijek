@@ -95,7 +95,7 @@ export default function AdminApp() {
                 <Polje label="Visina" value={n.height} onChange={set('height')} placeholder="182 cm" />
                 <Polje label="Noga" value={n.foot} onChange={set('foot')} placeholder="Desna" />
                 <Polje label="U klubu od" value={n.joined} onChange={set('joined')} placeholder="2021." />
-                <SlikaPolje label="Fotografija" value={n.photo} onChange={set('photo')} />
+                <SlikaPolje label="Fotografija" value={n.photo} onChange={set('photo')} portret />
                 <Polje label="Redoslijed" type="number" value={n.sort_order} onChange={set('sort_order')} />
               </>
             )}

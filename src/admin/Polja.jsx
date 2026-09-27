@@ -1,5 +1,6 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { supabase } from '../lib/supabase';
+import { pripremiPortret, pripremiSliku } from '../lib/slika';
 
 /** Sitni gradivni dijelovi obrazaca — da svaki uređivač ne ponavlja isto. */
 
@@ -45,23 +46,38 @@ export function Kvacica({ label, value, onChange }) {
  * Slika: ili se odabere datoteka (ide u Supabase Storage), ili se zalijepi
  * adresa slike s tuđe stranice. Oboje završi kao obična adresa u bazi, pa
  * stranici svejedno odakle slika dolazi.
+ *
+ * Uz `portret` se prije slanja automatski reže pozadina i slika obrezuje na
+ * igrača. Rezultat se **uvijek** prvo pokaže: automatika ne može znati je li
+ * pogodila, a bijeli dres pred bijelim zidom nema granicu koju bi se moglo
+ * naći. Zato uz svaki rez stoji i gumb „Pošalji original“.
  */
-export function SlikaPolje({ label, value, onChange }) {
+export function SlikaPolje({ label, value, onChange, portret = false }) {
   const [salje, setSalje] = useState(false);
   const [greska, setGreska] = useState(null);
+  const [radi, setRadi] = useState(false);
+  const [prijedlog, setPrijedlog] = useState(null);
+  const [prag, setPrag] = useState(28);
   const unos = useRef(null);
+  const izvornik = useRef(null);
 
-  const posalji = async (datoteka) => {
-    if (!datoteka) return;
+  /* Pregled živi kao objektna adresa; bez oslobađanja curi memorija. */
+  useEffect(
+    () => () => {
+      if (prijedlog?.url) URL.revokeObjectURL(prijedlog.url);
+      if (prijedlog?.izvorUrl) URL.revokeObjectURL(prijedlog.izvorUrl);
+    },
+    [prijedlog]
+  );
+
+  const posalji = async (blob, nastavak) => {
     setSalje(true);
     setGreska(null);
 
-    const nastavak = datoteka.name.split('.').pop()?.toLowerCase() || 'jpg';
     const naziv = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${nastavak}`;
-
     const { error } = await supabase.storage
       .from('shop')
-      .upload(naziv, datoteka, { cacheControl: '31536000', upsert: false });
+      .upload(naziv, blob, { cacheControl: '31536000', upsert: false, contentType: blob.type });
 
     if (error) {
       setGreska(error.message);
@@ -72,6 +88,67 @@ export function SlikaPolje({ label, value, onChange }) {
     const { data } = supabase.storage.from('shop').getPublicUrl(naziv);
     onChange(data.publicUrl);
     setSalje(false);
+    setPrijedlog(null);
+    izvornik.current = null;
+    if (unos.current) unos.current.value = '';
+  };
+
+  /* Rez se može ponoviti s drugom osjetljivošću bez novog odabira datoteke. */
+  const izreziIznova = async (noviPrag, datoteka = izvornik.current) => {
+    if (!datoteka) return;
+    setRadi(true);
+    setGreska(null);
+    try {
+      const rez = await pripremiPortret(datoteka, { prag: noviPrag });
+      setPrijedlog((staro) => {
+        if (staro?.url) URL.revokeObjectURL(staro.url);
+        return {
+          ...rez,
+          url: URL.createObjectURL(rez.blob),
+          izvorUrl: staro?.izvorUrl ?? URL.createObjectURL(datoteka),
+        };
+      });
+    } catch (e) {
+      setGreska(`Slika se nije dala obraditi: ${e.message}`);
+    }
+    setRadi(false);
+  };
+
+  const odabrano = async (datoteka) => {
+    if (!datoteka) return;
+    setGreska(null);
+
+    if (!portret) {
+      setRadi(true);
+      try {
+        const { blob, nastavak } = await pripremiSliku(datoteka);
+        await posalji(blob, nastavak);
+      } catch (e) {
+        setGreska(`Slika se nije dala obraditi: ${e.message}`);
+      }
+      setRadi(false);
+      return;
+    }
+
+    izvornik.current = datoteka;
+    await izreziIznova(prag, datoteka);
+  };
+
+  const posaljiOriginal = async () => {
+    if (!izvornik.current) return;
+    setRadi(true);
+    try {
+      const { blob, nastavak } = await pripremiSliku(izvornik.current, { maxSirina: 900 });
+      await posalji(blob, nastavak);
+    } catch (e) {
+      setGreska(`Slika se nije dala obraditi: ${e.message}`);
+    }
+    setRadi(false);
+  };
+
+  const odustani = () => {
+    setPrijedlog(null);
+    izvornik.current = null;
     if (unos.current) unos.current.value = '';
   };
 
@@ -90,13 +167,69 @@ export function SlikaPolje({ label, value, onChange }) {
         <div className="aslika__prazno">nema slike</div>
       )}
 
+      {prijedlog && (
+        <div className="arez">
+          <div className="arez__par">
+            <figure className="arez__stavka">
+              <img src={prijedlog.izvorUrl} alt="" />
+              <figcaption>Original</figcaption>
+            </figure>
+            <figure className="arez__stavka arez__stavka--rez">
+              <img src={prijedlog.url} alt="" />
+              <figcaption>Bez pozadine</figcaption>
+            </figure>
+          </div>
+
+          <p className={`arez__ocjena${prijedlog.ocjena.ok ? '' : ' arez__ocjena--pazi'}`}>
+            {prijedlog.ocjena.poruka} Slika je {prijedlog.sirina}×{prijedlog.visina}.
+          </p>
+
+          <label className="arez__klizac">
+            <span>
+              Osjetljivost <b>{prag}</b>
+            </span>
+            <input
+              type="range"
+              min="12"
+              max="60"
+              value={prag}
+              disabled={radi}
+              onChange={(e) => setPrag(Number(e.target.value))}
+              onMouseUp={(e) => izreziIznova(Number(e.target.value))}
+              onTouchEnd={(e) => izreziIznova(Number(e.target.value))}
+              onKeyUp={(e) => izreziIznova(Number(e.target.value))}
+            />
+            <span className="arez__savjet">
+              Veći broj reže više. Ako je nestao dio igrača — smanji.
+            </span>
+          </label>
+
+          <div className="arez__gumbi">
+            <button
+              type="button"
+              className="agumb agumb--glavni"
+              disabled={salje || radi}
+              onClick={() => posalji(prijedlog.blob, prijedlog.nastavak)}
+            >
+              Spremi bez pozadine
+            </button>
+            <button type="button" className="agumb" disabled={salje || radi} onClick={posaljiOriginal}>
+              Pošalji original
+            </button>
+            <button type="button" className="agumb" disabled={salje} onClick={odustani}>
+              Odustani
+            </button>
+          </div>
+        </div>
+      )}
+
       <input
         ref={unos}
         className="aslika__unos"
         type="file"
         accept="image/*"
-        disabled={salje}
-        onChange={(e) => posalji(e.target.files?.[0])}
+        disabled={salje || radi}
+        onChange={(e) => odabrano(e.target.files?.[0])}
       />
 
       <input
@@ -107,6 +240,7 @@ export function SlikaPolje({ label, value, onChange }) {
         onChange={(e) => onChange(e.target.value)}
       />
 
+      {radi && <span className="aslika__stanje">Obrađujem sliku…</span>}
       {salje && <span className="aslika__stanje">Šaljem…</span>}
       {greska && <span className="aslika__stanje aslika__stanje--greska">{greska}</span>}
     </div>

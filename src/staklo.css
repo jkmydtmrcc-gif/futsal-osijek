@@ -393,9 +393,13 @@ a.sponsor:hover {
 }
 .as-fab__x { width: 22px; height: 22px; }
 
-.asikona__krug   { fill: none; stroke: currentColor; stroke-width: 2.1; opacity: .95; }
-.asikona__savovi { fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; opacity: .95; }
-.asikona__peterokut { fill: currentColor; }
+.asikona__stit {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.1;
+  stroke-linejoin: round;
+}
+.asikona__tocke { fill: currentColor; }
 .askriz { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
 
 /* Ploča: duboko staklo, tanka svijetla nit po gornjem rubu i uska sjena
@@ -716,3 +720,73 @@ a.sponsor:hover {
 .custom__preview .pa-number,
 .custom__preview .pa-name { fill: var(--white); }
 .custom__preview .custom__tag { color: var(--sky); }
+
+/* --------------------------------------------------------------------------
+   12. Zaglavlja
+   Svaki je odsječak počinjao isto: nadnaslov, pa golem naslov, pa odmah
+   sadržaj. Bez ijedne crte stranica nije imala poglavlja nego niz natpisa.
+   -------------------------------------------------------------------------- */
+
+/* Vlas ispod naslova odsječka, koja se gubi prema desnom rubu.
+   `:has()` hvata i one naslove koji nisu u `.section-head` — takvih je
+   dvaput više, pa bi inače polovica odsječaka imala crtu, a polovica ne. */
+.section-head,
+.shell > .reveal:has(> .section-title) {
+  padding-bottom: 20px;
+  margin-bottom: 32px;
+  background-image: linear-gradient(90deg, rgba(11,71,168,.38), rgba(11,71,168,.07) 52%, transparent);
+  background-size: 100% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+}
+.slab--dark .section-head,
+.slab--blue .section-head,
+.slab--dark .shell > .reveal:has(> .section-title),
+.slab--blue .shell > .reveal:has(> .section-title),
+.league .shell > .reveal:has(> .league__title),
+.venue .shell > .reveal:has(> .section-title) {
+  background-image: linear-gradient(90deg, rgba(255,255,255,.34), rgba(255,255,255,.07) 52%, transparent);
+}
+
+/* Putanja u vrhu podstranice. */
+.phero__staza {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 30px;
+  padding-bottom: 16px;
+  background-image: linear-gradient(90deg, rgba(255,255,255,.28), rgba(255,255,255,.05) 46%, transparent);
+  background-size: 100% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 2.2px;
+  text-transform: uppercase;
+}
+.phero__staza a { color: rgba(255,255,255,.62); }
+.phero__staza a:hover { color: var(--white); }
+.phero__staza-crta { width: 18px; height: 1px; background: rgba(255,255,255,.34); }
+.phero__staza [aria-current] { color: var(--sky); }
+
+/* Traka s brojkama pod naslovom. */
+.phero__traka {
+  position: relative;
+  z-index: 3;
+  margin-top: 34px;
+  padding-top: 26px;
+  background-image: linear-gradient(90deg, rgba(255,255,255,.26), rgba(255,255,255,.05) 46%, transparent);
+  background-size: 100% 1px;
+  background-position: 0 0;
+  background-repeat: no-repeat;
+}
+.phero__traka .phero__stats,
+.phero__traka .phero__actions { margin-top: 0; }
+
+/* Bez `:has()` crtu dobivaju samo zaglavlja koja su u `.section-head` —
+   manje, ali bez polovične primjene unutar istog odsječka. */
+@supports not selector(:has(*)) {
+  .shell > .reveal { background-image: none; }
+}

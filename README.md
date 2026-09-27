@@ -127,10 +127,10 @@ a dvosmisleni izrazi stoje cijeli: ne „kupit" nego „kupit ulaznic" i
 „kupit dres". Ključne riječi su u istoj datoteci kao i bodovanje — da test ne
 provjerava izmišljeni popis dok stranica radi po svojem.
 
-Znak je futsal lopta u jednoj debljini poteza (`AsistentIkona.jsx`), s
-izračunatim koordinatama: peterokut s vrhom prema gore, šavovi iz njegovih
-vrhova svakih 72°. Ranije je bio puna ploha — svijetli disk s tamnim
-peterokutom — pa je unutar plavog gumba izgledao kao naljepnica preko njega.
+Znak (`AsistentIkona.jsx`) je klupski štit koji je ujedno oblačić za razgovor:
+obris prati siluetu grba, tri točke unutra kažu što gumb radi. Prije toga je
+bila futsal lopta — na 36 piksela su joj se šavovi stopili u pet krakova, pa
+je izgledala kao volan.
 
 ## Kolačići
 
@@ -149,6 +149,15 @@ Saira i Saira Condensed poslužuju se iz `public/fonts/`, a ne s
 bila jedina vanjska usluga bez potrebe — stranica nema ni analitiku ni oglase.
 Uzeti su samo podskupovi `latin` i `latin-ext`; `latin-ext` nosi č, ć, š, ž i đ.
 Popis je u `src/fonts.css`.
+
+## Zaglavlja stranica
+
+Vrh podstranice nosi putanju (Početna — Klub), naslov i traku s brojkama pod
+vlastitom crtom. Naslov je dotad bio i krivo poravnat: `.phero--art` je
+stupčani flex, a u njemu `margin: 0 auto` na omotaču gasi razvlačenje, pa se
+`.shell` stiskao na širinu svog sadržaja i stajao centriran negdje u sredini —
+naslov stranice nije bio u istoj okomici ni s grbom u zaglavlju ni sa
+sadržajem ispod.
 
 ## Izgled
 
@@ -171,6 +180,31 @@ dijagonalni rez ispod naslovnice — na toj veličini djeluje namjerno.
 
 Slike idu u `public/uploads/` i upisuju se kao putanja (`/uploads/ime.webp`),
 ili se kroz administraciju pošalju u Supabase Storage.
+
+Sve što ide kroz administraciju prvo prođe kroz canvas u pregledniku
+(`src/lib/slika.js`): smanji se na najviše 1200px (portreti na 900px) i
+pretvori u WebP. Originali portreta su znali biti 4000×6000 i 15 MB, a kartica
+ih prikazuje na ~250px — bez toga bi svaka nova slika pojela besplatnu kvotu.
+
+### Rezanje pozadine na portretima
+
+Portret igrača se automatski reže (`src/lib/pozadina.js`): rast regije od
+rubova slike prema sredini. Susjedni piksel ulazi u pozadinu ako je blizu
+piksela s kojeg se širi (tako se prati i prijelaz u zamućenom studijskom
+platnu) i ako nije previše odlutao od prosječne boje ruba (tako ne procuri
+kroz igračev dres u sredinu). Rub se zatim omekša, pa oko igrača ne ostane
+nit u boji platna.
+
+Ne radi čuda i ne pravi se da radi: bijeli dres pred bijelim zidom nema
+granicu koju bi se moglo naći. Zato uređivač **uvijek** prvo vidi original i
+rez jedan uz drugi, na kariranoj podlozi, uz postotak uklonjenog i klizač
+osjetljivosti — i gumb „Pošalji original". Automatika predlaže, ne odlučuje.
+
+Sve se odvija na uređivačevom računalu: fotografija ne ide nikakvoj vanjskoj
+usluzi za obradu, pa ništa ne košta i ne putuje nikamo osim u klupski Storage.
+Provjereno u `test/pozadina.test.mjs` na izmišljenim slikama — greška je uvijek
+ista, ili se rez ne uhvati ili procuri kroz lik, a oboje se na stranici vidi
+tek kad je kasno.
 
 ## Kako je složeno
 
