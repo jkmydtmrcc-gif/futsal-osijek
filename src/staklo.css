@@ -401,6 +401,13 @@ a.sponsor:hover {
   backdrop-filter: blur(12px) saturate(140%);
   -webkit-backdrop-filter: blur(12px) saturate(140%);
 }
+/* Ista dugmad na svijetloj plohi ima tamno slovo — tamna podloga bi ga
+   progutala. Tu ostaje svijetla, s vidljivim rubom. */
+.btn--ghost.btn--ink {
+  background: rgba(255,255,255,.7);
+  box-shadow: var(--odsjaj-s), inset 0 0 0 1px rgba(11,71,168,.12);
+}
+.btn--ghost.btn--ink:hover { background: var(--blue); }
 .btn--solid { box-shadow: var(--odsjaj-s), var(--sjena-1); }
 
 /* --------------------------------------------------------------------------
@@ -413,6 +420,7 @@ a.sponsor:hover {
   .standings, .timeline, .staff-card, .phero__stat,
   .slab--dark .chip, .slab--blue .chip { background: rgba(255,255,255,.12); }
   .btn--ghost { background: rgba(6,16,36,.7); }
+  .btn--ghost.btn--ink { background: rgba(255,255,255,.94); }
   .masthead, .site-header.is-scrolled .masthead { background: rgba(255,255,255,.97); }
   .ck { background: var(--navy); }
   .as { background: var(--navy); }
@@ -428,6 +436,7 @@ a.sponsor:hover {
     -webkit-backdrop-filter: none;
   }
   .btn--ghost { background: rgba(6,16,36,.8); backdrop-filter: none; -webkit-backdrop-filter: none; }
+  .btn--ghost.btn--ink { background: var(--white); }
   .masthead, .site-header.is-scrolled .masthead {
     background: var(--white);
     backdrop-filter: none;

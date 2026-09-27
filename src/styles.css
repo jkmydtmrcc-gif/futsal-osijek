@@ -1436,6 +1436,21 @@ html { scroll-behavior: smooth; }
   gap: 16px;
 }
 .clubs { background: var(--white); color: var(--ink); padding: 26px 28px; }
+
+/* Popis klubova lige pod tablicom, u istom tamnom odsječku. */
+.league__clubs { margin-top: 30px; }
+.league__clubs .clubs__list { margin-top: 14px; }
+.league__clubs .clubs__chip {
+  background: rgba(255,255,255,.07);
+  border-color: rgba(255,255,255,.18);
+  color: rgba(255,255,255,.86);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.12);
+}
+.league__clubs .clubs__chip:hover {
+  background: rgba(255,255,255,.14);
+  border-color: rgba(255,255,255,.4);
+  color: var(--white);
+}
 .clubs__list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
 .clubs__chip {
   border: 1px solid rgba(11,71,168,.24);

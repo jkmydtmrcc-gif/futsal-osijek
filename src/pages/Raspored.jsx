@@ -108,23 +108,27 @@ export default function Raspored() {
                 </Link>
               </Reveal>
 
-            <Reveal variant="right" delay={220} className="league__figure">
-              <span className="league__figure-glow" aria-hidden="true" />
-              <img
-                className="league__cutout"
-                src={images.cutout}
-                alt=""
-                aria-hidden="true"
-                loading="lazy"
-              />
-              <div className="league__figure-tag">
-                <span className="league__figure-comp">SuperSport HMNL</span>
-                <span className="league__figure-club">Osijek Kandit</span>
-              </div>
-            </Reveal>
-
             </div>
           </div>
+
+          <Reveal className="league__clubs" delay={180}>
+            <span className="eyebrow eyebrow--sky eyebrow--sm">Svi klubovi lige</span>
+            <div className="clubs__list">
+              {league.clubs.map((c, i) => (
+                <Reveal as="span" variant="scale" delay={120 + i * 40} className="clubs__chip" key={c}>
+                  {c}
+                </Reveal>
+              ))}
+            </div>
+            <p className="slab__foot slab__foot--light">
+              <Pip tone="sky" /> Termini se potvrđuju objavom kalendara HMNL-a. Promjene
+              javljamo u{' '}
+              <Link className="link-inline" to="/novosti">
+                novostima
+              </Link>
+              .
+            </p>
+          </Reveal>
         </div>
       </section>
 
@@ -155,37 +159,6 @@ export default function Raspored() {
         </section>
       )}
 
-      {/* --- Klubovi lige --------------------------------------------------- */}
-      <section className="slab" aria-labelledby="naslov-klubovi">
-        <div className="shell">
-          <Reveal>
-            <span className="eyebrow">SuperSport HMNL</span>
-            <h2 className="section-title" id="naslov-klubovi">
-              Klubovi lige
-            </h2>
-          </Reveal>
-
-          <Reveal className="clubs clubs--paper" delay={140}>
-            <div className="clubs__list">
-              {league.clubs.map((c, i) => (
-                <Reveal as="span" variant="scale" delay={120 + i * 40} className="clubs__chip" key={c}>
-                  {c}
-                </Reveal>
-              ))}
-            </div>
-          </Reveal>
-
-          <Reveal delay={260}>
-            <p className="slab__foot">
-              <Pip /> Termini se potvrđuju objavom kalendara HMNL-a. Promjene javljamo u{' '}
-              <Link className="link-inline" to="/novosti">
-                novostima
-              </Link>
-              .
-            </p>
-          </Reveal>
-        </div>
-      </section>
     </>
   );
 }
