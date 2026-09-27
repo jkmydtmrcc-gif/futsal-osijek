@@ -1279,13 +1279,16 @@ html { scroll-behavior: smooth; }
   margin: 0;
   font-family: var(--font-display);
   font-weight: 900;
-  font-size: clamp(27px, 2.3vw, 34px);
+  font-size: clamp(23px, 2vw, 30px);
   line-height: .92;
   letter-spacing: -.8px;
   text-transform: uppercase;
   color: var(--white);
   text-shadow: 0 6px 20px rgba(0,0,0,.5);
-  overflow-wrap: anywhere;
+  /* `break-word`, a ne `anywhere`: `anywhere` smije prelomiti riječ i kad
+     ima mjesta, pa je „Pandurević“ padao u dva retka usred kartice.
+     `break-word` lomi tek kad riječ stvarno ne stane. */
+  overflow-wrap: break-word;
 }
 
 /* Kosa crta ispod imena — potez, ne linija. */
@@ -1324,7 +1327,9 @@ html { scroll-behavior: smooth; }
   display: flex;
   flex-wrap: wrap;
   gap: 22px;
-  align-items: stretch;
+  /* `flex-start`, a ne `stretch`: tablica je niža od stupca s utakmicama
+     pa se rastezala i ispod zadnjeg kluba ostajala prazna ploha. */
+  align-items: flex-start;
 }
 .league__row + .league__row { margin-top: 0; }
 .league__row--top { margin-bottom: 22px; }
@@ -2863,6 +2868,53 @@ html { scroll-behavior: smooth; }
 }
 .step__note { margin: 7px 0 0; font-size: 13.5px; line-height: 1.6; color: var(--muted); }
 
+/* Kategorije trgovine. Cijela kartica je poveznica, pa `<a>` mora
+   postati blok — bez toga ostaje u retku i naslovi se preklapaju. */
+.shop-grid {
+  margin-top: 30px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 18px;
+}
+.shop-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  padding: 24px 26px 26px;
+  padding-right: 56px;   /* mjesto za strelicu u kutu */
+  background: var(--white);
+  color: var(--ink);
+  transition: transform .26s cubic-bezier(.22,.61,.36,1), box-shadow .26s ease;
+}
+.shop-card:hover { color: var(--ink); }
+.shop-card__cat {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 2.2px;
+  text-transform: uppercase;
+  color: var(--blue);
+}
+.shop-card__name {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 22px;
+  line-height: 1.06;
+  text-transform: uppercase;
+  text-wrap: pretty;
+}
+.shop-card__note { font-size: 13.5px; line-height: 1.6; color: var(--muted); text-wrap: pretty; }
+.shop-card__go {
+  position: absolute;
+  top: 22px;
+  right: 22px;
+  font-size: 17px;
+  line-height: 1;
+  color: var(--blue);
+  transition: transform .26s cubic-bezier(.22,.61,.36,1);
+}
+.shop-card:hover .shop-card__go { transform: translate(3px, -3px); }
 .shop-card--paper { background: var(--paper); box-shadow: 0 10px 26px rgba(14,20,32,.07); }
 
 /* --------------------------------------------------------------------------
@@ -2883,9 +2935,10 @@ html { scroll-behavior: smooth; }
 
 .squad-group { margin-top: 40px; }
 
-/* Duga prezimena (Pandurević) inače se prelome nasred riječi — radije se
-   stisnu nego razlome. */
-.player__last { hyphens: auto; }
+/* Bez rastavljanja: `hyphens: auto` je duga prezimena lomio crticom
+   nasred riječi. Uz manju veličinu i `overflow-wrap: break-word` ime
+   stane u jedan redak. */
+.player__last { hyphens: manual; }
 .squad-group__head { display: flex; align-items: center; gap: 14px; }
 .squad-group__label {
   font-family: var(--font-display);

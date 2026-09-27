@@ -5,6 +5,7 @@ import App from './App';
 import { ContentProvider } from './lib/content';
 import ErrorBoundary from './components/ErrorBoundary';
 import './styles.css';
+import './staklo.css';
 import './admin/admin.css';
 
 createRoot(document.getElementById('root')).render(

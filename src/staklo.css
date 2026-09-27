@@ -1,0 +1,440 @@
+/* ==========================================================================
+   MNK Osijek Kandit — staklo i svjetlo
+   Nadogradnja preko `styles.css`: dubina, svjetlo i prozirnost.
+
+   Zašto zaseban sloj, a ne izmjene u `styles.css`:
+   temeljni stilovi opisuju RASPORED (što je gdje, koliko je veliko), a
+   ovaj sloj opisuje POVRŠINU (od čega je napravljeno). Kad se jednom
+   odvoje, površina se može mijenjati bez straha da će se raspored
+   pomaknuti, a i vratiti unatrag brisanjem jednog uvoza.
+
+   Tri pravila kojih se sloj drži:
+   1. Ništa ne mijenja veličinu ni položaj elementa. Samo boju, rub,
+      sjenu, zamućenje i pokret na hover.
+   2. Zamućenje pozadine (`backdrop-filter`) ide samo tamo gdje iza
+      elementa stvarno nešto jest — na plutajuće slojeve i na pločice
+      nad obojanim plohama. Preko ravne bijele ne radi ništa, a košta.
+   3. Sve ima rezervu: bez podrške za `backdrop-filter`, uz
+      `prefers-reduced-transparency` i uz `prefers-reduced-motion`
+      stranica ostaje čitljiva i mirna.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Tokeni
+   -------------------------------------------------------------------------- */
+:root {
+  /* Staklo nad tamnom plohom — bijela u tragovima. */
+  --staklo-t:       rgba(255,255,255,.07);
+  --staklo-t-jace:  rgba(255,255,255,.115);
+  --rub-t:          rgba(255,255,255,.16);
+  --rub-t-jaci:     rgba(255,255,255,.3);
+
+  /* Staklo nad svijetlom plohom — bijela koja propušta ton ispod sebe. */
+  --staklo-s:       rgba(255,255,255,.72);
+  --rub-s:          rgba(11,71,168,.14);
+  --rub-s-jaci:     rgba(11,71,168,.34);
+
+  /* Sjene u dva sloja: kratka za dodir s podlogom, duga za visinu.
+     Jedna sjena uvijek izgleda ili pretvrdo ili premutno. */
+  --sjena-1: 0 1px 2px rgba(9,20,44,.05), 0 8px 22px rgba(9,20,44,.07);
+  --sjena-2: 0 2px 6px rgba(9,20,44,.07), 0 18px 40px rgba(9,20,44,.13);
+  --sjena-3: 0 30px 72px rgba(3,8,20,.5);
+
+  /* Tanka svijetla crta po gornjem rubu — odsjaj koji staklu daje debljinu. */
+  --odsjaj-t: inset 0 1px 0 rgba(255,255,255,.14);
+  --odsjaj-s: inset 0 1px 0 rgba(255,255,255,.9);
+
+  --zamuti: blur(16px) saturate(150%);
+  --mek: cubic-bezier(.22,.61,.36,1);
+}
+
+/* --------------------------------------------------------------------------
+   2. Svjetlo iza ploha
+   Ravna boja je ono što je stranicu činilo plošnom. Ispod sadržaja sada
+   leže velike, jedva vidljive mrlje svjetla u klupskim bojama.
+
+   Namjerno kao `background-image`, a ne kao `::before`: pozadina se crta
+   ispod svakog djeteta, pa nema šanse da sloj prekrije sadržaj — što bi
+   se s pozicioniranim pseudoelementom lako dogodilo elementima koji nisu
+   pozicionirani.
+   -------------------------------------------------------------------------- */
+/* Bijela ploha je osnova — zato ide prva: varijante (paper, blue, dark)
+   imaju istu težinu selektora, pa ih nadjačava samo redoslijed. */
+.slab,
+.impact {
+  background-color: var(--white);
+  background-image:
+    radial-gradient(900px 420px at 90% -14%, rgba(42,126,240,.075), transparent 62%),
+    radial-gradient(780px 480px at -8% 106%, rgba(11,71,168,.06), transparent 64%);
+}
+
+.slab--paper,
+.squad,
+.news,
+.partners {
+  background-color: var(--paper);
+  background-image:
+    radial-gradient(900px 440px at 88% -12%, rgba(42,126,240,.085), transparent 62%),
+    radial-gradient(820px 500px at -6% 104%, rgba(11,71,168,.065), transparent 64%);
+}
+
+.slab--blue,
+.shop {
+  background-color: var(--blue);
+  background-image:
+    radial-gradient(900px 480px at 6% -16%,  rgba(255,255,255,.18), transparent 60%),
+    radial-gradient(780px 520px at 98% 108%, rgba(6,16,36,.44),     transparent 66%);
+}
+
+/* Tamne plohe uz mrlje svjetla dobivaju i mrežu tanku kao dlaka. Ne vidi
+   se kao uzorak, ali oko po njoj mjeri dubinu — i zamućenje iznad ima
+   što razmazati. */
+.slab--dark,
+.phero,
+.hero,
+.league,
+.venue,
+.site-footer {
+  background-color: var(--navy);
+  background-image:
+    radial-gradient(1100px 520px at 10% -12%, rgba(42,126,240,.30), transparent 62%),
+    radial-gradient(760px 420px at 94% 6%,   rgba(143,192,255,.13), transparent 66%),
+    radial-gradient(940px 620px at 68% 114%, rgba(11,71,168,.34),  transparent 68%),
+    repeating-linear-gradient(90deg, rgba(255,255,255,.035) 0 1px, transparent 1px 72px),
+    repeating-linear-gradient(0deg,  rgba(255,255,255,.028) 0 1px, transparent 1px 72px);
+}
+
+/* --------------------------------------------------------------------------
+   3. Naslovi odsječaka
+   Kratka crta ispred nadnaslova — sitan potez koji svakom odsječku daje
+   isti početak, pa stranica dobiva ritam umjesto niza natpisa.
+   -------------------------------------------------------------------------- */
+.eyebrow::before {
+  content: '';
+  display: inline-block;
+  width: 22px;
+  height: 2px;
+  margin-right: 10px;
+  vertical-align: middle;
+  background: currentColor;
+  opacity: .55;
+}
+.eyebrow--sm::before { width: 14px; margin-right: 8px; }
+
+/* --------------------------------------------------------------------------
+   4. Staklene pločice nad tamnim plohama
+   -------------------------------------------------------------------------- */
+.standings,
+.timeline,
+.staff-card {
+  background: var(--staklo-t);
+  border: 1px solid var(--rub-t);
+  box-shadow: var(--odsjaj-t), 0 16px 40px rgba(3,8,20,.28);
+  backdrop-filter: var(--zamuti);
+  -webkit-backdrop-filter: var(--zamuti);
+}
+
+.staff-card {
+  transition: background .26s ease, border-color .26s ease, transform .26s var(--mek);
+}
+.staff-card:hover {
+  background: var(--staklo-t-jace);
+  border-color: var(--rub-t-jaci);
+  transform: translateY(-3px);
+}
+
+/* Brojke u vrhu podstranice — staklene pilule. */
+.phero__stat {
+  background: var(--staklo-t);
+  border-color: var(--rub-t);
+  box-shadow: var(--odsjaj-t);
+  backdrop-filter: var(--zamuti);
+  -webkit-backdrop-filter: var(--zamuti);
+}
+
+/* Brojevi na dresovima ostaju obris, kako su i zamišljeni — pločica
+   ispod njih samo bi ih isprala. Umjesto toga obris je jači, a pod
+   mišem se broj ispuni, kao da je dres okrenut prema tebi. */
+.numbers__n {
+  -webkit-text-stroke-color: rgba(11,71,168,.75);
+  transition: color .24s ease, -webkit-text-stroke-color .24s ease, transform .24s var(--mek);
+}
+.numbers__n:hover {
+  color: var(--blue);
+  -webkit-text-stroke-color: var(--blue);
+  transform: translateY(-3px);
+}
+
+/* Pilule na tamnoj plohi. */
+.slab--dark .chip,
+.slab--blue .chip {
+  background: var(--staklo-t);
+  border-color: var(--rub-t);
+  box-shadow: var(--odsjaj-t);
+  backdrop-filter: blur(10px) saturate(140%);
+  -webkit-backdrop-filter: blur(10px) saturate(140%);
+}
+
+/* --------------------------------------------------------------------------
+   5. Tablica
+   Najgušći dio stranice — dobiva staklo, redak koji reagira na miša i
+   vlastiti redak kluba kao svijetlu traku umjesto ravne plohe.
+   -------------------------------------------------------------------------- */
+.standings__head {
+  background: rgba(6,16,36,.35);
+  border-bottom-color: var(--rub-t);
+}
+.standings__row { transition: background .2s ease; }
+.standings__row:nth-child(even of .standings__row) { background: rgba(255,255,255,.022); }
+.standings__row:hover { background: rgba(255,255,255,.07); }
+
+/* Doigravanje: tanka crta uz lijevi rub umjesto nikakve oznake. */
+.standings__row.is-top { box-shadow: inset 3px 0 0 rgba(143,192,255,.55); }
+
+.standings__row.is-us {
+  background:
+    linear-gradient(90deg, rgba(42,126,240,.62), rgba(11,71,168,.28) 62%, rgba(11,71,168,.12));
+  box-shadow: inset 3px 0 0 var(--sky), var(--odsjaj-t);
+}
+.standings__row.is-us:hover { background: linear-gradient(90deg, rgba(42,126,240,.72), rgba(11,71,168,.34) 62%, rgba(11,71,168,.16)); }
+.standings__row.is-us .standings__pts { text-shadow: 0 0 18px rgba(143,192,255,.6); }
+
+.cbadge { box-shadow: var(--odsjaj-t); }
+
+/* --------------------------------------------------------------------------
+   6. Kartice na svijetlim plohama
+   Nad bijelim nema što zamutiti, pa dubina dolazi iz tri sloja: blagog
+   prijelaza u plohi, vlasi ruba i sjene u dva koraka.
+   -------------------------------------------------------------------------- */
+.fixture,
+.result,
+.step,
+.sponsor,
+.clubs,
+.shop-card--paper,
+.staff__row,
+.contact__card,
+.faq__item,
+.post__meta {
+  background-image: linear-gradient(180deg, rgba(255,255,255,.96), rgba(244,246,250,.9));
+  box-shadow: var(--odsjaj-s), 0 0 0 1px var(--rub-s), var(--sjena-1);
+  transition: transform .26s var(--mek), box-shadow .26s ease;
+}
+.fixture:hover,
+.result:hover,
+.step:hover,
+.shop-card--paper:hover,
+.staff__row:hover,
+.contact__card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--odsjaj-s), 0 0 0 1px var(--rub-s-jaci), var(--sjena-2);
+}
+a.sponsor:hover {
+  box-shadow: var(--odsjaj-s), 0 0 0 1px var(--rub-s-jaci), var(--sjena-2);
+}
+
+/* Koraci su imali samo crtu s lijeve strane; ostaje, ali sad na kartici. */
+.step { border-left-width: 3px; }
+
+/* Klubovi lige: pilule dobivaju plohu i reakciju. */
+.clubs__chip {
+  background: linear-gradient(180deg, #fff, #eef3fb);
+  box-shadow: var(--odsjaj-s), var(--sjena-1);
+  transition: transform .2s var(--mek), box-shadow .2s ease, border-color .2s ease, color .2s ease;
+}
+.clubs__chip:hover {
+  transform: translateY(-2px);
+  border-color: var(--blue);
+  color: var(--blue);
+  box-shadow: var(--odsjaj-s), var(--sjena-2);
+}
+
+/* Brojke o klubu: bile su niz s crtom slijeva. */
+.facts__cell {
+  padding: 18px 22px;
+  background: linear-gradient(180deg, rgba(255,255,255,.9), rgba(244,246,250,.7));
+  box-shadow: var(--odsjaj-s), 0 0 0 1px rgba(11,71,168,.08);
+  transition: box-shadow .26s ease, transform .26s var(--mek);
+}
+.facts__cell:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--odsjaj-s), 0 0 0 1px var(--rub-s), var(--sjena-1);
+}
+
+/* Kartice artikala i novosti — vlas ruba uz postojeću sjenu. */
+.product,
+.news-card {
+  box-shadow: var(--odsjaj-s), 0 0 0 1px var(--rub-s), var(--sjena-1);
+}
+.product:hover,
+.news-card:hover {
+  box-shadow: var(--odsjaj-s), 0 0 0 1px var(--rub-s-jaci), var(--sjena-2);
+}
+
+/* Kronologija na svijetloj plohi. Pravilo iz 4. dijela daje joj staklo
+   za tamnu podlogu; nad bijelim od toga ne ostane ništa, pa dobiva
+   svjetlu karticu. */
+.timeline--paper {
+  background: linear-gradient(180deg, rgba(255,255,255,.96), rgba(244,246,250,.86));
+  border-color: transparent;
+  box-shadow: var(--odsjaj-s), 0 0 0 1px var(--rub-s), var(--sjena-1);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+.timeline--paper .timeline__item { transition: background .2s ease; }
+.timeline--paper .timeline__item:hover { background: rgba(11,71,168,.05); }
+
+/* Popis klubova lige: ploha je bila bijela na bijelom i nestajala. */
+.clubs--paper {
+  background: linear-gradient(180deg, #fff, #eef3fb);
+  box-shadow: var(--odsjaj-s), 0 0 0 1px var(--rub-s), var(--sjena-1);
+}
+
+/* Uspjesi kluba — redak dobiva oznaku uz lijevi rub i reagira na miša. */
+.honour {
+  padding-left: 18px;
+  border-left: 2px solid rgba(143,192,255,.28);
+  transition: background .22s ease, border-color .22s ease, padding-left .22s var(--mek);
+}
+.honour:hover {
+  background: rgba(255,255,255,.045);
+  border-left-color: var(--sky);
+  padding-left: 24px;
+}
+
+/* Fotografija u dvostupcu: bijela vlas ruba da ne lebdi bez okvira. */
+.split__img { box-shadow: 0 0 0 1px var(--rub-s), var(--sjena-2); }
+
+/* Poveznica na dolazak u dvoranu — puna ploha dobiva dubinu. */
+.league__cta {
+  background-image: linear-gradient(120deg, var(--blue-mid), var(--blue) 58%, var(--blue-deep));
+  box-shadow: var(--odsjaj-t), 0 16px 38px rgba(11,71,168,.34);
+}
+.league__cta:hover { background-image: none; }
+
+/* Česta pitanja: otvoreno pitanje se i vidi da je otvoreno. */
+.faq__item { border-left-width: 3px; }
+.faq__item.is-open {
+  background-image: linear-gradient(180deg, #fff, #eef3fb);
+  box-shadow: var(--odsjaj-s), 0 0 0 1px var(--rub-s-jaci), var(--sjena-1);
+}
+
+/* Polja obrasca: udubljena, a u fokusu s prstenom u klupskoj boji. */
+.field__input {
+  background-image: linear-gradient(180deg, #fff, #f7f9fd);
+  box-shadow: inset 0 1px 3px rgba(11,71,168,.07);
+  transition: box-shadow .2s ease, border-color .2s ease;
+}
+.field__input:focus-visible {
+  border-color: var(--blue-mid);
+  box-shadow: inset 0 1px 3px rgba(11,71,168,.05), 0 0 0 4px rgba(42,126,240,.18);
+}
+
+/* Fotografije u objavama i podacima — ista vlas ruba kao na karticama. */
+.post__photo { box-shadow: 0 0 0 1px var(--rub-s), var(--sjena-2); }
+
+/* --------------------------------------------------------------------------
+   7. Plutajući slojevi
+   Zaglavlje, obavijest o kolačićima, asistent i kartica igrača stvarno
+   stoje IZNAD sadržaja — tu zamućenje ima posla i tu se najviše vidi.
+   -------------------------------------------------------------------------- */
+.masthead {
+  background: rgba(255,255,255,.82);
+  backdrop-filter: blur(22px) saturate(180%);
+  -webkit-backdrop-filter: blur(22px) saturate(180%);
+}
+.site-header.is-scrolled .masthead {
+  background: rgba(255,255,255,.88);
+  box-shadow: 0 1px 0 rgba(11,71,168,.1), 0 14px 36px rgba(6,16,36,.16);
+}
+
+.topbar {
+  background-color: var(--navy);
+  background-image: linear-gradient(90deg, rgba(11,71,168,.55), transparent 42%, rgba(11,71,168,.45));
+}
+
+/* Obavijest o kolačićima. */
+.ck {
+  background: rgba(6,16,36,.8);
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  box-shadow: 0 -18px 48px rgba(3,8,20,.4);
+}
+
+/* Asistent. */
+.as {
+  background: rgba(6,16,36,.82);
+  border-color: var(--rub-t);
+  box-shadow: var(--odsjaj-t), 0 26px 64px rgba(3,8,20,.6);
+  backdrop-filter: blur(24px) saturate(170%);
+  -webkit-backdrop-filter: blur(24px) saturate(170%);
+}
+.as-fab {
+  box-shadow: 0 10px 26px rgba(11,71,168,.45), var(--odsjaj-t);
+}
+
+/* Kartica igrača. */
+.pm__panel {
+  background-color: var(--navy);
+  background-image:
+    radial-gradient(900px 460px at 8% -10%,  rgba(42,126,240,.34), transparent 62%),
+    radial-gradient(760px 520px at 96% 110%, rgba(11,71,168,.4),  transparent 66%);
+  box-shadow: var(--odsjaj-t), var(--sjena-3);
+}
+.pm__scrim { backdrop-filter: blur(10px) saturate(120%); -webkit-backdrop-filter: blur(10px) saturate(120%); }
+
+/* --------------------------------------------------------------------------
+   8. Gumbi
+   -------------------------------------------------------------------------- */
+.btn--ghost {
+  background: var(--staklo-t);
+  box-shadow: var(--odsjaj-t);
+  backdrop-filter: blur(12px) saturate(140%);
+  -webkit-backdrop-filter: blur(12px) saturate(140%);
+}
+.btn--solid { box-shadow: var(--odsjaj-s), var(--sjena-1); }
+
+/* --------------------------------------------------------------------------
+   9. Rezerve
+   -------------------------------------------------------------------------- */
+
+/* Bez podrške za zamućenje pozadine staklo bi bila samo prozirna ploha
+   kroz koju se čita tekst ispod. Zato tamo ide gušća boja. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .standings, .timeline, .staff-card, .phero__stat, .btn--ghost,
+  .slab--dark .chip, .slab--blue .chip { background: rgba(255,255,255,.12); }
+  .masthead, .site-header.is-scrolled .masthead { background: rgba(255,255,255,.97); }
+  .ck { background: var(--navy); }
+  .as { background: var(--navy); }
+  .pm__scrim { background: rgba(3,8,20,.94); }
+}
+
+/* Tko je u sustavu tražio manje prozirnosti, dobiva pune plohe. */
+@media (prefers-reduced-transparency: reduce) {
+  .standings, .timeline, .staff-card, .phero__stat, .btn--ghost,
+  .slab--dark .chip, .slab--blue .chip {
+    background: rgba(255,255,255,.14);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+  .masthead, .site-header.is-scrolled .masthead {
+    background: var(--white);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+  .ck, .as {
+    background: var(--navy);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+  .pm__scrim { background: rgba(3,8,20,.95); backdrop-filter: none; -webkit-backdrop-filter: none; }
+}
+
+/* Podizanje na hover je ukras, ne obavijest — gasi se s ostalim gibanjem. */
+@media (prefers-reduced-motion: reduce) {
+  .fixture:hover, .result:hover, .step:hover, .shop-card--paper:hover,
+  .staff__row:hover, .staff-card:hover, .facts__cell:hover,
+  .numbers__n:hover, .clubs__chip:hover {
+    transform: none;
+  }
+}
