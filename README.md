@@ -68,7 +68,10 @@ artikl stvarno kupuje u trgovini **SalaSport**.
   u trgovini vodi na kategoriju ili na pretragu „kandit”, nikad na izmišljeni
   URL koji završi na 404.
 
-Bez fotografije kartica pokaže grb kao vodeni žig (`ProductPlaceholder.jsx`).
+Bez fotografije kartica pokaže grb na tamnoj klupskoj plohi
+(`ProductPlaceholder.jsx`) — četiri svijetle pločice s istim sivim grbom u nizu
+izgledale su kao da se slika nije učitala. Grb je malo pomaknut po mjestu u
+nizu, da četiri pločice jedna uz drugu ne budu ista slika četiri puta.
 Prije je na tom mjestu stajao nacrtani dres — izgledao je kao sličica iz zbirke
 ikona. Crtež je ostao samo tamo gdje nešto radi: u personalizaciji na `/shop`
 ispisuje upisano prezime i broj na dres (`ProductArt.jsx`).

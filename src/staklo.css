@@ -652,3 +652,54 @@ a.sponsor:hover {
   .slab--dark::after, .slab--blue::after, .phero::after, .hero::after,
   .league::after, .venue::after, .shop::after, .site-footer::after { opacity: .03; }
 }
+
+/* Fotografija se pod mišem lagano primakne. Kadar ostaje isti jer okvir oko
+   nje reže preljev — miče se samo sadržaj. Crta se izvlači slijeva već u
+   `styles.css`; ovdje se dira samo slika. */
+.feature, .product__media { overflow: hidden; }
+.feature__photo,
+.product__photo { transition: scale .7s cubic-bezier(.22,.61,.36,1); }
+.feature--link:hover .feature__photo,
+.product:hover .product__photo { scale: 1.045; }
+
+@media (prefers-reduced-motion: reduce) {
+  .feature--link:hover .feature__photo,
+  .product:hover .product__photo { scale: 1; }
+}
+
+/* --------------------------------------------------------------------------
+   11. Pločica artikla bez fotografije
+   Četiri svijetle pločice s istim sivim grbom u nizu izgledaju kao da se
+   slika nije učitala. Tamna ploha s grbom u boji čita se kao klupska
+   pločica — namjerna, ne nedostajuća.
+   -------------------------------------------------------------------------- */
+.product__media:has(.ppl) {
+  background: linear-gradient(158deg, #0d1d3e, #061024 72%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.08);
+}
+.ppl__grb {
+  filter: none;
+  opacity: .2;
+  transition: opacity .4s ease, scale .6s cubic-bezier(.22,.61,.36,1);
+}
+.product:hover .ppl__grb { opacity: .28; scale: 1.04; }
+
+/* Mali pomak po mjestu u nizu, da četiri pločice jedna uz drugu ne izgledaju
+   kao ista slika zalijepljena četiri puta. */
+.product:nth-child(4n + 1) .ppl__grb { translate: -5% -2%; }
+.product:nth-child(4n + 2) .ppl__grb { translate:  6%  2%; width: 42%; }
+.product:nth-child(4n + 3) .ppl__grb { translate: -2%  3%; }
+.product:nth-child(4n + 4) .ppl__grb { translate:  4% -3%; width: 41%; }
+
+/* Strelica u kutu bila je plava na plavom. */
+.product:has(.ppl) .product__zoom { color: var(--sky); }
+
+/* Bez podrške za `:has()` ploha ostaje svijetla, pa grb ide natrag u sivo —
+   grb u boji na svijetloplavom izgleda isprano. */
+@supports not selector(:has(*)) {
+  .ppl__grb { filter: grayscale(1); opacity: .16; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .product:hover .ppl__grb { scale: 1; }
+}

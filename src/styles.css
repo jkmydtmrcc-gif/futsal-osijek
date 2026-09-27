@@ -258,21 +258,23 @@ html { scroll-behavior: smooth; }
 
 .reveal {
   opacity: 0;
+  /* Kraće i s manjim pomakom nego prije (.8s / 28px): dugo klizanje se čita
+     kao efekt, kratko kao da je sadržaj već bio tu. */
   transition:
-    opacity .8s cubic-bezier(.22,.61,.36,1),
-    translate .8s cubic-bezier(.22,.61,.36,1),
-    scale .8s cubic-bezier(.22,.61,.36,1),
-    filter .8s cubic-bezier(.22,.61,.36,1);
+    opacity .6s cubic-bezier(.22,.61,.36,1),
+    translate .6s cubic-bezier(.22,.61,.36,1),
+    scale .6s cubic-bezier(.22,.61,.36,1),
+    filter .6s cubic-bezier(.22,.61,.36,1);
   transition-delay: var(--reveal-delay, 0ms);
   will-change: opacity, translate;
 }
 
-.reveal--up    { translate: 0 28px; }
-.reveal--down  { translate: 0 -22px; }
-.reveal--left  { translate: -32px 0; }
-.reveal--right { translate: 32px 0; }
-.reveal--scale { scale: .94; }
-.reveal--blur  { translate: 0 20px; filter: blur(7px); }
+.reveal--up    { translate: 0 18px; }
+.reveal--down  { translate: 0 -16px; }
+.reveal--left  { translate: -22px 0; }
+.reveal--right { translate: 22px 0; }
+.reveal--scale { scale: .96; }
+.reveal--blur  { translate: 0 14px; filter: blur(5px); }
 
 .reveal.is-visible {
   opacity: 1;
@@ -687,10 +689,10 @@ html { scroll-behavior: smooth; }
    dio ništa ne dobiva — a bez njega sadržaj ostaje vidljiv i u slučaju da
    se animacija nikad ne pokrene (zamrznuti tab, iznimka u pregledniku). */
 .route {
-  animation: routeIn .5s cubic-bezier(.22,.61,.36,1) forwards;
+  animation: routeIn .42s cubic-bezier(.22,.61,.36,1) forwards;
 }
 @keyframes routeIn {
-  from { opacity: 0; translate: 0 16px; }
+  from { opacity: 0; translate: 0 10px; }
   to   { opacity: 1; translate: none; }
 }
 
