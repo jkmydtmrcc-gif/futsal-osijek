@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useContent, useStandings } from '../lib/content';
 import AsistentIkona from './AsistentIkona';
+import { TEME_RIJECI, norm, odaberiTemu } from '../lib/asistent';
 
 /**
  * Klupski asistent.
@@ -16,13 +17,18 @@ import AsistentIkona from './AsistentIkona';
  * utakmice shvatio ozbiljno.
  */
 
-/** Miče kvačice i velika slova, pa „utakmica“ i „UTAKMICA“ budu isto. */
-const norm = (s) =>
-  String(s ?? '')
-    .toLocaleLowerCase('hr-HR')
-    .normalize('NFD')
-    .replace(/[̀-ͯ]/g, '')
-    .replace(/đ/g, 'd');
+function Krizic({ className = '' }) {
+  return (
+    <svg
+      className={`askriz ${className}`.trim()}
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path d="M7 7l10 10M17 7L7 17" />
+    </svg>
+  );
+}
 
 export default function Asistent() {
   const content = useContent();
@@ -44,7 +50,7 @@ export default function Asistent() {
     return [
       {
         id: 'utakmica',
-        rijeci: ['utakmic', 'kada', 'kad igra', 'sljedec', 'iduc', 'termin', 'raspored', 'kolo'],
+        rijeci: TEME_RIJECI.utakmica,
         pitanje: 'Kad je sljedeća utakmica?',
         odgovor: () =>
           sljedeca
@@ -55,7 +61,7 @@ export default function Asistent() {
       },
       {
         id: 'tablica',
-        rijeci: ['tablic', 'poredak', 'mjesto', 'bodov', 'koliko bod', 'liga'],
+        rijeci: TEME_RIJECI.tablica,
         pitanje: 'Koje smo mjesto na tablici?',
         odgovor: () =>
           mi
@@ -66,19 +72,23 @@ export default function Asistent() {
       },
       {
         id: 'dvorana',
-        rijeci: ['dvoran', 'gdje', 'adres', 'lokacij', 'zrinjevac', 'kako doc', 'parking', 'doci'],
+        rijeci: TEME_RIJECI.dvorana,
         pitanje: 'Gdje se igraju domaće utakmice?',
-        odgovor: () =>
-          `Domaće utakmice igraju se u ${hero.venue}. Adresa: ${contact.address.join(', ')}.` +
-          (tickets.info?.length
-            ? ` ${tickets.info.map((r) => `${r.label}: ${r.value}`).join(' · ')}.`
-            : ''),
+        odgovor: () => {
+          const redci = (tickets.info ?? []).filter(
+            (r) => !norm(r.label).includes('adres')
+          );
+          return (
+            `Domaće utakmice igraju se u ${hero.venue}. Adresa: ${contact.address.join(', ')}.` +
+            (redci.length ? ` ${redci.map((r) => `${r.label}: ${r.value}`).join(' · ')}.` : '')
+          );
+        },
         put: '/ulaznice',
         putLabel: 'Dolazak na utakmicu',
       },
       {
         id: 'ulaznice',
-        rijeci: ['ulaznic', 'karte', 'kupit', 'cijena ulaz', 'tribin'],
+        rijeci: TEME_RIJECI.ulaznice,
         pitanje: 'Kako do ulaznice?',
         odgovor: () =>
           `Klub nema online prodaju ulaznica. Ulaznice se kupuju na dan utakmice na ulazu, a za rezervacije i grupne dolaske javi se na ${contact.email}.`,
@@ -87,7 +97,7 @@ export default function Asistent() {
       },
       {
         id: 'kontakt',
-        rijeci: ['kontakt', 'mail', 'email', 'telefon', 'broj tel', 'javit', 'pisat'],
+        rijeci: TEME_RIJECI.kontakt,
         pitanje: 'Kako kontaktirati klub?',
         odgovor: () => `E-mail: ${contact.email}. Telefon: ${contact.phone}.`,
         put: '/kontakt',
@@ -95,7 +105,7 @@ export default function Asistent() {
       },
       {
         id: 'dres',
-        rijeci: ['dres', 'shop', 'kupit dres', 'oprema', 'lopta', 'artikl', 'trgovin', 'salasport'],
+        rijeci: TEME_RIJECI.dres,
         pitanje: 'Gdje kupiti dres?',
         odgovor: () =>
           `Opremu prodaje SalaSport — klub nema vlastitu naplatu. Na stranici Fan Shop je ${shop.products.length} artikala, a klik vodi na stranicu artikla u trgovini. Dres se može naručiti i s prezimenom i brojem.`,
@@ -104,7 +114,7 @@ export default function Asistent() {
       },
       {
         id: 'postava',
-        rijeci: ['igrac', 'postav', 'momcad', 'tko igra', 'kapetan', 'trener', 'vratar', 'stozer'],
+        rijeci: TEME_RIJECI.postava,
         pitanje: 'Tko igra za klub?',
         odgovor: () => {
           const trener = staff.find((s) => norm(s.role).includes('trener'));
@@ -122,7 +132,7 @@ export default function Asistent() {
       },
       {
         id: 'novosti',
-        rijeci: ['novost', 'vijest', 'objav', 'sto ima nov', 'transfer'],
+        rijeci: TEME_RIJECI.novosti,
         pitanje: 'Ima li novosti?',
         odgovor: () => {
           const zadnja = news.items?.[0];
@@ -135,7 +145,7 @@ export default function Asistent() {
       },
       {
         id: 'klub',
-        rijeci: ['klub', 'osnovan', 'povijest', 'godin', 'uspjeh', 'o vama', 'boje'],
+        rijeci: TEME_RIJECI.klub,
         pitanje: 'Nešto o klubu?',
         odgovor: () => {
           const priča = content.club.story?.[0];
@@ -147,24 +157,7 @@ export default function Asistent() {
     ];
   }, [content, standings]);
 
-  /* Bodovanje: koliko se ključnih riječi teme pojavljuje u pitanju. */
-  const odgovoriNa = (tekst) => {
-    const t = norm(tekst);
-    if (!t.trim()) return null;
-
-    let najbolja = null;
-    let najviše = 0;
-
-    teme.forEach((tema) => {
-      const pogodaka = tema.rijeci.filter((r) => t.includes(r)).length;
-      if (pogodaka > najviše) {
-        najviše = pogodaka;
-        najbolja = tema;
-      }
-    });
-
-    return najviše > 0 ? najbolja : null;
-  };
+  const odgovoriNa = (tekst) => odaberiTemu(teme, tekst);
 
   const posalji = (tekst) => {
     const pitanje = tekst.trim();
@@ -216,13 +209,7 @@ export default function Asistent() {
         aria-controls="klupski-asistent"
         aria-label={otvoren ? 'Zatvori asistenta' : 'Otvori klupskog asistenta'}
       >
-        {otvoren ? (
-          <span className="as-fab__x" aria-hidden="true">
-            ✕
-          </span>
-        ) : (
-          <AsistentIkona className="as-fab__ikona" />
-        )}
+        {otvoren ? <Krizic className="as-fab__x" /> : <AsistentIkona className="as-fab__ikona" />}
       </button>
 
       <div
@@ -235,7 +222,6 @@ export default function Asistent() {
         <div className="as__vrh">
           <span className="as__avatar">
             <AsistentIkona />
-            <span className="as__tocka" aria-hidden="true" />
           </span>
           <div className="as__ime">
             <span className="as__naslov">Klupski asistent</span>
@@ -247,15 +233,15 @@ export default function Asistent() {
             onClick={() => setOtvoren(false)}
             aria-label="Zatvori asistenta"
           >
-            ✕
+            <Krizic />
           </button>
         </div>
 
         <div className="as__tok">
           <div className="as__poruka as__poruka--bot">
             <p>
-              Bok! 👋 Ja sam klupski asistent. Pitaj me o rasporedu, tablici,
-              dvorani ili opremi — odgovaram iz onoga što piše na ovoj stranici.
+              Klupski asistent. Pitaj me o rasporedu, tablici, dvorani ili
+              opremi — odgovaram iz onoga što piše na ovoj stranici.
             </p>
           </div>
 
@@ -310,7 +296,9 @@ export default function Asistent() {
             aria-label="Pitanje"
           />
           <button type="submit" disabled={!upit.trim()} aria-label="Pošalji pitanje">
-            <span aria-hidden="true">↗</span>
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M5 12h13M12.5 6l6 6-6 6" />
+            </svg>
           </button>
         </form>
       </div>

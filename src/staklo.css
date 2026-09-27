@@ -367,17 +367,122 @@ a.sponsor:hover {
   box-shadow: 0 -18px 48px rgba(3,8,20,.4);
 }
 
-/* Asistent. */
-.as {
-  background: rgba(6,16,36,.82);
-  border-color: var(--rub-t);
-  box-shadow: var(--odsjaj-t), 0 26px 64px rgba(3,8,20,.6);
-  backdrop-filter: blur(24px) saturate(170%);
-  -webkit-backdrop-filter: blur(24px) saturate(170%);
-}
+/* --- Klupski asistent ------------------------------------------------
+   Gumb je jedan predmet: plavi disk s odsjajem po gornjem rubu i tankim
+   svijetlim prstenom. Znak unutra je obris, pa ne izgleda kao naljepnica
+   zalijepljena preko diska. */
 .as-fab {
-  box-shadow: 0 10px 26px rgba(11,71,168,.45), var(--odsjaj-t);
+  width: 62px;
+  height: 62px;
+  padding: 15px;
+  background: radial-gradient(120% 120% at 30% 16%, var(--blue-bright), var(--blue) 56%, var(--blue-deep));
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.3),
+    0 0 0 1px rgba(143,192,255,.26),
+    0 12px 30px rgba(6,16,36,.5);
 }
+.as-fab:hover {
+  background: radial-gradient(120% 120% at 30% 16%, #4b97ff, var(--blue-mid) 56%, var(--blue));
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.36),
+    0 0 0 1px rgba(143,192,255,.5),
+    0 18px 40px rgba(11,71,168,.5);
+}
+.as-fab.je-otvoren {
+  background: radial-gradient(120% 120% at 30% 16%, #16223d, #0b142b 60%, #060f22);
+}
+.as-fab__x { width: 22px; height: 22px; }
+
+.asikona__krug   { fill: none; stroke: currentColor; stroke-width: 2.1; opacity: .95; }
+.asikona__savovi { fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; opacity: .95; }
+.asikona__peterokut { fill: currentColor; }
+.askriz { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
+
+/* Ploča: duboko staklo, tanka svijetla nit po gornjem rubu i uska sjena
+   koja je drži uz ekran umjesto da je diže kao oblak. */
+.as {
+  border-radius: 16px;
+  background:
+    linear-gradient(180deg, rgba(42,126,240,.16), transparent 34%),
+    rgba(6,16,36,.84);
+  border-color: rgba(255,255,255,.14);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.16),
+    0 2px 10px rgba(3,8,20,.34),
+    0 28px 70px rgba(3,8,20,.62);
+  backdrop-filter: blur(26px) saturate(175%);
+  -webkit-backdrop-filter: blur(26px) saturate(175%);
+}
+
+.as__vrh { padding: 15px 15px 13px; border-bottom-color: rgba(255,255,255,.1); }
+.as__avatar {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  padding: 8px;
+  border-radius: 50%;
+  background: radial-gradient(120% 120% at 30% 16%, var(--blue-bright), var(--blue) 60%, var(--blue-deep));
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.28), 0 0 0 1px rgba(143,192,255,.24);
+  color: var(--white);
+}
+.as__naslov { font-weight: 700; letter-spacing: .1px; }
+.as__zatvori { border-radius: 8px; }
+.as__zatvori svg { width: 15px; height: 15px; }
+
+/* Poruke: manji zaobljeni kut i tanka nit umjesto pune plohe. */
+.as__poruka { border-radius: 12px; animation: asPoruka .3s var(--mek) both; }
+@keyframes asPoruka { from { opacity: 0; translate: 0 6px; } to { opacity: 1; translate: 0 0; } }
+.as__poruka--bot {
+  background: rgba(255,255,255,.055);
+  border-color: rgba(255,255,255,.11);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.07);
+  border-bottom-left-radius: 4px;
+}
+.as__poruka--ja {
+  background: linear-gradient(135deg, var(--blue-mid), var(--blue) 70%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.2);
+  border-bottom-right-radius: 4px;
+}
+
+/* Prijedlozi prate geometriju stranice: oštri kut, ne pilula. */
+.as__prijedlog {
+  border-radius: 4px;
+  background: rgba(255,255,255,.05);
+  border-color: rgba(255,255,255,.14);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
+}
+.as__prijedlog:hover {
+  background: rgba(143,192,255,.14);
+  border-color: rgba(143,192,255,.55);
+}
+
+.as__unos input {
+  border-radius: 8px;
+  border-color: rgba(255,255,255,.16);
+  background: rgba(255,255,255,.04);
+  box-shadow: inset 0 1px 3px rgba(3,8,20,.35);
+}
+.as__unos input:focus-visible {
+  outline: none;
+  border-color: rgba(143,192,255,.7);
+  box-shadow: inset 0 1px 3px rgba(3,8,20,.35), 0 0 0 3px rgba(42,126,240,.28);
+}
+.as__unos button {
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  background: radial-gradient(120% 120% at 30% 16%, var(--blue-bright), var(--blue) 60%, var(--blue-deep));
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.26), 0 6px 16px rgba(11,71,168,.4);
+}
+.as__unos button svg { width: 19px; height: 19px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.as__unos button:hover:not(:disabled) { transform: translateY(-1px); }
+
+/* Klizač u toku razgovora — tanak i u boji ploče, ne sistemski sivi. */
+.as__tok { scrollbar-width: thin; scrollbar-color: rgba(143,192,255,.35) transparent; }
+.as__tok::-webkit-scrollbar { width: 6px; }
+.as__tok::-webkit-scrollbar-thumb { background: rgba(143,192,255,.3); border-radius: 3px; }
+.as__tok::-webkit-scrollbar-track { background: transparent; }
 
 /* Kartica igrača. */
 .pm__panel {
@@ -457,4 +562,93 @@ a.sponsor:hover {
   .numbers__n:hover, .clubs__chip:hover {
     transform: none;
   }
+}
+
+/* --------------------------------------------------------------------------
+   10. Zrno, brojke i sitnice
+   Ono po čemu se skupo razlikuje od urednog: film ima zrno, tablica ima
+   brojke koje stoje jedna ispod druge, a fokus i odabir teksta nose boju
+   kluba umjesto sistemske.
+   -------------------------------------------------------------------------- */
+
+/* Zrno preko tamnih ploha. Jedna pločica 160×160 se ponavlja, pa preglednik
+   rasterizira šum jednom. Sloj je iznad sadržaja jer zrno ide preko svega —
+   `pointer-events: none` da ne pojede nijedan klik. */
+.slab--dark::after,
+.slab--blue::after,
+.phero::after,
+.hero::after,
+.league::after,
+.venue::after,
+.shop::after,
+.site-footer::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  pointer-events: none;
+  opacity: .055;
+  background-image: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='160'%20height='160'%3E%3Cfilter%20id='z'%3E%3CfeTurbulence%20type='fractalNoise'%20baseFrequency='.9'%20numOctaves='3'%20stitchTiles='stitch'/%3E%3CfeColorMatrix%20type='saturate'%20values='0'/%3E%3C/filter%3E%3Crect%20width='160'%20height='160'%20filter='url(%23z)'%20opacity='.5'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
+}
+
+/* Vinjeta u heroju: rubovi kadra malo tamniji, kao na fotografiji snimljenoj
+   objektivom, a ne izrezanoj iz plakata. */
+.hero__veil {
+  background-image:
+    radial-gradient(120% 90% at 50% 34%, transparent 42%, rgba(3,8,20,.5) 100%),
+    linear-gradient(to top,
+      rgba(6,16,36,.98) 4%,
+      rgba(6,16,36,.86) 34%,
+      rgba(8,25,60,.5) 66%,
+      rgba(8,25,60,.34) 100%);
+}
+
+/* Brojke jednake širine. Bez ovoga se u tablici „11“ i „16“ ne poklapaju
+   po stupcu, a to je prvo što oda da je tablica složena na brzinu. */
+.standings__pos,
+.standings__played,
+.standings__pts,
+.impact__n,
+.facts__value,
+.hero__fact-v,
+.phero__stat strong,
+.numbers__n,
+.result__score,
+.step__n,
+.timeline__when,
+.honour__when,
+.hero__next-when {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum' 1;
+}
+
+/* Odabir teksta u klupskoj boji. */
+::selection { background: rgba(42,126,240,.28); color: inherit; }
+
+/* Jedan prsten fokusa na cijeloj stranici, umjesto sistemskog obruba koji
+   na tamnoj plohi zna i nestati. */
+:where(a, button, input, textarea, select, [tabindex]):focus-visible {
+  outline: 2px solid var(--blue-bright);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+.slab--dark :where(a, button):focus-visible,
+.phero :where(a, button):focus-visible,
+.hero :where(a, button):focus-visible,
+.site-footer :where(a, button):focus-visible {
+  outline-color: var(--sky);
+}
+
+/* Klizač tablice na uskom ekranu — u boji ploče, ne sistemski sivi. */
+.standings { scrollbar-width: thin; scrollbar-color: rgba(143,192,255,.3) transparent; }
+.standings::-webkit-scrollbar { height: 6px; }
+.standings::-webkit-scrollbar-thumb { background: rgba(143,192,255,.28); border-radius: 3px; }
+.standings::-webkit-scrollbar-track { background: transparent; }
+
+/* Zrno je ukras; tko traži manje gibanja i manje prozirnosti dobiva plohu
+   kakva jest. */
+@media (prefers-reduced-transparency: reduce) {
+  .slab--dark::after, .slab--blue::after, .phero::after, .hero::after,
+  .league::after, .venue::after, .shop::after, .site-footer::after { opacity: .03; }
 }

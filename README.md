@@ -109,16 +109,25 @@ nikakva.
 
 ## Klupski asistent
 
-Gumb „Pitaj klub” dolje desno otvara asistenta koji odgovara na pitanja o
-rasporedu, tablici, dvorani, ulaznicama, postavi, Fan Shopu i kontaktu.
+Odgovara iz podataka koji su već na stranici — raspored, tablica, postava,
+kontakt, Fan Shop. Nije jezični model: ne zove nikakvu vanjsku uslugu, ne košta
+ništa i ne može reći nešto čega u klupskim podacima nema. Kad ne prepozna
+pitanje, to i kaže i ponudi teme koje zna.
 
-**Nije jezični model.** Odgovore slaže iz podataka koji su već na stranici, pa
-ne košta ništa, radi bez interneta i ne može izmisliti termin utakmice. Kad ne
-prepozna pitanje, to i kaže i uputi na klub — nagađanje bi ovdje bilo gore od
-priznanja, jer bi posjetitelj krivi podatak shvatio ozbiljno.
+Prepoznavanje teme živi u `src/lib/asistent.js`, odvojeno od komponente, pa ga
+`npm test` može gađati izravno. Povod: na „gdje kupiti dres" asistent je
+odgovarao o dvorani. Brojanje pogodaka je obje teme izjednačilo — „gdje" za
+dvoranu, „dres" za Fan Shop — pa je pobijedila ona koja je prva u popisu.
 
-Teme su u `src/components/Asistent.jsx`; nova se doda kao još jedan unos s
-ključnim riječima i odgovorom.
+Sada duži izraz nosi više bodova (specifičniji je), upitne riječi skoro ništa,
+a dvosmisleni izrazi stoje cijeli: ne „kupit" nego „kupit ulaznic" i
+„kupit dres". Ključne riječi su u istoj datoteci kao i bodovanje — da test ne
+provjerava izmišljeni popis dok stranica radi po svojem.
+
+Znak je futsal lopta u jednoj debljini poteza (`AsistentIkona.jsx`), s
+izračunatim koordinatama: peterokut s vrhom prema gore, šavovi iz njegovih
+vrhova svakih 72°. Ranije je bio puna ploha — svijetli disk s tamnim
+peterokutom — pa je unutar plavog gumba izgledao kao naljepnica preko njega.
 
 ## Kolačići
 
@@ -143,6 +152,12 @@ Popis je u `src/fonts.css`.
 `styles.css` opisuje raspored, `staklo.css` površinu (svjetlo iza ploha, staklo
 na plutajućim slojevima, rub i sjena na karticama). Podjela znači da se izgled
 može mijenjati bez straha da će se nešto pomaknuti.
+
+Tamne plohe nose tanko zrno (jedna pločica 160×160 koja se ponavlja, 5,5%
+prozirnosti). Ne vidi se kao tekstura, ali razbija stepenice u prijelazima i
+plohi daje dubinu — izmjereno 44% više visokofrekventnog detalja. Brojke u
+tablici i u statistikama koriste `tabular-nums`, pa „11" i „16" stoje točno
+jedno ispod drugoga.
 
 Iz ranije verzije su izbačeni ukrasi koji su stranicu činili neozbiljnom:
 potezi kistom (SVG turbulencija), dijagonalne crte preko ploha, nasumični nagib
