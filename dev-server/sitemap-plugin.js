@@ -1,5 +1,6 @@
 /**
- * Zapisuje `sitemap.xml` i dopunjava `robots.txt` pri buildu.
+ * Zapisuje `sitemap.xml`, dopunjava `robots.txt` i upisuje punu adresu u
+ * oznake za dijeljenje pri buildu.
  *
  * Karta stranice traži pune adrese, a domena se zna tek kad je stranica
  * negdje objavljena. Zato se uzima iz okoline:
@@ -48,6 +49,32 @@ function newsPaths(root) {
   }
 }
 
+/**
+ * Facebook i WhatsApp traže punu adresu slike u `og:image` — s relativnom
+ * putanjom podijeljena poveznica stiže bez slike. Domena se zna tek pri
+ * buildu, pa se upisuje ovdje, zajedno s `og:url` i `canonical`.
+ */
+function apsolutneOznake(dir, base) {
+  const put = join(dir, 'index.html');
+  if (!existsSync(put)) return;
+
+  let html = readFileSync(put, 'utf8');
+
+  html = html.replace(
+    /(<meta property="og:image" content=")\/([^"]*")/,
+    (_, a, b) => `${a}${base}/${b}`
+  );
+
+  if (!/property="og:url"/.test(html)) {
+    html = html.replace(
+      '<meta name="twitter:card"',
+      `<meta property="og:url" content="${base}/">\n<link rel="canonical" href="${base}/">\n<meta name="twitter:card"`
+    );
+  }
+
+  writeFileSync(put, html);
+}
+
 export default function sitemapPlugin() {
   let root = process.cwd();
   let outDir = 'dist';
@@ -93,6 +120,7 @@ ${entries
 </urlset>
 `;
       writeFileSync(join(dir, 'sitemap.xml'), xml);
+      apsolutneOznake(dir, base);
 
       const robotsPath = join(dir, 'robots.txt');
       const robots = existsSync(robotsPath) ? readFileSync(robotsPath, 'utf8').trimEnd() : 'User-agent: *\nAllow: /';

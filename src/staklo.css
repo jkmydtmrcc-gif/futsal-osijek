@@ -790,3 +790,17 @@ a.sponsor:hover {
 @supports not selector(:has(*)) {
   .shell > .reveal { background-image: none; }
 }
+
+/* Istaknuta novost bez fotografije: klupska ploha s grbom, ista kao na
+   kartici artikla. Prije je ovdje bio prazan `<img>`. */
+.feature__plate {
+  display: grid;
+  place-items: center;
+  background: linear-gradient(158deg, #12244a, #061024 74%);
+}
+.feature__plate img {
+  width: 34%;
+  max-width: 190px;
+  height: auto;
+  opacity: .17;
+}

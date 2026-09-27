@@ -1,3 +1,4 @@
+import { lazy, Suspense } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -15,8 +16,16 @@ import Novost from './pages/Novost';
 import Kontakt from './pages/Kontakt';
 import Ulaznice from './pages/Ulaznice';
 import Kolacici from './pages/Kolacici';
-import AdminApp from './admin/AdminApp';
 import NijePronadeno from './pages/NijePronadeno';
+
+/**
+ * Administracija se učitava tek kad je netko otvori.
+ *
+ * S njom ide i Supabase SDK (prijava i slanje slika) — oko 250 KB koje
+ * posjetitelj nikad ne otvori. Javni dio čita bazu običnim GET-om
+ * (`lib/citac.js`), pa mu SDK ne treba.
+ */
+const AdminApp = lazy(() => import('./admin/AdminApp'));
 
 /**
  * Okvir stranice: zaglavlje, sadržaj, partneri i podnožje.
@@ -33,7 +42,9 @@ export default function App() {
     return (
       <>
         <ScrollToTop />
-        <AdminApp />
+        <Suspense fallback={<div className="admin admin--poruka">Učitavam administraciju…</div>}>
+          <AdminApp />
+        </Suspense>
       </>
     );
   }

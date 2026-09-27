@@ -3,6 +3,7 @@ import Pip from '../components/Pip';
 import Reveal from '../components/Reveal';
 import NewsCard from '../components/NewsCard';
 import { useContent } from '../lib/content';
+import FeaturePhoto from '../components/FeaturePhoto';
 
 export default function News() {
   const { news } = useContent();
@@ -35,12 +36,7 @@ export default function News() {
             variant="scale"
             className="feature feature--link"
           >
-            <img
-              className="feature__photo"
-              src={featured.image}
-              alt="Slavlje s navijačima"
-              loading="lazy"
-            />
+            <FeaturePhoto src={featured.image} alt={featured.title} />
             <div className="feature__veil" aria-hidden="true" />
             <div className="feature__body">
               <span className="feature__flag">{featured.flag}</span>

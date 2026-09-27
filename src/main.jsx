@@ -7,7 +7,6 @@ import ErrorBoundary from './components/ErrorBoundary';
 import './fonts.css';
 import './styles.css';
 import './staklo.css';
-import './admin/admin.css';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

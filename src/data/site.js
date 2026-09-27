@@ -431,7 +431,7 @@ export const LEGAL_LINKS = [
 ];
 
 export const IMAGES = {
-  crest: '/grb.png',
+  crest: '/grb.webp',
   /* Izrezani igrač (bez pozadine) koji stoji uz tablicu. */
   cutout: '/uploads/igraci/grafika-igrac.webp',
   /* Grafike u vrhu podstranica — bez njih je tamo naslov u praznini. */

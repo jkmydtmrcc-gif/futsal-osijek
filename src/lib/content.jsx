@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
-import { supabase, supabaseConfigured } from './supabase';
+import { bazaPostavljena, procitaj } from './citac';
 import {
   merge,
   zadaniSadrzaj,
@@ -33,25 +33,27 @@ const ContentContext = createContext(null);
 export function ContentProvider({ children }) {
   const [data, setData] = useState(() => ({
     ...zadaniSadrzaj(),
-    source: supabaseConfigured ? 'ucitavanje' : 'ugradeno',
+    source: bazaPostavljena ? 'ucitavanje' : 'ugradeno',
     error: null,
   }));
 
   useEffect(() => {
-    if (!supabase) return undefined;
+    if (!bazaPostavljena) return undefined;
     let otkazano = false;
+    const prekid = new AbortController();
+    const uzmi = (tablica, poredak) => procitaj(tablica, poredak, { signal: prekid.signal });
 
     (async () => {
       const [igraci, statistika, novosti, utakmice, tablica, artikli, sponzori, postavke] =
         await Promise.all([
-          supabase.from('igraci').select('*').order('sort_order'),
-          supabase.from('igraci_statistika').select('*').order('sort_order'),
-          supabase.from('novosti').select('*').order('sort_order'),
-          supabase.from('utakmice').select('*').order('sort_order'),
-          supabase.from('tablica').select('*').order('pos'),
-          supabase.from('shop').select('*').order('sort_order'),
-          supabase.from('sponzori').select('*').order('sort_order'),
-          supabase.from('postavke').select('*'),
+          uzmi('igraci', 'sort_order'),
+          uzmi('igraci_statistika', 'sort_order'),
+          uzmi('novosti', 'sort_order'),
+          uzmi('utakmice', 'sort_order'),
+          uzmi('tablica', 'pos'),
+          uzmi('shop', 'sort_order'),
+          uzmi('sponzori', 'sort_order'),
+          uzmi('postavke'),
         ]);
 
       if (otkazano) return;
@@ -111,6 +113,7 @@ export function ContentProvider({ children }) {
 
     return () => {
       otkazano = true;
+      prekid.abort();
     };
   }, []);
 

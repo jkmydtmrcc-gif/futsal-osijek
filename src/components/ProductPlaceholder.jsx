@@ -10,7 +10,7 @@
 export default function ProductPlaceholder() {
   return (
     <span className="ppl" aria-hidden="true">
-      <img className="ppl__grb" src="/grb.png" alt="" loading="lazy" />
+      <img className="ppl__grb" src="/grb.webp" alt="" loading="lazy" />
     </span>
   );
 }

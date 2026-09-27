@@ -206,6 +206,31 @@ Provjereno u `test/pozadina.test.mjs` na izmišljenim slikama — greška je uvi
 ista, ili se rez ne uhvati ili procuri kroz lik, a oboje se na stranici vidi
 tek kad je kasno.
 
+## Brzina i objava
+
+Posjetitelj **ne skida Supabase SDK**. Javni dio čita bazu običnim GET-om na
+PostgREST (`src/lib/citac.js`, isti oblik odgovora `{ data, error }`); SDK
+nosi prijavu, spremište i realtime preko websocketa, od čega posjetitelju ne
+treba ništa. Administracija se učitava tek kad je netko otvori
+(`lazy` + `Suspense`) i sa sobom vuče SDK i vlastiti CSS.
+
+Mjereno na produkcijskom buildu: **574 KB → 328 KB** JavaScripta
+(166 → 100 KB gzip). Slike: grb 223 → 21 KB (WebP umjesto PNG-a), ikona
+512px 217 → 56 KB, portreti 627 → 355 KB, grafike 672 → 366 KB.
+
+`vercel.json` drži zaglavlja: `immutable` na `/assets` i `/fonts` (ime nosi
+otisak, sadržaj se ne mijenja), dan uz `stale-while-revalidate` na
+`/uploads` (slike se mogu zamijeniti pod istim imenom preko administracije),
+i `must-revalidate` na `index.html`.
+
+Pri buildu se u `index.html` upisuje puna adresa u `og:image`, `og:url` i
+`canonical`. S relativnom putanjom Facebook i WhatsApp pokažu poveznicu bez
+slike — domena se zna tek pri objavi, pa se uzima iz `SITE_URL` ili
+`VERCEL_PROJECT_PRODUCTION_URL`.
+
+Izmjereno na produkcijskom buildu, s istim zaglavljima kakva piše
+`vercel.json`: CLS 0,0001 na mobilnom i 0,023 na stolnom (prag je 0,1).
+
 ## Kako je složeno
 
 ```

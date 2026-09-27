@@ -6,6 +6,7 @@ import Prijava from './Prijava';
 import { Polje, Tekst, Kvacica, SlikaPolje } from './Polja';
 import Statistika from './Statistika';
 import Postavke from './Postavke';
+import './admin.css';
 
 const KARTICE = [
   { id: 'igraci', label: 'Igrači' },
