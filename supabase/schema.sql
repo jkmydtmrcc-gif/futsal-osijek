@@ -1,5 +1,15 @@
--- MNK Osijek Kandit — shema baze
--- Pokreni jednom u Supabase → SQL Editor → New query → Run.
+-- ═════════════════════════════════════════════════════════════
+--  MNK Osijek Kandit — shema baze
+--
+--  ZALIJEPI CIJELU DATOTEKU, OD OVOG PRVOG RETKA.
+--
+--  Supabase → SQL Editor → New query → zalijepi sve → Run.
+--  Na GitHubu klikni „Raw“, pa Ctrl+A i Ctrl+C — tako se ne može
+--  slučajno uhvatiti samo dio.
+--
+--  Smije se pokrenuti više puta: dodaje što nedostaje, postojeće
+--  podatke ne dira.
+-- ═════════════════════════════════════════════════════════════
 
 -- ─────────────────────────────────────────────────────────────
 -- 1. Tablice
@@ -62,6 +72,15 @@ create table if not exists shop (
 -- Stranicu čita svatko; mijenjati smije samo prijavljeni korisnik.
 -- ─────────────────────────────────────────────────────────────
 
+-- Provjera: postoje li tablice iz 1. dijela?
+do $$
+begin
+  if to_regclass('public.igraci') is null then
+    raise exception
+      'Tablice ne postoje. Najčešći uzrok: zalijepljen je samo dio datoteke. Kopiraj schema.sql od prvog retka (na GitHubu: Raw → Ctrl+A → Ctrl+C) i pokreni ponovno.';
+  end if;
+end $$;
+
 alter table igraci   enable row level security;
 alter table novosti  enable row level security;
 alter table utakmice enable row level security;
@@ -118,6 +137,15 @@ create policy "shop slike brisanje" on storage.objects
 -- pokrenuti ponovno bez straha da će sadržaj biti udvostručen.
 -- ─────────────────────────────────────────────────────────────
 
+-- Provjera: postoje li tablice iz 1. dijela?
+do $$
+begin
+  if to_regclass('public.igraci') is null then
+    raise exception
+      'Tablice ne postoje. Najčešći uzrok: zalijepljen je samo dio datoteke. Kopiraj schema.sql od prvog retka (na GitHubu: Raw → Ctrl+A → Ctrl+C) i pokreni ponovno.';
+  end if;
+end $$;
+
 insert into igraci (sort_order, name, number, pos, note, photo)
 select * from (values
   (1, 'Franko Jamičić',    1,  'Vratar',        'Hrvatska',  '/uploads/igraci/franko-jamicic.webp'),
@@ -172,6 +200,15 @@ where not exists (select 1 from shop);
 -- Sve je pisano tako da se datoteka smije pokrenuti ponovno na bazi
 -- koja već postoji — postojeći podaci se ne diraju.
 -- ═════════════════════════════════════════════════════════════
+
+-- Provjera: postoje li tablice iz 1. dijela?
+do $$
+begin
+  if to_regclass('public.igraci') is null then
+    raise exception
+      'Tablice ne postoje. Najčešći uzrok: zalijepljen je samo dio datoteke. Kopiraj schema.sql od prvog retka (na GitHubu: Raw → Ctrl+A → Ctrl+C) i pokreni ponovno.';
+  end if;
+end $$;
 
 -- 4.1 Profil igrača (prikazuje se u kartici koja se otvori klikom)
 -- `from` je rezervirana riječ u SQL-u, pa stupac nosi ime `from_place`.
