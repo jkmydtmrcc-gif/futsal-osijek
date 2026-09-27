@@ -703,3 +703,16 @@ a.sponsor:hover {
 @media (prefers-reduced-motion: reduce) {
   .product:hover .ppl__grb { scale: 1; }
 }
+
+/* Pregled dresa s prezimenom stoji na istoj tamnoj plohi kao pločice
+   artikala — bijela ploha usred plavog odsječka je izgledala kao list
+   papira nalijepljen preko njega, a crtež na njoj kao skica. */
+.custom__preview {
+  background: linear-gradient(158deg, #0d1d3e, #061024 72%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.1), 0 26px 60px rgba(3,10,26,.45);
+}
+.custom__preview .pa-fill { fill: rgba(255,255,255,.08); }
+.custom__preview .pa-line { stroke: rgba(143,192,255,.85); }
+.custom__preview .pa-number,
+.custom__preview .pa-name { fill: var(--white); }
+.custom__preview .custom__tag { color: var(--sky); }
