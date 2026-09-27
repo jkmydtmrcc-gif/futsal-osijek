@@ -885,6 +885,51 @@ html { scroll-behavior: smooth; }
   color: var(--muted);
 }
 
+/* Sljedeća utakmica u vrhu stranice. Prije su ovdje stajale iste četiri
+   brojke koje traka odmah ispod heroja ionako ponavlja. */
+.hero__next { display: flex; flex-direction: column; }
+.hero__next-meta { display: flex; align-items: baseline; gap: 10px; margin-top: 14px; flex-wrap: wrap; }
+.hero__next-when {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 26px;
+  line-height: 1;
+  letter-spacing: .4px;
+  text-transform: uppercase;
+  color: var(--blue);
+}
+.hero__next-comp {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.hero__next-title {
+  margin: 10px 0 0;
+  max-width: 15ch;
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 27px;
+  line-height: 1.04;
+  text-transform: uppercase;
+  color: var(--ink);
+  text-wrap: pretty;
+}
+.hero__next-venue { margin-top: 8px; font-size: 13px; color: var(--muted); }
+.hero__next-link {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(14,20,32,.12);
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 13px;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  color: var(--blue);
+}
+.hero__next-link:hover { color: var(--ink); }
+
 /* --------------------------------------------------------------------------
    6. Traka s natpisima ispod heroa
    -------------------------------------------------------------------------- */

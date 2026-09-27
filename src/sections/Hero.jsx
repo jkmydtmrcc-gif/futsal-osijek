@@ -7,7 +7,11 @@ import { useContent } from '../lib/content';
  * (floatUp) kreću po učitavanju, bez čekanja na listanje.
  */
 export default function Hero() {
-  const { hero, images } = useContent();
+  const { hero, images, league } = useContent();
+
+  // Prvo što navijača zanima na vrhu stranice je sljedeća utakmica.
+  // Dok je nema u rasporedu, na njezino mjesto idu klupske brojke.
+  const sljedeca = league.fixtures[0] ?? null;
 
   return (
     <section className="hero" id="pocetna">
@@ -57,22 +61,37 @@ export default function Hero() {
             <span className="hero__frame-tag">Zrinjevac · bijelo-plavi</span>
           </div>
 
-          <div className="hero__facts">
-            <span className="eyebrow eyebrow--sm">Sezona 2025/26</span>
-            <div className="hero__facts-list">
-              {hero.facts.map((fact, i) => (
-                <div
-                  className="hero__fact"
-                  key={fact.label}
-                  style={{ '--fact-delay': `${0.45 + i * 0.12}s` }}
-                >
-                  <span className="hero__fact-v">{fact.value}</span>
-                  <span className="hero__fact-l">{fact.label}</span>
-                </div>
-              ))}
+          {sljedeca ? (
+            <div className="hero__facts hero__next">
+              <span className="eyebrow eyebrow--sm">Sljedeća utakmica</span>
+              <div className="hero__next-meta">
+                <span className="hero__next-when">{sljedeca.when}</span>
+                <span className="hero__next-comp">{sljedeca.comp}</span>
+              </div>
+              <h2 className="hero__next-title">{sljedeca.title}</h2>
+              <span className="hero__next-venue">{sljedeca.venue}</span>
+              <Link className="hero__next-link" to="/raspored">
+                Cijeli raspored i tablica →
+              </Link>
             </div>
-            <div className="hero__facts-foot">{hero.venue}</div>
-          </div>
+          ) : (
+            <div className="hero__facts">
+              <span className="eyebrow eyebrow--sm">Sezona 2025/26</span>
+              <div className="hero__facts-list">
+                {hero.facts.map((fact, i) => (
+                  <div
+                    className="hero__fact"
+                    key={fact.label}
+                    style={{ '--fact-delay': `${0.45 + i * 0.12}s` }}
+                  >
+                    <span className="hero__fact-v">{fact.value}</span>
+                    <span className="hero__fact-l">{fact.label}</span>
+                  </div>
+                ))}
+              </div>
+              <div className="hero__facts-foot">{hero.venue}</div>
+            </div>
+          )}
         </div>
       </div>
     </section>

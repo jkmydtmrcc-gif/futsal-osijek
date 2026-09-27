@@ -34,6 +34,13 @@ Postavljanje baze i popis svega što se uređuje: **[ADMIN.md](ADMIN.md)**.
 | `/ulaznice` | Dolazak na Zrinjevac i česta pitanja |
 | `/admin` | Administracija (Supabase prijava) |
 
+## Vrh naslovnice
+
+Pločica uz naslov pokazuje **sljedeću utakmicu** iz rasporeda, a ne klupske
+brojke: iste četiri brojke stajale su i u traci odmah ispod heroja, pa su se
+čitale dvaput jedna ispod druge. Kad rasporeda nema, pločica se vraća na
+brojke — vrh stranice nikad ne ostaje prazan.
+
 ## Kartica igrača
 
 Klik na igrača — na naslovnici ili na stranici Postava — otvara karticu preko
