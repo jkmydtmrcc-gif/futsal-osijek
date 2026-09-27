@@ -61,7 +61,8 @@
 /* Bijela ploha je osnova — zato ide prva: varijante (paper, blue, dark)
    imaju istu težinu selektora, pa ih nadjačava samo redoslijed. */
 .slab,
-.impact {
+.impact,
+.squad {
   background-color: var(--white);
   background-image:
     radial-gradient(900px 420px at 90% -14%, rgba(42,126,240,.075), transparent 62%),
@@ -69,7 +70,6 @@
 }
 
 .slab--paper,
-.squad,
 .news,
 .partners {
   background-color: var(--paper);

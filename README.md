@@ -23,7 +23,7 @@ Postavljanje baze i popis svega što se uređuje: **[ADMIN.md](ADMIN.md)**.
 
 | Ruta | Što je |
 | --- | --- |
-| `/` | Naslovnica |
+| `/` | Naslovnica — heroj, novosti, momčad, tablica i raspored, Fan Shop |
 | `/klub` | O klubu — brojke, priča, uspjesi, kronologija |
 | `/postava` | Igrači po pozicijama i stručni stožer |
 | `/raspored` | Tablica s grbovima, utakmice, rezultati, klubovi lige |
@@ -33,6 +33,18 @@ Postavljanje baze i popis svega što se uređuje: **[ADMIN.md](ADMIN.md)**.
 | `/kontakt` | Kontakt, poruka klubu i karta |
 | `/ulaznice` | Dolazak na Zrinjevac i česta pitanja |
 | `/admin` | Administracija (Supabase prijava) |
+
+## Redoslijed na naslovnici
+
+`Hero → Impact → News → Squad → League → Venue → Shop`, pa partneri i
+podnožje iz okvira stranice. `Impact` je uska traka s brojkama i drži se
+heroja kao njegov podnožak, a `Venue` je fotografija dvorane koja razdvaja
+tablicu od trgovine.
+
+Plohe se pritom izmjenjuju: bijela, paper, bijela, tamna, fotografija, plava.
+Zato je odsječak momčadi bijel, a ne paper — novosti su odmah iznad i također
+su na paperu, pa bi dvije iste plohe jedna uz drugu izgledale kao jedan
+dugačak odsječak bez šava.
 
 ## Vrh naslovnice
 

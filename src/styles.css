@@ -995,7 +995,10 @@ html { scroll-behavior: smooth; }
 /* --------------------------------------------------------------------------
    8. Momčad
    -------------------------------------------------------------------------- */
-.squad { position: relative; background: var(--paper); padding: var(--sec-y) 0; overflow: hidden; }
+/* Bijela, a ne „paper“: novosti su odmah iznad i također su na paperu, pa
+   bi dvije iste plohe jedna uz drugu izgledale kao jedan dugačak odsječak
+   bez šava. */
+.squad { position: relative; background: var(--white); padding: var(--sec-y) 0; overflow: hidden; }
 /* --- Traka s igračima ---------------------------------------------------
    Kartice klize vodoravno i pružaju se do ruba ekrana; prva je poravnata
    s ostatkom sadržaja preko istog razmaka kao .shell. */
