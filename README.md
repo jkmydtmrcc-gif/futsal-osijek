@@ -10,7 +10,7 @@ npm install
 cp .env.example .env      # Supabase ključevi (neobavezno)
 npm run dev
 npm run build
-npm test                  # pretvorbe, asistent, rez pozadine, čitač baze
+npm test                  # pretvorbe, asistent, rez pozadine, čitač, greške baze
 ```
 
 Stranica radi i **bez** Supabasea — tada prikazuje ugrađeni sadržaj iz
@@ -217,6 +217,20 @@ usluzi za obradu, pa ništa ne košta i ne putuje nikamo osim u klupski Storage.
 Provjereno u `test/pozadina.test.mjs` na izmišljenim slikama — greška je uvijek
 ista, ili se rez ne uhvati ili procuri kroz lik, a oboje se na stranici vidi
 tek kad je kasno.
+
+## Kad je baza starija od stranice
+
+Shemu nadograđuje vlasnik ručno, pokretanjem `supabase/schema.sql`. Između
+objave nove verzije stranice i tog trenutka obrazac u administraciji zna imati
+polje kojem u bazi još nema stupca.
+
+Supabase u tom slučaju odbija **cijeli** redak, pa se ne bi moglo promijeniti
+ni ime igrača. Zato `src/lib/postgrest.js` prepozna poruku o nepoznatom stupcu,
+`useTable` to polje izbaci i upis ponovi, a `Urednik` mirno javi koja se polja
+ne spremaju i što učiniti — bez crvene greške, jer ništa nije pokvareno.
+
+Provjereno protiv lažnog Supabasea sa starom shemom: prvi upit je odbijen zbog
+nepoznatog stupca, drugi je prošao, izmjena imena je spremljena.
 
 ## Prije objave
 

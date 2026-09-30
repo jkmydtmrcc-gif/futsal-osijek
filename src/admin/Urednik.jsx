@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import useTable from './useTable';
+import { nazivStupca } from './nazivi';
 
 /**
  * Zajednički uređivač jedne tablice.
@@ -9,7 +10,7 @@ import useTable from './useTable';
  * pregaziti tuđu izmjenu.
  */
 export default function Urednik({ naslov, opis, tablica, poredakPo, polja, prazan, opisRetka, podsadrzaj }) {
-  const { redovi, stanje, greska, spremi, dodaj, obrisi } = useTable(tablica, poredakPo);
+  const { redovi, stanje, greska, neupisano, spremi, dodaj, obrisi } = useTable(tablica, poredakPo);
 
   if (stanje === 'ucitavanje') return <p className="anapomena">Učitavam…</p>;
   if (stanje === 'nespojeno')
@@ -28,6 +29,17 @@ export default function Urednik({ naslov, opis, tablica, poredakPo, polja, praza
       </div>
 
       {greska && <p className="anapomena anapomena--greska">{greska}</p>}
+
+      {/* Baza je starija od obrasca: ostalo je spremljeno, ova polja nisu.
+          Namjerno mirno, a ne kao greška — ništa nije pokvareno, samo
+          nedostaje jedan korak koji vlasnik napravi jednom. */}
+      {neupisano.length > 0 && (
+        <p className="anapomena anapomena--pazi">
+          Baza još nije nadograđena, pa se <b>{neupisano.map(nazivStupca).join(', ')}</b>{' '}
+          {neupisano.length === 1 ? 'ne sprema' : 'ne spremaju'}. Ostalo je spremljeno. Pokreni{' '}
+          <code>supabase/schema.sql</code> u Supabase → SQL Editor i pokušaj ponovno.
+        </p>
+      )}
 
       {redovi.length === 0 && <p className="anapomena">Još nema unosa. Klikni „Dodaj”.</p>}
 

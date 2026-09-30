@@ -313,3 +313,18 @@
   .arez__par { grid-template-columns: 1fr; }
   .arez__stavka img { height: 180px; }
 }
+
+/* Baza starija od obrasca: obavijest, a ne greška — ništa nije pokvareno,
+   samo nedostaje jedan korak koji se napravi jednom. */
+.anapomena--pazi {
+  padding: 10px 12px;
+  background: rgba(240, 180, 41, .1);
+  border-left: 3px solid #f0b429;
+  color: #ffd98a;
+}
+.anapomena--pazi code {
+  padding: 1px 5px;
+  background: rgba(0, 0, 0, .3);
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
