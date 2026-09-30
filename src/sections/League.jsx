@@ -1,12 +1,11 @@
 import { Link } from 'react-router-dom';
 import Pip from '../components/Pip';
 import Reveal from '../components/Reveal';
-import ClubBadge from '../components/ClubBadge';
-import { useContent, useStandings } from '../lib/content';
+import Tablica from '../components/Tablica';
+import { useContent } from '../lib/content';
 
 export default function League() {
   const { league, images } = useContent();
-  const standings = useStandings();
 
   return (
     <section className="league" id="raspored" aria-labelledby="naslov-liga">
@@ -21,42 +20,7 @@ export default function League() {
 
         <div className="league__row league__row--top">
           <Reveal variant="left" className="standings">
-            <div className="standings__inner">
-              <div className="standings__head">
-                <span>Poz</span>
-                <span>Klub</span>
-                <span style={{ textAlign: 'center' }}>Ut</span>
-                <span style={{ textAlign: 'right' }}>Bod</span>
-              </div>
-
-              {standings.map((row, i) => (
-                <Reveal
-                  variant="right"
-                  delay={120 + i * 55}
-                  className={[
-                    'standings__row',
-                    row.isPlayoff ? 'is-top' : '',
-                    row.isUs ? 'is-us' : '',
-                  ]
-                    .filter(Boolean)
-                    .join(' ')}
-                  key={row.club}
-                >
-                  <span className="standings__pos">{row.pos}</span>
-                  <span className="standings__team">
-                    <ClubBadge club={row.club} logo={row.logo} />
-                    <span className="standings__club">{row.club}</span>
-                  </span>
-                  <span className="standings__played">{row.played}</span>
-                  <span className="standings__pts">{row.points}</span>
-                </Reveal>
-              ))}
-
-              {/* Napomena da su podaci ogledni stoji samo dok stvarno jesu.
-                  Čim baza vrati utakmice, `demo` padne na `false` i priznanje
-                  nestane samo — bez da se itko toga mora sjetiti. */}
-              {league.demo && <p className="standings__note">{league.note}</p>}
-            </div>
+            <Tablica />
           </Reveal>
 
           <div className="fixtures">

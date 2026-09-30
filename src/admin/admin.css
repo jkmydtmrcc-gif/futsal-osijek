@@ -335,6 +335,10 @@
 .apolje__input--sat { flex: 0 0 110px; }
 .apolje--broj .apolje__input { max-width: 110px; }
 
+/* Upozorenje na neskladan redak ide preko cijele širine obrasca — inače
+   sjedne u stupac širok 230px i izgleda kao još jedno polje. */
+.apolje--puna { grid-column: 1 / -1; margin: 0; }
+
 /* Strijelci jedne utakmice. */
 .astrijelci { margin-top: 14px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,.1); }
 .astrijelci__vrh { display: flex; align-items: center; justify-content: space-between; gap: 12px; }

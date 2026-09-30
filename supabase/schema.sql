@@ -177,13 +177,8 @@ select * from (values
 ) as v(sort_order, "when", comp, title, venue)
 where not exists (select 1 from utakmice);
 
-insert into tablica (pos, club, played, points)
-select * from (values
-  (1, 'Olmissum', 6, 16), (2, 'Osijek Kandit', 6, 13), (3, 'Futsal Dinamo', 6, 12),
-  (4, 'Rijeka', 6, 11),   (5, 'Novo vrijeme', 6, 9),   (6, 'Torcida Biberon', 6, 7),
-  (7, 'Square', 6, 6),    (8, 'Crnica', 6, 4),         (9, 'Vrgorac', 6, 2)
-) as v(pos, club, played, points)
-where not exists (select 1 from tablica);
+-- Ogledna tablica se puni na kraju datoteke (odsječak 6), jer traži stupce
+-- koje tek tamo dobiva.
 
 insert into shop (sort_order, name, price, image, href, badge)
 select * from (values
@@ -374,3 +369,60 @@ begin
   create policy "uredjivanje za prijavljene" on strijelci for all
     to authenticated using (true) with check (true);
 end $$;
+
+-- ─────────────────────────────────────────────────────────────
+-- 6. TABLICA LIGE: PUNI REDAK                      (dodano 2026)
+-- ─────────────────────────────────────────────────────────────
+-- Redak je imao mjesto, klub, odigrano i bodove. Nijedna futsal tablica u
+-- Hrvatskoj ne izgleda tako — standardni redak je Ut · P · N · I · G+ · G− ·
+-- GR · Bod. Gol-razlika se namjerno **ne** sprema: računa se iz golova, pa ne
+-- može proturječiti retku u kojem stoji.
+--
+-- Sve ima zadanu nulu, pa stari redci ostanu ispravni. Dok su nule, stranica
+-- prikazuje točno današnju tablicu od četiri stupca.
+
+alter table tablica add column if not exists wins          int not null default 0;
+alter table tablica add column if not exists draws         int not null default 0;
+alter table tablica add column if not exists losses        int not null default 0;
+alter table tablica add column if not exists goals_for     int not null default 0;
+alter table tablica add column if not exists goals_against int not null default 0;
+
+-- Datum ažuriranja stoji ispod tablice, uz naveden izvor. Vodi se sam, jer
+-- datum koji se upisuje ručno prije ili kasnije ostane lanjski — a tablica s
+-- krivim datumom gora je od tablice bez datuma.
+alter table tablica add column if not exists updated_at timestamptz not null default now();
+
+create or replace function dodirni_updated_at() returns trigger as $$
+begin
+  new.updated_at = now();
+  return new;
+end;
+$$ language plpgsql;
+
+drop trigger if exists tablica_updated_at on tablica;
+create trigger tablica_updated_at
+  before update on tablica
+  for each row execute function dodirni_updated_at();
+
+-- 6.1 Ogledna tablica za praznu bazu
+-- Brojke su izmišljene, ali su **složne**: P+N+I daje odigrano, 3·P+N daje
+-- bodove, a zbroj danih golova jednak je zbroju primljenih. Neskladan primjer
+-- bi odmah pao na provjeri u administraciji i izgledao kao greška umjesto kao
+-- primjer.
+--
+-- Upis stoji ovdje, a ne uz ostale ogledne podatke gore, jer traži stupce koje
+-- dobiva tek nekoliko redaka iznad. `where not exists` znači da postojeća baza
+-- ostaje netaknuta — ovo je samo za prvo pokretanje.
+insert into tablica (pos, club, played, wins, draws, losses, goals_for, goals_against, points)
+select * from (values
+  (1, 'Olmissum',        6, 5, 1, 0, 34, 14, 16),
+  (2, 'Osijek Kandit',   6, 4, 2, 0, 31, 17, 14),
+  (3, 'Futsal Dinamo',   6, 4, 0, 2, 28, 20, 12),
+  (4, 'Rijeka',          6, 3, 1, 2, 24, 21, 10),
+  (5, 'Novo vrijeme',    6, 2, 2, 2, 22, 22,  8),
+  (6, 'Torcida Biberon', 6, 2, 1, 3, 20, 24,  7),
+  (7, 'Square',          6, 2, 0, 4, 19, 27,  6),
+  (8, 'Crnica',          6, 1, 0, 5, 15, 32,  3),
+  (9, 'Vrgorac',         6, 0, 1, 5, 12, 28,  1)
+) as v(pos, club, played, wins, draws, losses, goals_for, goals_against, points)
+where not exists (select 1 from tablica);

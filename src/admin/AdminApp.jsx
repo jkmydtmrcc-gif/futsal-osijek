@@ -9,6 +9,7 @@ import Strijelci from './Strijelci';
 import UvozRasporeda from './UvozRasporeda';
 import useTable from './useTable';
 import { formatDatum, formatSat } from '../lib/vrijeme';
+import ProvjeraRetka from './ProvjeraRetka';
 import Postavke from './Postavke';
 import './admin.css';
 
@@ -150,18 +151,42 @@ export default function AdminApp() {
         {kartica === 'tablica' && (
           <Urednik
             naslov="Tablica lige"
-            opis="Osijek Kandit se sam ističe u tablici — piši ime točno tako. Klub bez upisanog grba pokaže inicijale."
+            opis="Osijek Kandit se sam ističe u tablici — piši ime točno tako. Klub bez upisanog grba pokaže inicijale. Gol-razliku ne upisuješ, računa se sama; ako se brojke ne zbrajaju, redak to kaže ispod polja. Dok su pobjede, neriješeno i porazi na nuli, stranica pokazuje kraću tablicu."
             tablica="tablica"
             poredakPo="pos"
             opisRetka={(r) => `${r.pos}. ${r.club || 'Novi klub'} — ${r.points ?? 0} bod.`}
-            prazan={(r) => ({ pos: r.length + 1, club: 'Novi klub', played: 0, points: 0, logo: '' })}
+            prazan={(r) => ({
+              pos: r.length + 1,
+              club: 'Novi klub',
+              played: 0,
+              wins: 0,
+              draws: 0,
+              losses: 0,
+              goals_for: 0,
+              goals_against: 0,
+              points: 0,
+              logo: '',
+            })}
             polja={(n, set) => (
               <>
                 <Polje label="Pozicija" type="number" value={n.pos} onChange={set('pos')} />
                 <Polje label="Klub" value={n.club} onChange={set('club')} />
-                <Polje label="Odigrano" type="number" value={n.played} onChange={set('played')} />
-                <Polje label="Bodovi" type="number" value={n.points} onChange={set('points')} />
+                <Broj label="Odigrano" value={n.played} onChange={set('played')} min="0" />
+                <Broj label="Pobjede" value={n.wins} onChange={set('wins')} min="0" />
+                <Broj label="Neriješeno" value={n.draws} onChange={set('draws')} min="0" />
+                <Broj label="Porazi" value={n.losses} onChange={set('losses')} min="0" />
+                <Broj label="Dani golovi" value={n.goals_for} onChange={set('goals_for')} min="0" />
+                <Broj
+                  label="Primljeni golovi"
+                  value={n.goals_against}
+                  onChange={set('goals_against')}
+                  min="0"
+                />
+                <Broj label="Bodovi" value={n.points} onChange={set('points')} min="0" />
                 <SlikaPolje label="Grb kluba" value={n.logo} onChange={set('logo')} />
+                {/* Gol-razlika se ne upisuje — računa se, pa ne može
+                    proturječiti golovima iz istog retka. */}
+                <ProvjeraRetka redak={n} />
               </>
             )}
           />

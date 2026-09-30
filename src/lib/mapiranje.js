@@ -38,13 +38,11 @@ export function zadaniSadrzaj() {
       ourClub: SITE.OUR_CLUB,
       playoffCutoff: SITE.PLAYOFF_CUTOFF,
       note: SITE.STANDINGS_NOTE,
-      standings: SITE.STANDINGS.map(({ pos, club, played, points, logo }) => ({
-        pos,
-        club,
-        played,
-        points,
-        logo,
-      })),
+      /* `isUs` i `isPlayoff` se ovdje namjerno odbacuju: izvode se pri
+         čitanju, pa tablica iz baze i ugrađena tablica prolaze istim putem. */
+      standings: SITE.STANDINGS.map(({ isUs: _a, isPlayoff: _b, ...redak }) => redak),
+      /* Ugrađena tablica je ogledna, pa nema ni datuma ažuriranja. */
+      azurirano: null,
       fixtures: SITE.FIXTURES,
       results: SITE.RESULTS,
       /* Ugrađeni termini su ogledni. Čim baza vrati utakmice, ovo pada na

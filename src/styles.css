@@ -1290,10 +1290,109 @@ html { scroll-behavior: smooth; }
   background: rgba(255,255,255,.06);
   border: 1px solid rgba(255,255,255,.14);
   overflow-x: auto;
+  /* Puna tablica se mjeri po stupcu u kojem stoji, a ne po ekranu. Na
+     naslovnici dijeli red s nadolazećim utakmicama, pa u prozoru od 1100px
+     dobije 620px — a to je uže od nekog telefona u vodoravnom položaju.
+     Medijski upit to ne vidi; upit na spremnik vidi. */
+  container-type: inline-size;
 }
 .standings__inner { min-width: 520px; }
 .standings__head,
 .standings__row { display: grid; grid-template-columns: 48px 1fr 92px 92px; }
+
+/* Puni redak: Poz · Klub · Ut · P · N · I · G+ · G− · GR · Bod.
+   Uključuje se samo kad u tablici stvarno ima tih brojeva — dok ih nema,
+   ostaje gornji raspored od četiri stupca, bajt po bajt kao prije.
+
+   Bez `min-width`: širina se skuplja s ime kluba, a uži stupci ispadaju u
+   upitima na spremnik ispod. Tako se tablica nikad ne kliže vodoravno. */
+.standings__inner--puna { min-width: 0; }
+.standings__inner--puna .standings__head,
+.standings__inner--puna .standings__row {
+  grid-template-columns: 40px minmax(110px, 1fr) repeat(6, 36px) 46px 54px;
+  column-gap: 2px;
+  padding-left: 18px;
+  padding-right: 18px;
+}
+
+/* Ispod ~640px stupca ispadaju G+ i G−: jedina su dva čiju informaciju treći
+   (gol-razlika) već nosi, pa se gube bez štete. */
+@container (max-width: 640px) {
+  .standings__inner--puna .standings__head,
+  .standings__inner--puna .standings__row {
+    grid-template-columns: 30px minmax(0, 1fr) repeat(4, 30px) 40px 46px;
+    column-gap: 4px;
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+  .standings__sirok { display: none; }
+  .standings__inner--puna .standings__club { font-size: 15px; letter-spacing: 0; }
+  .standings__inner--puna .standings__pos { font-size: 15px; }
+  .standings__inner--puna .standings__pts { font-size: 18px; }
+  .standings__inner--puna .cbadge--md { width: 24px; height: 24px; }
+  .standings__inner--puna .standings__team { gap: 8px; }
+}
+
+/* Najuže: telefon. Forma ide van — u stupac od 22 piksela se ne stisne, a
+   naš je redak ionako obojen, pa se i bez nje odmah nađe. */
+@container (max-width: 430px) {
+  .standings__inner--puna .standings__head,
+  .standings__inner--puna .standings__row {
+    grid-template-columns: 22px minmax(0, 1fr) repeat(4, 22px) 30px 34px;
+    column-gap: 5px;
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+  .standings__inner--puna .standings__club { font-size: 13.5px; }
+  .standings__inner--puna .standings__pos { font-size: 13px; }
+  .standings__inner--puna .standings__played,
+  .standings__inner--puna .standings__broj,
+  .standings__inner--puna .standings__gr { font-size: 11.5px; }
+  .standings__inner--puna .standings__pts { font-size: 16px; }
+  .standings__inner--puna .cbadge--md { width: 20px; height: 20px; }
+  .standings__inner--puna .standings__team { gap: 7px; }
+  .standings__inner--puna .forma { display: none; }
+}
+.standings__c,
+.standings__broj,
+.standings__gr { text-align: center; }
+.standings__d { text-align: right; }
+.standings__broj {
+  font-size: 14px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: rgba(255,255,255,.7);
+}
+.standings__row.is-us .standings__broj { color: rgba(255,255,255,.9); }
+.standings__gr {
+  font-size: 14px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  color: rgba(255,255,255,.82);
+}
+/* Kratice u zaglavlju nose puno ime, ali bez isprekidane crte ispod —
+   devet takvih crta u retku izgleda kao greška, a ne kao pomoć. */
+.standings__head abbr { text-decoration: none; cursor: help; }
+
+/* Forma uz naš redak: zadnjih pet ishoda, najstariji lijevo. */
+.forma { display: inline-flex; gap: 3px; margin-left: 10px; vertical-align: middle; }
+.forma__pip {
+  width: 16px;
+  height: 16px;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 9px;
+  letter-spacing: 0;
+  color: var(--navy);
+  background: rgba(255,255,255,.55);
+}
+.forma__pip--w { background: var(--sky); }
+.forma__pip--d { background: rgba(255,255,255,.75); }
+/* Poraz je jedini pip koji ostaje taman. Svijetla podloga s tamnim slovom
+   ovdje ne radi: preko obojenog retka ispadne 1.1:1, dakle nevidljivo. */
+.forma__pip--l { background: rgba(255,255,255,.16); color: var(--white); }
 
 /* Grb i ime kluba dijele stupac „Klub“. */
 .standings__team { display: flex; align-items: center; gap: 12px; min-width: 0; }
@@ -1391,6 +1490,20 @@ html { scroll-behavior: smooth; }
   line-height: 1.5;
   color: rgba(255,255,255,.55);
 }
+/* Naveden izvor je ono što tablicu razlikuje od tvrdnje. Stoji tiho, ali je
+   klikabilan — tko sumnja u brojku, može otići provjeriti. */
+.standings__izvor {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  border-top: 1px solid rgba(255,255,255,.1);
+}
+.standings__izvor a {
+  color: var(--sky);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.standings__izvor a:hover { color: var(--white); }
 
 /* 9.2 Nadolazeće utakmice */
 .fixtures {

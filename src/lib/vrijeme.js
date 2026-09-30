@@ -101,6 +101,18 @@ export function formatDatum(iso, zona = ZONA) {
   return veliko(tekst.replace(',', '').replace(/\s+/g, ' ').replace(/(\d+)\. (\d+)\./, '$1.$2.'));
 }
 
+/** `17. listopada 2026.` — za datum ažuriranja ispod tablice. */
+export function formatDan(iso, zona = ZONA) {
+  const t = Date.parse(iso ?? '');
+  if (Number.isNaN(t)) return '';
+  return new Intl.DateTimeFormat('hr-HR', {
+    timeZone: zona,
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  }).format(t);
+}
+
 /** `19:00` */
 export function formatSat(iso, zona = ZONA) {
   const t = Date.parse(iso ?? '');

@@ -56,8 +56,10 @@ export default function useTable(tablica, poredakPo = 'sort_order') {
     return true;
   };
 
+  /* `created_at` i `updated_at` vodi baza — poslati ih natrag znači ili ih
+     pregaziti, ili ih uzalud slati okidaču koji ih ionako prepisuje. */
   const spremi = async (red) => {
-    const { id, created_at: _ignore, ...polja } = red;
+    const { id, created_at: _a, updated_at: _b, ...polja } = red;
     return upisi(polja, (p) => supabase.from(tablica).update(p).eq('id', id));
   };
 

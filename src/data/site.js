@@ -196,17 +196,33 @@ export const PLAYOFF_CUTOFF = 4;
  * inicijale kluba u pločici. Upisuje se u administraciji, pod „Tablica i
  * raspored“.
  */
+/* Brojke su ogledne, ali su složne: P+N+I daje odigrano, 3·P+N daje bodove,
+   a zbroj danih golova jednak je zbroju primljenih. Nesložan primjer bi pao
+   na istoj provjeri koja u administraciji hvata tipfelere, pa bi izgledao kao
+   greška umjesto kao primjer. Gol-razlika se ne upisuje — računa se. */
 const STANDINGS_ROWS = [
-  { pos: 1, club: 'Olmissum', played: 6, points: 16, logo: '' },
-  { pos: 2, club: 'Osijek Kandit', played: 6, points: 13, logo: '/uploads/images.jpeg' },
-  { pos: 3, club: 'Futsal Dinamo', played: 6, points: 12, logo: '' },
-  { pos: 4, club: 'Rijeka', played: 6, points: 11, logo: '' },
-  { pos: 5, club: 'Novo vrijeme', played: 6, points: 9, logo: '' },
-  { pos: 6, club: 'Torcida Biberon', played: 6, points: 7, logo: '' },
-  { pos: 7, club: 'Square', played: 6, points: 6, logo: '' },
-  { pos: 8, club: 'Crnica', played: 6, points: 4, logo: '' },
-  { pos: 9, club: 'Vrgorac', played: 6, points: 2, logo: '' },
+  { pos: 1, club: 'Olmissum',        played: 6, wins: 5, draws: 1, losses: 0, goals_for: 34, goals_against: 14, points: 16, logo: '' },
+  { pos: 2, club: 'Osijek Kandit',   played: 6, wins: 4, draws: 2, losses: 0, goals_for: 31, goals_against: 17, points: 14, logo: '/uploads/images.jpeg' },
+  { pos: 3, club: 'Futsal Dinamo',   played: 6, wins: 4, draws: 0, losses: 2, goals_for: 28, goals_against: 20, points: 12, logo: '' },
+  { pos: 4, club: 'Rijeka',          played: 6, wins: 3, draws: 1, losses: 2, goals_for: 24, goals_against: 21, points: 10, logo: '' },
+  { pos: 5, club: 'Novo vrijeme',    played: 6, wins: 2, draws: 2, losses: 2, goals_for: 22, goals_against: 22, points:  8, logo: '' },
+  { pos: 6, club: 'Torcida Biberon', played: 6, wins: 2, draws: 1, losses: 3, goals_for: 20, goals_against: 24, points:  7, logo: '' },
+  { pos: 7, club: 'Square',          played: 6, wins: 2, draws: 0, losses: 4, goals_for: 19, goals_against: 27, points:  6, logo: '' },
+  { pos: 8, club: 'Crnica',          played: 6, wins: 1, draws: 0, losses: 5, goals_for: 15, goals_against: 32, points:  3, logo: '' },
+  { pos: 9, club: 'Vrgorac',         played: 6, wins: 0, draws: 1, losses: 5, goals_for: 12, goals_against: 28, points:  1, logo: '' },
 ];
+
+/**
+ * Izvor tablice.
+ *
+ * Navedeni izvor je ono što tablicu čini vjerodostojnom: posjetitelj koji
+ * sumnja u brojku može otići provjeriti, a klub time kaže da ne izmišlja.
+ * HNS Semafor je službeni savezov prikaz SuperSport HMNL-a.
+ */
+export const STANDINGS_SOURCE = {
+  label: 'HNS Semafor',
+  href: 'https://semafor.hns.family/',
+};
 
 export const STANDINGS = STANDINGS_ROWS.map((row) => ({
   ...row,

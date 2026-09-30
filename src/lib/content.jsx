@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { bazaPostavljena, procitaj } from './citac';
 import { matchFromRow, razvrstaj, forma } from './utakmice';
+import { slozi } from './tablica';
 import {
   merge,
   zadaniSadrzaj,
@@ -111,7 +112,19 @@ export function ContentProvider({ children }) {
             forma: forma(odigrane),
           };
         }
-        if (tablica.data?.length) next.league = { ...next.league, standings: tablica.data };
+        /* Datum ažuriranja se ne upisuje rukom — baza ga vodi sama okidačem na
+           `tablica`. Uzima se najnoviji redak, jer se tablica uređuje redak po
+           redak, a ispod nje stoji jedan datum za cijelu tablicu. */
+        if (tablica.data?.length) {
+          const dodiri = tablica.data
+            .map((r) => Date.parse(r.updated_at ?? ''))
+            .filter((t) => Number.isFinite(t));
+          next.league = {
+            ...next.league,
+            standings: tablica.data,
+            azurirano: dodiri.length ? new Date(Math.max(...dodiri)).toISOString() : null,
+          };
+        }
         if (artikli.data?.length) {
           next.shop = { ...next.shop, products: artikli.data.map(productFromRow) };
         }
@@ -147,19 +160,20 @@ export function useContent() {
 }
 
 /**
- * Tablica s izvedenim poljima: koji redak smo mi i koji vodi u doigravanje.
- * Računa se pri čitanju, pa se u bazi drže samo upisani podaci.
+ * Tablica s izvedenim poljima: gol-razlika, koji redak smo mi, koji vodi u
+ * doigravanje i forma uz naš redak. Sve se računa pri čitanju, pa se u bazi
+ * drže samo upisani podaci — ništa izvedeno ne može zastarjeti.
  */
 export function useStandings() {
   const { league } = useContent();
 
   return useMemo(
     () =>
-      (league.standings ?? []).map((row) => ({
-        ...row,
-        isUs: row.club === league.ourClub,
-        isPlayoff: row.pos <= league.playoffCutoff,
-      })),
-    [league.standings, league.ourClub, league.playoffCutoff]
+      slozi(league.standings, {
+        ourClub: league.ourClub,
+        playoffCutoff: league.playoffCutoff,
+        forma: league.forma,
+      }),
+    [league.standings, league.ourClub, league.playoffCutoff, league.forma]
   );
 }

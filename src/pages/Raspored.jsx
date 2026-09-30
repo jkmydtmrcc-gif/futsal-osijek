@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import Pip from '../components/Pip';
 import Reveal from '../components/Reveal';
 import PageHero from '../components/PageHero';
-import ClubBadge from '../components/ClubBadge';
+import Tablica from '../components/Tablica';
 import { TICKETS_PATH } from '../data/site';
 import { useContent, useStandings } from '../lib/content';
 
@@ -25,6 +25,16 @@ export default function Raspored() {
             <span className="phero__stat">
               <strong>{us.played}</strong> utakmica
             </span>
+            {/* Omjer se pokazuje tek kad je upisan — nule bi tvrdile da smo
+                odigrali šest utakmica bez ijedne pobjede i bez ijednog poraza. */}
+            {us.wins + us.draws + us.losses > 0 && (
+              <span className="phero__stat">
+                <strong>
+                  {us.wins}-{us.draws}-{us.losses}
+                </strong>{' '}
+                P-N-I
+              </span>
+            )}
           </div>
         )}
       </PageHero>
@@ -42,52 +52,7 @@ export default function Raspored() {
 
           <div className="league__row league__row--top">
             <Reveal variant="left" className="standings">
-              <div className="standings__inner">
-                <div className="standings__head">
-                  <span>Poz</span>
-                  <span>Klub</span>
-                  <span style={{ textAlign: 'center' }}>Ut</span>
-                  <span style={{ textAlign: 'right' }}>Bod</span>
-                </div>
-                {standings.map((row, i) => (
-                  <Reveal
-                    variant="right"
-                    delay={100 + i * 50}
-                    className={[
-                      'standings__row',
-                      row.isPlayoff ? 'is-top' : '',
-                      row.isUs ? 'is-us' : '',
-                    ]
-                      .filter(Boolean)
-                      .join(' ')}
-                    key={row.club}
-                  >
-                    <span className="standings__pos">{row.pos}</span>
-                    <span className="standings__team">
-                      <ClubBadge club={row.club} logo={row.logo} />
-                      <span className="standings__club">{row.club}</span>
-                    </span>
-                    <span className="standings__played">{row.played}</span>
-                    <span className="standings__pts">{row.points}</span>
-                  </Reveal>
-                ))}
-
-                <div className="legend">
-                  <span className="legend__item">
-                    <span className="legend__swatch legend__swatch--top" aria-hidden="true" />
-                    Prva {league.playoffCutoff} mjesta — doigravanje
-                  </span>
-                  <span className="legend__item">
-                    <span className="legend__swatch legend__swatch--us" aria-hidden="true" />
-                    {league.ourClub}
-                  </span>
-                </div>
-
-                {/* Napomena da su podaci ogledni stoji samo dok stvarno jesu.
-                  Čim baza vrati utakmice, `demo` padne na `false` i priznanje
-                  nestane samo — bez da se itko toga mora sjetiti. */}
-              {league.demo && <p className="standings__note">{league.note}</p>}
-              </div>
+              <Tablica legenda />
             </Reveal>
 
             <div className="fixtures">
