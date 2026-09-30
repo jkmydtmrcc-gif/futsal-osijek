@@ -4273,3 +4273,96 @@ a.sponsor:hover { transform: translateY(-4px); border-color: var(--blue); box-sh
   .mobile-nav.is-open .mobile-nav__foot { opacity: 1; translate: none; }
   .route { animation: none; }
 }
+
+/* --------------------------------------------------------------------------
+   17. Traka s utakmicom
+   Zadnji rezultat i sljedeći termin, ispod zaglavlja na svakoj stranici.
+   -------------------------------------------------------------------------- */
+.tru {
+  position: relative;
+  z-index: 4;
+  background: var(--navy-soft);
+  border-bottom: 1px solid rgba(255,255,255,.1);
+  color: var(--white);
+}
+.tru__inner {
+  display: flex;
+  align-items: center;
+  gap: clamp(18px, 3vw, 40px);
+  padding-top: 13px;
+  padding-bottom: 13px;
+  flex-wrap: wrap;
+}
+.tru__blok { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+
+.tru__oznaka {
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: 2.2px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.5);
+}
+.tru__oznaka--sky { color: var(--sky); }
+
+.tru__redak { display: flex; align-items: baseline; gap: 10px; min-width: 0; }
+.tru__klub {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 16px;
+  letter-spacing: .4px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.6);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* Naš klub je podebljan i svijetliji — na prvi pogled se vidi tko smo mi. */
+.tru__klub.je-nas { font-weight: 900; color: var(--white); }
+
+.tru__rezultat {
+  flex: none;
+  padding: 1px 9px;
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 17px;
+  letter-spacing: .4px;
+  font-variant-numeric: tabular-nums;
+  color: var(--navy);
+  background: var(--white);
+}
+.tru__rezultat--w { background: var(--sky); }
+.tru__rezultat--l { background: rgba(255,255,255,.55); }
+.tru__rezultat--d { background: rgba(255,255,255,.8); }
+
+.tru__vs { flex: none; font-weight: 700; color: rgba(255,255,255,.35); }
+
+.tru__pod {
+  font-size: 11.5px;
+  color: rgba(255,255,255,.62);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tru__crta { width: 1px; align-self: stretch; background: rgba(255,255,255,.12); }
+
+.tru__veza {
+  margin-left: auto;
+  flex: none;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 12.5px;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  color: var(--sky);
+}
+.tru__veza:hover { color: var(--white); }
+
+@media (max-width: 720px) {
+  /* Na uskom ekranu crta među blokovima nema smisla — blokovi idu jedan
+     ispod drugog, a poveznica u vlastiti red. */
+  .tru__inner { gap: 12px; }
+  .tru__crta { display: none; }
+  .tru__blok { flex: 1 1 100%; }
+  .tru__veza { margin-left: 0; }
+}

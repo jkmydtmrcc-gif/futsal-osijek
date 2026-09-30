@@ -47,6 +47,14 @@ export function zadaniSadrzaj() {
       })),
       fixtures: SITE.FIXTURES,
       results: SITE.RESULTS,
+      /* Ugrađeni termini su ogledni. Čim baza vrati utakmice, ovo pada na
+         `false` i napomena o oglednim podacima nestaje sama — bez da se
+         itko toga mora sjetiti. */
+      demo: true,
+      matches: [],
+      sljedeca: null,
+      zadnja: null,
+      forma: [],
       clubs: SITE.CLUBS,
       timeline: SITE.TIMELINE,
     },

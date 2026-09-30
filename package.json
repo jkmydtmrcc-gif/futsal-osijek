@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "test": "node test/mapiranje.test.mjs && node test/asistent.test.mjs && node test/pozadina.test.mjs && node test/citac.test.mjs && node test/postgrest.test.mjs"
+    "test": "node test/mapiranje.test.mjs && node test/asistent.test.mjs && node test/pozadina.test.mjs && node test/citac.test.mjs && node test/postgrest.test.mjs && node test/tekst.test.mjs && node test/vrijeme.test.mjs && node test/utakmice.test.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.115.0",

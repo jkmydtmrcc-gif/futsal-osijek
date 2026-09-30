@@ -477,7 +477,7 @@ export const PAGES = {
     navId: 'raspored',
     eyebrow: 'SuperSport HMNL',
     title: 'Raspored i tablica',
-    lead: 'Poredak i termini sezone 2026/27 upisuju se čim ih HMNL objavi.',
+    lead: 'Svi termini, rezultati i poredak u SuperSport HMNL-u i Hrvatskom kupu.',
   },
   '/shop': {
     navId: 'shop',

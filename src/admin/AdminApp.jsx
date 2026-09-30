@@ -3,8 +3,12 @@ import { Link } from 'react-router-dom';
 import { supabase, supabaseConfigured } from '../lib/supabase';
 import Urednik from './Urednik';
 import Prijava from './Prijava';
-import { Polje, Tekst, Kvacica, SlikaPolje } from './Polja';
+import { Polje, Tekst, Kvacica, SlikaPolje, Broj, DatumVrijeme, Odabir } from './Polja';
 import Statistika from './Statistika';
+import Strijelci from './Strijelci';
+import UvozRasporeda from './UvozRasporeda';
+import useTable from './useTable';
+import { formatDatum, formatSat } from '../lib/vrijeme';
 import Postavke from './Postavke';
 import './admin.css';
 
@@ -17,6 +21,21 @@ const KARTICE = [
   { id: 'sponzori', label: 'Sponzori' },
   { id: 'postavke', label: 'Tekstovi i kontakt' },
 ];
+
+const STATUSI = [
+  { value: '', label: 'Uobičajeno' },
+  { value: 'odgodeno', label: 'Odgođeno' },
+  { value: 'otkazano', label: 'Otkazano' },
+];
+
+/** `17.10. 19:00 · Osijek Kandit 3:2 Futsal Dinamo` — da je popis pregledan. */
+function opisUtakmice(r) {
+  const kad = r.kickoff ? `${formatDatum(r.kickoff)} ${formatSat(r.kickoff)}` : r.when || '';
+  const momcadi = r.home && r.away ? `${r.home} — ${r.away}` : r.title || 'Nova utakmica';
+  const ima = (v) => v !== null && v !== undefined && v !== '';
+  const rez = ima(r.home_score) && ima(r.away_score) ? ` ${r.home_score}:${r.away_score}` : '';
+  return [kad, `${momcadi}${rez}`].filter(Boolean).join(' · ');
+}
 
 export default function AdminApp() {
   const [sesija, setSesija] = useState(undefined); // undefined = još provjeravam
@@ -126,24 +145,7 @@ export default function AdminApp() {
           />
         )}
 
-        {kartica === 'utakmice' && (
-          <Urednik
-            naslov="Nadolazeće utakmice"
-            opis="Prikazuju se na naslovnici i na stranici Raspored."
-            tablica="utakmice"
-            opisRetka={(r) => r.title || 'Nova utakmica'}
-            prazan={(r) => ({ sort_order: r.length + 1, when: '', comp: '', title: 'Domaći — Gosti', venue: '' })}
-            polja={(n, set) => (
-              <>
-                <Polje label="Kada" value={n.when} onChange={set('when')} placeholder="Sub 17.10." />
-                <Polje label="Natjecanje" value={n.comp} onChange={set('comp')} placeholder="HMNL · 7. kolo" />
-                <Polje label="Susret" value={n.title} onChange={set('title')} placeholder="Osijek Kandit — Futsal Dinamo" />
-                <Polje label="Dvorana" value={n.venue} onChange={set('venue')} />
-                <Polje label="Redoslijed" type="number" value={n.sort_order} onChange={set('sort_order')} />
-              </>
-            )}
-          />
-        )}
+        {kartica === 'utakmice' && <KarticaUtakmice />}
 
         {kartica === 'tablica' && (
           <Urednik
@@ -213,5 +215,65 @@ export default function AdminApp() {
         {kartica === 'postavke' && <Postavke />}
       </main>
     </div>
+  );
+}
+
+/**
+ * Utakmice.
+ *
+ * Popis igrača se učitava ovdje, a ne u svakom retku, jer ga treba svaki
+ * podurednik strijelaca — inače bi ga svaka otvorena utakmica povlačila
+ * iznova.
+ *
+ * Rezultat se namjerno upisuje u dva odvojena polja i smije ostati prazan:
+ * prazno znači „još nije odigrano", a nula znači nula golova. Da je jedno
+ * tekstualno polje, „3:2" bi se moralo rastavljati i pogađati.
+ */
+function KarticaUtakmice() {
+  const { redovi: igraci } = useTable('igraci', 'sort_order');
+  // Uvoz je skupljen, jer se koristi jednom po sezoni — ne treba stajati
+  // otvoren iznad popisa svaki put kad se ispravlja rezultat.
+  const [uvoz, setUvoz] = useState(false);
+  const [osvjezi, setOsvjezi] = useState(0);
+
+  return (
+    <>
+      <button type="button" className="agumb agumb--pod auvoz__prekidac" onClick={() => setUvoz((v) => !v)}>
+        {uvoz ? '− Sakrij uvoz rasporeda' : '+ Uvezi cijeli raspored lijepljenjem'}
+      </button>
+      {uvoz && <UvozRasporeda naKraju={() => setOsvjezi((n) => n + 1)} />}
+
+      <Urednik
+      key={osvjezi}
+      naslov="Utakmice"
+      opis="Termin, rezultat i strijelci. Odigrane se same sele u rezultate — ne treba ih nikamo prebacivati."
+      tablica="utakmice"
+      opisRetka={opisUtakmice}
+      prazan={(r) => ({
+        sort_order: r.length + 1,
+        comp: 'SuperSport HMNL',
+        round: '',
+        home: 'Osijek Kandit',
+        away: '',
+        venue: 'Športska dvorana Zrinjevac',
+        status: '',
+      })}
+      podsadrzaj={(red) => <Strijelci utakmicaId={red.id} igraci={igraci} />}
+      polja={(n, set) => (
+        <>
+          <DatumVrijeme label="Termin" value={n.kickoff} onChange={set('kickoff')} />
+          <Polje label="Natjecanje" value={n.comp} onChange={set('comp')} placeholder="SuperSport HMNL" />
+          <Polje label="Kolo" value={n.round} onChange={set('round')} placeholder="7. kolo" />
+          <Polje label="Domaćin" value={n.home} onChange={set('home')} placeholder="Osijek Kandit" />
+          <Polje label="Gost" value={n.away} onChange={set('away')} placeholder="Futsal Dinamo" />
+          <Broj label="Golovi domaćina" value={n.home_score} onChange={set('home_score')} min="0" />
+          <Broj label="Golovi gosta" value={n.away_score} onChange={set('away_score')} min="0" />
+          <Polje label="Dvorana" value={n.venue} onChange={set('venue')} />
+          <Odabir label="Status" value={n.status} onChange={set('status')} opcije={STATUSI} />
+          <Polje label="Redoslijed" type="number" value={n.sort_order} onChange={set('sort_order')} />
+        </>
+      )}
+      />
+    </>
   );
 }

@@ -310,3 +310,67 @@ where not exists (select 1 from sponzori);
 --      grb ne upiše — tuđi grbovi nisu klupsko vlasništvo)
 update tablica set logo = '/uploads/images.jpeg'
 where club = 'Osijek Kandit' and coalesce(logo, '') = '';
+
+-- ─────────────────────────────────────────────────────────────
+-- 5. Utakmica kao pravi zapis
+--
+-- Do sada je utakmica bila natpis: `when` slobodan tekst („Sub 17.10.")
+-- i `title` jedan niz („Osijek Kandit — Futsal Dinamo"). Iz natpisa se ne
+-- da izvesti ni sljedeća utakmica, ni podjela na odigrano i nadolazeće,
+-- ni forma, ni rezultat.
+--
+-- Stari stupci ostaju i dalje rade: dok je `kickoff` prazan, stranica
+-- prikazuje redak točno kao prije.
+-- ─────────────────────────────────────────────────────────────
+
+do $$
+begin
+  if to_regclass('public.utakmice') is null then
+    raise exception
+      'Tablice ne postoje. Najčešći uzrok: zalijepljen je samo dio datoteke. Kopiraj schema.sql od prvog retka (na GitHubu: Raw → Ctrl+A → Ctrl+C) i pokreni ponovno.';
+  end if;
+end $$;
+
+-- 5.1 Termin, momčadi i rezultat
+-- `kickoff` namjerno nema zadanu vrijednost: prazno znači „stari tekstualni
+-- redak", a to je točno signal koji stranici treba.
+alter table utakmice add column if not exists kickoff    timestamptz;
+alter table utakmice add column if not exists home       text not null default '';
+alter table utakmice add column if not exists away       text not null default '';
+-- Rezultat smije biti prazan. `null` nije `0` — 0:0 je rezultat.
+alter table utakmice add column if not exists home_score int;
+alter table utakmice add column if not exists away_score int;
+alter table utakmice add column if not exists status     text not null default '';
+alter table utakmice add column if not exists round      text not null default '';
+alter table utakmice add column if not exists season     text not null default '';
+alter table utakmice add column if not exists slug       text not null default '';
+
+create index if not exists utakmice_kickoff on utakmice(kickoff);
+
+-- 5.2 Strijelci
+-- `igrac_id` veže gol uz našeg igrača; `ime` pokriva protivničke strijelce,
+-- kojih nema u tablici `igraci`.
+create table if not exists strijelci (
+  id          uuid primary key default gen_random_uuid(),
+  utakmica_id uuid not null references utakmice(id) on delete cascade,
+  igrac_id    uuid references igraci(id) on delete set null,
+  ime         text not null default '',
+  minuta      int,
+  vrsta       text not null default 'gol',   -- gol | penal | autogol
+  sort_order  int  not null default 0,
+  created_at  timestamptz not null default now()
+);
+create index if not exists strijelci_utakmica on strijelci(utakmica_id);
+
+-- 5.3 Pristup: čita svatko, mijenja samo prijavljeni
+alter table strijelci enable row level security;
+
+do $$
+begin
+  drop policy if exists "javno citanje" on strijelci;
+  drop policy if exists "uredjivanje za prijavljene" on strijelci;
+
+  create policy "javno citanje" on strijelci for select using (true);
+  create policy "uredjivanje za prijavljene" on strijelci for all
+    to authenticated using (true) with check (true);
+end $$;

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { supabase } from '../lib/supabase';
 import { pripremiPortret, pripremiSliku } from '../lib/slika';
+import { spojiDatumVrijeme, razdvojiDatumVrijeme } from '../lib/vrijeme';
 
 /** Sitni gradivni dijelovi obrazaca — da svaki uređivač ne ponavlja isto. */
 
@@ -15,6 +16,85 @@ export function Polje({ label, value, onChange, type = 'text', ...rest }) {
         onChange={(e) => onChange(type === 'number' ? Number(e.target.value) : e.target.value)}
         {...rest}
       />
+    </label>
+  );
+}
+
+/**
+ * Broj koji smije biti prazan.
+ *
+ * Obično `Polje type="number"` radi `Number('')` → `0`. Za rezultat je to
+ * kriva vrijednost: prazno znači „još nije odigrano", a `0` znači „primili su
+ * nula golova". Bez ove razlike bi svaka nadolazeća utakmica izgledala kao
+ * 0:0.
+ */
+export function Broj({ label, value, onChange, ...rest }) {
+  return (
+    <label className="apolje apolje--broj">
+      <span className="apolje__label">{label}</span>
+      <input
+        className="apolje__input"
+        type="number"
+        value={value ?? ''}
+        onChange={(e) => onChange(e.target.value === '' ? null : Number(e.target.value))}
+        {...rest}
+      />
+    </label>
+  );
+}
+
+/**
+ * Termin utakmice: domaći odabir datuma i sata.
+ *
+ * Dva domaća polja umjesto jednog `datetime-local` — `datetime-local` je na
+ * dijelu preglednika i dalje obično tekstualno polje, a nitko neće tipkati
+ * `2026-10-17T19:00`. Spajaju se uz pomak zagrebačke zone koji vrijedi baš
+ * tog datuma, pa utakmica u noći prijelaza na ljetno vrijeme ne ispadne sat
+ * krivo.
+ */
+export function DatumVrijeme({ label, value, onChange }) {
+  const { datum, vrijeme } = razdvojiDatumVrijeme(value);
+
+  const promijeni = (noviDatum, novoVrijeme) => {
+    if (!noviDatum) return onChange(null);
+    onChange(spojiDatumVrijeme(noviDatum, novoVrijeme || '00:00'));
+  };
+
+  return (
+    <div className="apolje apolje--termin">
+      <span className="apolje__label">{label}</span>
+      <div className="atermin">
+        <input
+          className="apolje__input"
+          type="date"
+          value={datum}
+          onChange={(e) => promijeni(e.target.value, vrijeme)}
+          aria-label={`${label} — datum`}
+        />
+        <input
+          className="apolje__input apolje__input--sat"
+          type="time"
+          value={vrijeme}
+          onChange={(e) => promijeni(datum, e.target.value)}
+          aria-label={`${label} — sat`}
+        />
+      </div>
+    </div>
+  );
+}
+
+/** Odabir iz zadanog popisa (status utakmice, vrsta gola…). */
+export function Odabir({ label, value, onChange, opcije }) {
+  return (
+    <label className="apolje">
+      <span className="apolje__label">{label}</span>
+      <select className="apolje__input" value={value ?? ''} onChange={(e) => onChange(e.target.value)}>
+        {opcije.map((o) => (
+          <option value={o.value} key={o.value}>
+            {o.label}
+          </option>
+        ))}
+      </select>
     </label>
   );
 }

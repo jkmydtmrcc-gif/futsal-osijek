@@ -83,7 +83,10 @@ export default function Raspored() {
                   </span>
                 </div>
 
-                <p className="standings__note">{league.note}</p>
+                {/* Napomena da su podaci ogledni stoji samo dok stvarno jesu.
+                  Čim baza vrati utakmice, `demo` padne na `false` i priznanje
+                  nestane samo — bez da se itko toga mora sjetiti. */}
+              {league.demo && <p className="standings__note">{league.note}</p>}
               </div>
             </Reveal>
 

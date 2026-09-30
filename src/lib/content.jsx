@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { bazaPostavljena, procitaj } from './citac';
+import { matchFromRow, razvrstaj, forma } from './utakmice';
 import {
   merge,
   zadaniSadrzaj,
@@ -91,7 +92,25 @@ export function ContentProvider({ children }) {
           };
         }
 
-        if (utakmice.data?.length) next.league = { ...next.league, fixtures: utakmice.data };
+        /* Utakmice iz baze prolaze kroz `matchFromRow`, koji zna i za stare
+           retke bez termina i rezultata — pa nenadograđena baza daje točno
+           današnji prikaz. `fixtures` i `results` zadržavaju oblik koji
+           `Hero`, `League` i `Raspored` već čitaju, zato se tamo ništa ne
+           mijenja da bi rezultati proradili. */
+        if (utakmice.data?.length) {
+          const svi = utakmice.data.map((row) => matchFromRow(row, next.league.ourClub));
+          const { nadolazece, odigrane, sljedeca, zadnja } = razvrstaj(svi, Date.now());
+          next.league = {
+            ...next.league,
+            demo: false,
+            matches: svi,
+            fixtures: nadolazece,
+            results: odigrane,
+            sljedeca,
+            zadnja,
+            forma: forma(odigrane),
+          };
+        }
         if (tablica.data?.length) next.league = { ...next.league, standings: tablica.data };
         if (artikli.data?.length) {
           next.shop = { ...next.shop, products: artikli.data.map(productFromRow) };

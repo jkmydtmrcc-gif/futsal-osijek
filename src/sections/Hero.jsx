@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import Pip from '../components/Pip';
 import { useContent } from '../lib/content';
+import { formatSat, opisRazmaka } from '../lib/vrijeme';
 
 /**
  * Hero ne koristi <Reveal> — sadržaj je odmah u kadru, pa ulazne animacije
@@ -65,11 +66,21 @@ export default function Hero() {
             <div className="hero__facts hero__next">
               <span className="eyebrow eyebrow--sm">Sljedeća utakmica</span>
               <div className="hero__next-meta">
-                <span className="hero__next-when">{sljedeca.when}</span>
-                <span className="hero__next-comp">{sljedeca.comp}</span>
+                <span className="hero__next-when">
+                  {sljedeca.when}
+                  {/* Sat ide uz datum tek kad je termin pravi. Kod starog
+                      tekstualnog retka sata nema, pa se ne izmišlja. */}
+                  {sljedeca.kickoff ? ` ${formatSat(sljedeca.kickoff)}` : ''}
+                </span>
+                <span className="hero__next-comp">
+                  {[sljedeca.comp, sljedeca.round].filter(Boolean).join(' · ')}
+                </span>
               </div>
               <h2 className="hero__next-title">{sljedeca.title}</h2>
-              <span className="hero__next-venue">{sljedeca.venue}</span>
+              <span className="hero__next-venue">
+                {sljedeca.venue}
+                {sljedeca.kickoff ? ` · ${opisRazmaka(sljedeca.kickoff)}` : ''}
+              </span>
               <Link className="hero__next-link" to="/raspored">
                 Cijeli raspored i tablica →
               </Link>

@@ -4,6 +4,7 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import ScrollToTop from './components/ScrollToTop';
 import KolaciciTraka from './components/Kolacici';
+import TrakaUtakmice from './components/TrakaUtakmice';
 import Asistent from './components/Asistent';
 import Partners from './sections/Partners';
 import Naslovnica from './pages/Naslovnica';
@@ -59,6 +60,10 @@ export default function App() {
 
       <div className="page">
         <Header />
+
+        {/* Zadnji rezultat i sljedeća utakmica stoje izvan <Routes>, pa su
+            na svakoj stranici — navijač to traži prvo, bez obzira gdje je. */}
+        <TrakaUtakmice />
 
         <main id="sadrzaj">
           {/* `key` je pathname: pri promjeni rute se blok ponovno montira,

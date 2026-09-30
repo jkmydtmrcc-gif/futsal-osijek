@@ -328,3 +328,55 @@
   font-family: var(--font-mono);
   font-size: 12px;
 }
+
+/* Termin: datum i sat jedan uz drugi, jer su jedno polje u dva dijela. */
+.atermin { display: flex; gap: 8px; }
+.atermin .apolje__input { flex: 1 1 auto; min-width: 0; }
+.apolje__input--sat { flex: 0 0 110px; }
+.apolje--broj .apolje__input { max-width: 110px; }
+
+/* Strijelci jedne utakmice. */
+.astrijelci { margin-top: 14px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,.1); }
+.astrijelci__vrh { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.astrijelci__redak {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 10px;
+  margin-top: 10px;
+  padding: 12px;
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 6px;
+}
+.astrijelci__radnje { display: flex; align-items: flex-end; gap: 8px; }
+
+@media (max-width: 560px) {
+  .astrijelci__redak { grid-template-columns: 1fr; }
+}
+
+/* Uvoz rasporeda lijepljenjem. */
+.auvoz__prekidac { margin-bottom: 10px; }
+.auvoz__postavke { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 14px; }
+.auvoz__gumbi { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+
+.auvoz__pregled { margin-top: 14px; border: 1px solid rgba(255,255,255,.1); border-radius: 6px; overflow: hidden; }
+.auvoz__redak {
+  display: grid;
+  grid-template-columns: 150px 1fr 200px;
+  gap: 12px;
+  padding: 9px 12px;
+  font-size: 13px;
+  border-bottom: 1px solid rgba(255,255,255,.07);
+}
+.auvoz__redak:last-child { border-bottom: 0; }
+/* Redak koji se ne da pročitati ostaje vidljiv — tiho preskakanje bi značilo
+   da klub misli da je upisao cijelo kolo, a fali mu utakmica. */
+.auvoz__redak.je-sporan { background: rgba(226,88,88,.12); color: #ffc2c2; }
+.auvoz__kad { font-variant-numeric: tabular-nums; color: #94a8c8; }
+.auvoz__susret { font-weight: 600; }
+.auvoz__dvorana { color: #94a8c8; }
+.anapomena--ok { color: #7fe0a8; }
+
+@media (max-width: 700px) {
+  .auvoz__redak { grid-template-columns: 1fr; gap: 2px; }
+}

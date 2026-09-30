@@ -34,12 +34,61 @@ Postavljanje baze i popis svega što se uređuje: **[ADMIN.md](ADMIN.md)**.
 | `/ulaznice` | Dolazak na Zrinjevac i česta pitanja |
 | `/admin` | Administracija (Supabase prijava) |
 
+## Utakmica
+
+Utakmica je zapis, ne natpis. `utakmice` uz stare `when` i `title` nosi i
+`kickoff` (pravi trenutak), razdvojene `home`/`away`, rezultat koji smije biti
+prazan, `round` i `status`; golovi su u tablici `strijelci`.
+
+Iz toga se onda izvodi sve ostalo (`src/lib/utakmice.js`): zadnji rezultat,
+sljedeća utakmica, podjela na odigrano i nadolazeće, ishod P/N/I iz kuta našeg
+kluba i forma. Datumi idu preko ugrađenog `Intl` (`src/lib/vrijeme.js`), u
+zagrebačkoj zoni — utakmica počinje u 19:00 po Zagrebu i za navijača u
+Münchenu.
+
+**Traka ispod zaglavlja** (`TrakaUtakmice.jsx`) pokazuje zadnji rezultat i
+sljedeći termin na svakoj stranici. Namjerno bez otkucavajućeg brojača:
+„za 3 dana · Sub 19:00" kaže sve, a sekunde koje skaču oduzimaju ozbiljnost.
+Kad nema ni jednog ni drugog, trake nema — prazan okvir s crticama izgleda
+gore nego ništa.
+
+### Kako preživi nenadograđenu bazu
+
+Ključ je `razdvojiNaziv()`: „Osijek Kandit — Futsal Dinamo" se rastavlja na
+domaćina i gosta, pa sučelje s razdvojenim momčadima radi **prije** migracije.
+Crtica se prihvaća samo kad je okružena razmacima — inače bi „Torcida-Biberon"
+postala dva kluba.
+
+| Stanje baze | Što posjetitelj vidi |
+| --- | --- |
+| nema Supabasea | ugrađeni termini, bez rezultata, bez trake, napomena vidljiva |
+| stara shema | termin ostaje stari tekst, momčadi iz naslova, bez rezultata |
+| nova shema | traka, podjela, rezultati, forma |
+
+Napomena da su podaci ogledni vezana je uz `league.demo` — čim baza vrati
+utakmice, nestane sama. Nitko je ne mora obrisati.
+
+### Uvoz rasporeda
+
+Nitko neće kroz obrazac utipkati 22 termina, pa bi sve gore ostalo prazno.
+`Utakmice → Uvezi cijeli raspored lijepljenjem` prima ono što se dobije kad se
+kolo označi na **HNS Semaforu** (`semafor.hns.family` → SuperSport HMNL):
+datum u više oblika, sat s dvotočjem ili točkom, stupce odvojene uspravnom
+crtom, tabulatorom ili s dva razmaka. Prvo se pokaže što je pročitano, upis ide
+tek na potvrdu, a redak koji se ne da pročitati **ostaje vidljiv s razlogom** —
+tiho preskakanje bi značilo da klub misli da je upisao cijelo kolo, a fali mu
+utakmica.
+
 ## Redoslijed na naslovnici
 
-`Hero → Impact → News → Squad → League → Venue → Shop`, pa partneri i
-podnožje iz okvira stranice. `Impact` je uska traka s brojkama i drži se
-heroja kao njegov podnožak, a `Venue` je fotografija dvorane koja razdvaja
+`TrakaUtakmice → Hero → News → Squad → League → Venue → Shop`, pa partneri i
+podnožje iz okvira stranice. `Venue` je fotografija dvorane koja razdvaja
 tablicu od trgovine.
+
+Traka s klupskim brojkama (`Impact`: 2002. · 1.160 · 2. · 2024/25) je
+maknuta — ponavljala je ono što već piše u heroju i nije se mijenjala
+godinama. Na tom mjestu sada stoji traka s utakmicom: klupska stranica ondje
+ima utakmicu, ne godinu osnutka.
 
 Plohe se pritom izmjenjuju: bijela, paper, bijela, tamna, fotografija, plava.
 Zato je odsječak momčadi bijel, a ne paper — novosti su odmah iznad i također
