@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import Reveal from './Reveal';
+import Reveal, { stupnjevito } from './Reveal';
 
 /** Ime se lomi na prvo i zadnje ("Everton Cardoso — Gallo" → Everton Cardoso / Gallo). */
 function splitName(name) {
@@ -31,7 +31,7 @@ export default function PlayerCard({ player, index = 0, onOpen }) {
       onClick={onOpen}
       aria-label={onOpen ? `${player.name} — otvori profil` : undefined}
       variant="blur"
-      delay={index * 70}
+      delay={stupnjevito(index)}
       className={`player${showPhoto ? ' has-photo' : ''}${onOpen ? ' player--btn' : ''}`}
     >
       {/* Broj na dresu, ne redni broj u popisu. */}

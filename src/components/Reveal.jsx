@@ -1,6 +1,18 @@
 import { useEffect, useRef, useState } from 'react';
 
 /**
+ * Kašnjenje za niz kartica — s gornjom granicom.
+ *
+ * Bez granice dvadeset kartica puta 70 ms znači da zadnja čeka sekundu i pol
+ * prije nego se uopće pojavi. To se ne čita kao pažnja prema detalju nego kao
+ * predložak koji dijeli karte. Nekoliko prvih kartica dovoljno je da se vidi
+ * da niz ima smjer; ostatak dolazi s njima.
+ *
+ * Tablice i popisi ovo **ne** koriste — oni se pojavljuju odjednom.
+ */
+export const stupnjevito = (i, korak = 70, najvise = 4) => Math.min(i, najvise) * korak;
+
+/**
  * Otkriva sadržaj kad uđe u vidno polje.
  *
  * Renderira se KAO traženi element (`as`), a ne kao dodatni omotač, da ne

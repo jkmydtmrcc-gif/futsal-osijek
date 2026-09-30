@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import Reveal from './Reveal';
+import Reveal, { stupnjevito } from './Reveal';
 import ProductPlaceholder from './ProductPlaceholder';
 
 /**
@@ -20,7 +20,7 @@ export default function ProductCard({ product, index = 0 }) {
     <Reveal
       as="a"
       variant="blur"
-      delay={index * 70}
+      delay={stupnjevito(index)}
       className="product"
       href={product.href}
       target="_blank"

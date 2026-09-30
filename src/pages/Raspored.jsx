@@ -55,10 +55,12 @@ export default function Raspored() {
               <Tablica legenda />
             </Reveal>
 
-            <div className="fixtures">
+            {/* Popis se pojavljuje odjednom: raspored koji se dijeli kao
+                karte izgleda kao predložak, a ne kao kalendar sezone. */}
+            <Reveal variant="right" className="fixtures">
               <span className="eyebrow eyebrow--sky eyebrow--sm">Nadolazeće utakmice</span>
-              {league.fixtures.map((f, i) => (
-                <Reveal variant="right" delay={i * 110} className="fixture" key={f.title}>
+              {league.fixtures.map((f) => (
+                <div className="fixture" key={f.title}>
                   <div className="fixture__meta">
                     <span className="fixture__when">{f.when}</span>
                     <Pip size="sm" />
@@ -66,26 +68,23 @@ export default function Raspored() {
                   </div>
                   <h3 className="fixture__title">{f.title}</h3>
                   <span className="fixture__venue">{f.venue}</span>
-                </Reveal>
+                </div>
               ))}
 
-              <Reveal variant="right" delay={360}>
-                <Link className="league__cta" to={TICKETS_PATH}>
-                  Dolazak na Zrinjevac
-                  <Pip size="lg" tone="cur" />
-                </Link>
-              </Reveal>
-
-            </div>
+              <Link className="league__cta" to={TICKETS_PATH}>
+                Dolazak na Zrinjevac
+                <Pip size="lg" tone="cur" />
+              </Link>
+            </Reveal>
           </div>
 
           <Reveal className="league__clubs" delay={180}>
             <span className="eyebrow eyebrow--sky eyebrow--sm">Svi klubovi lige</span>
             <div className="clubs__list">
-              {league.clubs.map((c, i) => (
-                <Reveal as="span" variant="scale" delay={120 + i * 40} className="clubs__chip" key={c}>
+              {league.clubs.map((c) => (
+                <span className="clubs__chip" key={c}>
                   {c}
-                </Reveal>
+                </span>
               ))}
             </div>
             <p className="slab__foot slab__foot--light">
@@ -111,18 +110,18 @@ export default function Raspored() {
               </h2>
             </Reveal>
 
-            <div className="results">
-              {league.results.map((r, i) => (
-                <Reveal className="result" delay={i * 90} key={`${r.when}-${r.title}`}>
+            <Reveal className="results">
+              {league.results.map((r) => (
+                <div className="result" key={`${r.when}-${r.title}`}>
                   <span className="result__when">{r.when}</span>
                   <h3 className="result__title">{r.title}</h3>
                   <span className={`result__score result__score--${r.outcome || 'n'}`}>
                     {r.score}
                   </span>
                   <span className="result__comp">{r.comp}</span>
-                </Reveal>
+                </div>
               ))}
-            </div>
+            </Reveal>
           </div>
         </section>
       )}

@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import Reveal from './Reveal';
+import Reveal, { stupnjevito } from './Reveal';
 
 /**
  * Kartica novosti. Cijela je poveznica na pojedinačnu novost, a kad novost
@@ -25,7 +25,7 @@ export default function NewsCard({ item, index = 0, delay = 0 }) {
 
   if (!item.id) {
     return (
-      <Reveal as="article" variant="right" delay={delay + index * 110} className="news-card">
+      <Reveal as="article" variant="right" delay={delay + stupnjevito(index, 110, 3)} className="news-card">
         {inner}
       </Reveal>
     );
@@ -36,7 +36,7 @@ export default function NewsCard({ item, index = 0, delay = 0 }) {
       as={Link}
       to={`/novosti/${item.id}`}
       variant="right"
-      delay={delay + index * 110}
+      delay={delay + stupnjevito(index, 110, 3)}
       className="news-card news-card--link"
     >
       {inner}

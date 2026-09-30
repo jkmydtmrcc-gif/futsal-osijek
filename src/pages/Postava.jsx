@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import Reveal from '../components/Reveal';
+import Reveal, { stupnjevito } from '../components/Reveal';
 import PageHero from '../components/PageHero';
 import PlayerCard from '../components/PlayerCard';
 import PlayerModal from '../components/PlayerModal';
@@ -58,13 +58,16 @@ export default function Postava() {
       <section className="slab slab--numbers" aria-label="Brojevi na dresovima">
         <div className="shell">
           <span className="eyebrow numbers-head">Brojevi na dresovima</span>
-          <div className="numbers">
-            {players.map((p, i) => (
-              <Reveal as="span" variant="scale" delay={i * 45} className="numbers__n" key={p.name}>
+          {/* Brojevi se pojavljuju odjednom. Iskakali su jedan po jedan, a
+              dvadeset brojeva puta 45 ms je gotovo sekunda skakanja — to je
+              gif, ne popis momčadi. */}
+          <Reveal className="numbers">
+            {players.map((p) => (
+              <span className="numbers__n" key={p.name}>
                 {p.number}
-              </Reveal>
+              </span>
             ))}
-          </div>
+          </Reveal>
         </div>
       </section>
 
@@ -113,7 +116,7 @@ export default function Postava() {
 
           <div className="staff-grid">
             {staff.map((s, i) => (
-              <Reveal className="staff-card" delay={i * 110} key={s.role}>
+              <Reveal className="staff-card" delay={stupnjevito(i, 110, 3)} key={s.role}>
                 <span className="staff-card__role">{s.role}</span>
                 <h3 className="staff-card__name">{s.name}</h3>
               </Reveal>

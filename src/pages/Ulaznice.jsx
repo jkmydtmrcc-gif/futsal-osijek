@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Pip from '../components/Pip';
-import Reveal from '../components/Reveal';
+import Reveal, { stupnjevito } from '../components/Reveal';
 import PageHero from '../components/PageHero';
 import { CONTACT_PATH } from '../data/site';
 import { useContent } from '../lib/content';
@@ -47,7 +47,7 @@ export default function Ulaznice() {
 
             <div className="infolist">
               {tickets.info.map((row, i) => (
-                <Reveal className="infolist__row" delay={i * 80} key={row.label}>
+                <Reveal className="infolist__row" delay={stupnjevito(i, 80, 3)} key={row.label}>
                   <span className="infolist__label">{row.label}</span>
                   <span className="infolist__value">{row.value}</span>
                 </Reveal>
@@ -97,9 +97,9 @@ export default function Ulaznice() {
               </Reveal>
             </div>
 
-            <div className="fixtures fixtures--row">
-              {league.fixtures.map((f, i) => (
-                <Reveal className="fixture" delay={i * 100} key={f.title}>
+            <Reveal className="fixtures fixtures--row">
+              {league.fixtures.map((f) => (
+                <div className="fixture" key={f.title}>
                   <div className="fixture__meta">
                     <span className="fixture__when">{f.when}</span>
                     <Pip size="sm" />
@@ -107,9 +107,9 @@ export default function Ulaznice() {
                   </div>
                   <h3 className="fixture__title">{f.title}</h3>
                   <span className="fixture__venue">{f.venue}</span>
-                </Reveal>
+                </div>
               ))}
-            </div>
+            </Reveal>
           </div>
         </section>
       )}
@@ -126,7 +126,7 @@ export default function Ulaznice() {
 
           <div className="faq">
             {tickets.faq.map((row, i) => (
-              <Reveal className={`faq__item${open === i ? ' is-open' : ''}`} delay={i * 80} key={row.q}>
+              <Reveal className={`faq__item${open === i ? ' is-open' : ''}`} delay={stupnjevito(i, 80, 3)} key={row.q}>
                 <button
                   type="button"
                   className="faq__q"

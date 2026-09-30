@@ -1,5 +1,5 @@
 import Pip from '../components/Pip';
-import Reveal from '../components/Reveal';
+import Reveal, { stupnjevito } from '../components/Reveal';
 import PageHero from '../components/PageHero';
 import { useContent } from '../lib/content';
 
@@ -61,7 +61,7 @@ export default function Kolacici() {
 
           <div className="infolist infolist--wide">
             {STAVKE.map((s, i) => (
-              <Reveal className="ckrow" delay={i * 90} key={s.naziv}>
+              <Reveal className="ckrow" delay={stupnjevito(i, 90, 3)} key={s.naziv}>
                 <div className="ckrow__head">
                   <h3 className="ckrow__name">{s.naziv}</h3>
                   <span className="ckrow__kind">{s.vrsta}</span>

@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import Pip from '../components/Pip';
-import Reveal from '../components/Reveal';
+import Reveal, { stupnjevito } from '../components/Reveal';
 import PageHero from '../components/PageHero';
 import { TICKETS_PATH } from '../data/site';
 import { useContent } from '../lib/content';
@@ -25,7 +25,7 @@ export default function Klub() {
       <section className="slab" aria-label="Klub u brojkama">
         <div className="shell facts">
           {club.facts.map((f, i) => (
-            <Reveal className="facts__cell" key={f.label} delay={i * 90}>
+            <Reveal className="facts__cell" key={f.label} delay={stupnjevito(i, 90, 3)}>
               <span className="facts__value">{f.value}</span>
               <span className="facts__label">{f.label}</span>
             </Reveal>
@@ -90,7 +90,7 @@ export default function Klub() {
 
           <div className="honours">
             {club.honours.map((h, i) => (
-              <Reveal className="honour" key={h.title} delay={120 + i * 110} variant="right">
+              <Reveal className="honour" key={h.title} delay={120 + stupnjevito(i, 110, 3)} variant="right">
                 <span className="honour__when">{h.when}</span>
                 <div>
                   <h3 className="honour__title">{h.title}</h3>
@@ -122,7 +122,7 @@ export default function Klub() {
             {league.timeline.map((entry, i) => (
               <Reveal
                 className="timeline__item"
-                delay={100 + i * 90}
+                delay={100 + stupnjevito(i, 90, 3)}
                 key={`${entry.when}-${entry.title}`}
               >
                 <span className="timeline__when">{entry.when}</span>

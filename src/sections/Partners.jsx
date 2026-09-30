@@ -117,17 +117,13 @@ export default function Partners() {
                   </Marquee>
                 </>
               ) : (
+                /* Cijela razina se pojavi odjednom — logotipi koji uskaču
+                   jedan po jedan djeluju kao da ih se broji. */
                 <div className="tier__grid">
                   {tier.sponsors.map((sponsor, i) => (
-                    <Reveal
-                      as="div"
-                      variant="scale"
-                      delay={i * 45}
-                      key={`${sponsor.name}-${i}`}
-                      className="tier__cell"
-                    >
+                    <div key={`${sponsor.name}-${i}`} className="tier__cell">
                       <SponsorCell sponsor={sponsor} size={tier.size} />
-                    </Reveal>
+                    </div>
                   ))}
                 </div>
               )}

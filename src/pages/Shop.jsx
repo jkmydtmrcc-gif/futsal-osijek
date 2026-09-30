@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import Pip from '../components/Pip';
-import Reveal from '../components/Reveal';
+import Reveal, { stupnjevito } from '../components/Reveal';
 import PageHero from '../components/PageHero';
 import ProductCard from '../components/ProductCard';
 import ProductArt from '../components/ProductArt';
@@ -196,7 +196,7 @@ export default function Shop() {
               <Reveal
                 as="a"
                 variant="blur"
-                delay={i * 90}
+                delay={stupnjevito(i, 90, 3)}
                 className="shop-card shop-card--paper"
                 key={item.href}
                 href={item.href}
@@ -215,7 +215,7 @@ export default function Shop() {
 
           <div className="steps">
             {shop.steps.map((step, i) => (
-              <Reveal className="step" delay={i * 100} key={step.n}>
+              <Reveal className="step" delay={stupnjevito(i, 100, 3)} key={step.n}>
                 <span className="step__n">{step.n}</span>
                 <h3 className="step__title">{step.title}</h3>
                 <p className="step__note">{step.note}</p>
