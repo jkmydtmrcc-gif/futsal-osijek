@@ -126,7 +126,7 @@ export default function AdminApp() {
         {kartica === 'novosti' && (
           <Urednik
             naslov="Novosti"
-            opis="Označena vijest ide u veliki okvir na naslovnici i stranici Novosti. Označi samo jednu."
+            opis="Svaka vijest ima svoju stranicu. Označena ide u veliki okvir na naslovnici i stranici Novosti — označi samo jednu; ne označiš li nijednu, u okvir ide prva po redoslijedu. Fotografija se vidi na kartici i u okviru; bez nje kartica pokaže klupsku plohu s grbom."
             tablica="novosti"
             opisRetka={(r) => r.title || 'Nova vijest'}
             prazan={(r) => ({ sort_order: r.length, date: '', cat: '', title: 'Nova vijest', lead: '', body: '', image: '', slug: '', featured: false })}
@@ -137,7 +137,14 @@ export default function AdminApp() {
                 <Polje label="Kategorija" value={n.cat} onChange={set('cat')} placeholder="Liga" />
                 <Tekst label="Uvod" value={n.lead} onChange={set('lead')} />
                 <Tekst label="Tekst objave (prazan red između odlomaka)" rows={8} value={n.body} onChange={set('body')} />
-                <Polje label="Adresa objave" value={n.slug} onChange={set('slug')} placeholder="vitor-lima-povratak" />
+                {/* Prazna adresa i dalje radi — poveznica tada nosi ključ iz
+                    baze. Zato napomena, a ne obavezno polje. */}
+                <Polje
+                  label="Adresa objave (ostavi li se prazna, adresa bude niz slova i brojki)"
+                  value={n.slug}
+                  onChange={set('slug')}
+                  placeholder="vitor-lima-povratak"
+                />
                 <SlikaPolje label="Fotografija" value={n.image} onChange={set('image')} />
                 <Kvacica label="Izdvojena vijest" value={n.featured} onChange={set('featured')} />
                 <Polje label="Redoslijed" type="number" value={n.sort_order} onChange={set('sort_order')} />

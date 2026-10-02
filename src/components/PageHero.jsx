@@ -3,20 +3,39 @@ import { Link, useLocation } from 'react-router-dom';
 import Reveal from './Reveal';
 import Meta from './Meta';
 import { NAV_LINKS } from '../data/site';
+import { useContent } from '../lib/content';
 
 /**
  * Zajednički vrh svake podstranice — ista tema kao tamne sekcije naslovnice.
  *
- * `grafika` je izrezani igrač koji stoji desno od naslova. Bez njega je vrh
- * stranice bio naslov u praznini; s njim ima što gledati, a fotografija je
- * ionako klupska.
+ * Klupska fotografija ulazi s desnog ruba i gubi se u plavom prema naslovu.
+ * Prije je ondje stajao izrezani igrač: ukras širok tristotinjak piksela uz
+ * golemu praznu plohu lijevo od njega. Fotografija preko pola vrha daje istom
+ * prostoru sadržaj, a ista je na svim podstranicama, pa se vrh čita kao jedan
+ * oblik, a ne kao sedam različitih uvoda.
  *
- * Na uskim ekranima se ne prikazuje: tamo nema mjesta pokraj naslova, a
- * ispod njega bi samo gurao sadržaj niže.
+ * Nestajanje radi koprena u gradijentu, a ne `mask-image`: isti učinak, a
+ * nema preglednika u kojem bi otkazao i ostavio tvrdi rub preko naslova.
+ *
+ * `bezFotografije` koristi stranica pojedine objave — ondje fotografija stoji
+ * u punoj veličini uz tekst, pa bi ista slika dvaput bila ponavljanje.
+ *
+ * `dugNaslov` je za naslov koji je rečenica, a ne natpis. „NOVOSTI" u 92
+ * piksela je znak; naslov objave u 92 piksela je zid koji zauzme cijeli
+ * ekran prije nego se stigne pročitati.
  */
-export default function PageHero({ page, children, metaImage, grafika }) {
+export default function PageHero({
+  page,
+  children,
+  metaImage,
+  metaType,
+  bezFotografije = false,
+  dugNaslov = false,
+  nadStranica,
+}) {
+  const { images } = useContent();
   const [failed, setFailed] = useState(false);
-  const showArt = Boolean(grafika) && !failed;
+  const foto = bezFotografije || failed ? null : images.celebration;
 
   // Putanja u vrhu: kratka, ali kaže gdje si. Stranice izvan izbornika
   // (ulaznice, kolačići, pojedina novost) uzimaju vlastiti naslov.
@@ -24,30 +43,41 @@ export default function PageHero({ page, children, metaImage, grafika }) {
   const ovdje = NAV_LINKS.find((l) => l.to === pathname)?.label ?? page.title;
 
   return (
-    <section className={`phero${showArt ? ' phero--art' : ''}`} aria-labelledby="phero-naslov">
+    <section
+      className={`phero${foto ? ' phero--foto' : ''}${dugNaslov ? ' phero--dug' : ''}`}
+      aria-labelledby="phero-naslov"
+    >
       {/* Naslov i opis stranice su isti tekstovi koje urednik upisuje, pa se
           meta oznake održavaju same. */}
-      <Meta title={page.title} description={page.lead} image={metaImage} />
+      <Meta title={page.title} description={page.lead} image={metaImage} type={metaType} />
 
-
-      {/* Grafika je ukras i stoji izvan toka: da je u mreži, njezina bi
-          visina razvukla cijeli vrh stranice i gurnula naslov na dno. */}
-      {showArt && (
-        <div className="phero__art" aria-hidden="true">
-          <span className="phero__art-glow" />
+      {foto && (
+        <div className="phero__foto" aria-hidden="true">
           <img
-            className="phero__art-img"
-            src={grafika}
+            className="phero__foto-img"
+            src={foto}
             alt=""
-            loading="lazy"
+            /* Iznad pregiba je na svakoj podstranici, pa ne smije biti
+               `lazy`. Ista je datoteka kao hero na naslovnici, dakle
+               najčešće je već u međuspremniku. */
+            fetchPriority="high"
             onError={() => setFailed(true)}
           />
+          <span className="phero__foto-koprena" />
         </div>
       )}
 
       <div className="shell">
         <nav className="phero__staza" aria-label="Putanja">
           <Link to="/">Početna</Link>
+          {/* Stranica unutar rubrike (objava unutar Novosti) nosi i rubriku,
+              inače bi naslov objave visio odmah uz „Početna“. */}
+          {nadStranica && (
+            <>
+              <span className="phero__staza-crta" aria-hidden="true" />
+              <Link to={nadStranica.to}>{nadStranica.label}</Link>
+            </>
+          )}
           <span className="phero__staza-crta" aria-hidden="true" />
           <span aria-current="page">{ovdje}</span>
         </nav>

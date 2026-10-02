@@ -9,7 +9,7 @@ import { useContent } from '../lib/content';
 const TEME = ['Navijački upit', 'Mediji', 'Partnerstvo', 'Ulaznice', 'Ostalo'];
 
 export default function Kontakt() {
-  const { pages, contact, hero, map, images } = useContent();
+  const { pages, contact, hero, map } = useContent();
   const [tema, setTema] = useState(TEME[0]);
   const [ime, setIme] = useState('');
   const [poruka, setPoruka] = useState('');
@@ -25,7 +25,7 @@ export default function Kontakt() {
 
   return (
     <>
-      <PageHero page={pages['/kontakt']} grafika={images.artKontakt}>
+      <PageHero page={pages['/kontakt']}>
         <div className="phero__actions">
           <a className="btn btn--solid" href={`mailto:${contact.email}`}>
             {contact.email}

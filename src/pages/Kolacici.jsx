@@ -38,11 +38,11 @@ const STAVKE = [
 ];
 
 export default function Kolacici() {
-  const { pages, contact, images } = useContent();
+  const { pages, contact } = useContent();
 
   return (
     <>
-      <PageHero page={pages['/kolacici']} grafika={images.artKontakt} />
+      <PageHero page={pages['/kolacici']} />
 
       <section className="slab slab--paper" aria-labelledby="naslov-kolacici">
         <div className="shell">

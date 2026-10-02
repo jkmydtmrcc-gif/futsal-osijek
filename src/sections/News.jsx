@@ -9,6 +9,12 @@ export default function News() {
   const { news } = useContent();
   const featured = news.featured;
 
+  // Istaknuta objava je obična objava s oznakom, pa stoji i u popisu — ovdje
+  // se izostavlja da se ne pojavi dvaput u istom odsječku.
+  const ostale = news.items.filter((n) => n.id !== featured?.id).slice(0, 3);
+
+  if (!featured) return null;
+
   return (
     <section className="news" id="novosti" aria-labelledby="naslov-novosti">
 
@@ -32,7 +38,7 @@ export default function News() {
         <div className="news__layout">
           <Reveal
             as={Link}
-            to={featured.id ? `/novosti/${featured.id}` : '/novosti'}
+            to={`/novosti/${featured.id}`}
             variant="scale"
             className="feature feature--link"
           >
@@ -49,9 +55,18 @@ export default function News() {
             </div>
           </Reveal>
 
+          {/* Uski stupac uz veliki okvir — kartice ovdje ostaju bez
+              fotografije, inače bi stupac bio triput viši od okvira uz koji
+              stoji. Fotografije nose kartice na stranici Novosti. */}
           <div className="news__list">
-            {news.items.slice(0, 3).map((item, i) => (
-              <NewsCard item={item} index={i} delay={120} key={item.id ?? item.title} />
+            {ostale.map((item, i) => (
+              <NewsCard
+                item={item}
+                index={i}
+                delay={120}
+                sFotografijom={false}
+                key={item.id ?? item.title}
+              />
             ))}
           </div>
         </div>

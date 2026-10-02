@@ -7,13 +7,13 @@ import { TICKETS_PATH } from '../data/site';
 import { useContent, useStandings } from '../lib/content';
 
 export default function Raspored() {
-  const { pages, league, images } = useContent();
+  const { pages, league } = useContent();
   const standings = useStandings();
   const us = standings.find((row) => row.isUs);
 
   return (
     <>
-      <PageHero page={pages['/raspored']} grafika={images.artRaspored}>
+      <PageHero page={pages['/raspored']}>
         {us && (
           <div className="phero__stats">
             <span className="phero__stat">

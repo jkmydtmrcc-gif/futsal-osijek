@@ -17,7 +17,7 @@ export default function Ulaznice() {
 
   return (
     <>
-      <PageHero page={pages['/ulaznice']} grafika={images.artUlaznice}>
+      <PageHero page={pages['/ulaznice']}>
         <div className="phero__actions">
           <a className="btn btn--solid" href={`mailto:${contact.email}`}>
             Rezerviraj e-mailom

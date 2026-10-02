@@ -56,7 +56,9 @@ export function zadaniSadrzaj() {
       clubs: SITE.CLUBS,
       timeline: SITE.TIMELINE,
     },
-    news: { featured: SITE.FEATURED_NEWS, items: SITE.NEWS },
+    /* Ugrađene novosti prolaze istim putem kao one iz baze, pa se razlika
+       između ta dva izvora ne može pojaviti slučajno. */
+    news: slozinovosti(SITE.NEWS),
     club: { facts: SITE.CLUB_FACTS, story: SITE.CLUB_STORY, honours: SITE.HONOURS },
     shop: {
       url: SITE.SHOP_URL,
@@ -103,17 +105,51 @@ export const playerFromRow = (row, stats) => ({
 });
 
 export const newsFromRow = (row) => ({
+  /* Adresa objave. `slug` je ono što urednik upiše; kad ga nema, pada na
+     ključ iz baze — poveznica tada radi, samo je ružna. */
   id: row.slug || row.id,
   date: row.date ?? '',
   cat: row.cat ?? '',
   title: row.title ?? '',
   lead: row.lead ?? '',
   image: row.image ?? '',
-  body: String(row.body ?? '')
-    .split(/\n\s*\n/)
-    .map((p) => p.trim())
-    .filter(Boolean),
+  featured: Boolean(row.featured),
+  body: Array.isArray(row.body)
+    ? row.body
+    : String(row.body ?? '')
+        .split(/\n\s*\n/)
+        .map((p) => p.trim())
+        .filter(Boolean),
 });
+
+/**
+ * Popis novosti i ona koja ide u veliki okvir.
+ *
+ * Istaknuta objava **ostaje u popisu**. Prije je bila izbačena iz njega, a
+ * njezina je kartica ipak vodila na `/novosti/{id}` — gdje ju je stranica
+ * objave tražila baš u tom popisu i nije je nalazila. Klik na najvidljiviju
+ * objavu na stranici završavao je na „Nema te stranice“, i to uvijek čim je
+ * sadržaj došao iz baze.
+ *
+ * Kad nijedna nije označena, istaknuta je prva. Nikad se ne poseže za
+ * ugrađenim sadržajem dok baza ima redke — inače se u okviru pokaže priča
+ * koje u bazi nema, pa opet vodi u prazno.
+ */
+export function slozinovosti(redci) {
+  const items = (redci ?? []).map(newsFromRow);
+  if (!items.length) return { items: [], featured: null };
+
+  const featured = items.find((n) => n.featured) ?? items[0];
+
+  return {
+    items,
+    featured: {
+      ...featured,
+      flag: 'Izdvojeno',
+      meta: [featured.date, featured.cat].filter(Boolean).join(' · '),
+    },
+  };
+}
 
 export const productFromRow = (row) => ({
   id: row.id,

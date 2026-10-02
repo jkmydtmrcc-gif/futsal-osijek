@@ -768,8 +768,17 @@ a.sponsor:hover {
 }
 .phero__staza a { color: rgba(255,255,255,.62); }
 .phero__staza a:hover { color: var(--white); }
-.phero__staza-crta { width: 18px; height: 1px; background: rgba(255,255,255,.34); }
-.phero__staza [aria-current] { color: var(--sky); }
+.phero__staza-crta { flex: none; width: 18px; height: 1px; background: rgba(255,255,255,.34); }
+/* Zadnja stavka je naslov stranice — na objavi to zna biti cijela rečenica,
+   pa se krati umjesto da putanja prijeđe u drugi red. */
+.phero__staza [aria-current] {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--sky);
+}
+.phero__staza a { flex: none; }
 
 /* Traka s brojkama pod naslovom. */
 .phero__traka {

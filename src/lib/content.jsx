@@ -6,7 +6,7 @@ import {
   merge,
   zadaniSadrzaj,
   playerFromRow,
-  newsFromRow,
+  slozinovosti,
   productFromRow,
   tiersFromRows,
 } from './mapiranje';
@@ -78,20 +78,10 @@ export function ContentProvider({ children }) {
           next.players = igraci.data.map((row) => playerFromRow(row, statistika.data));
         }
 
-        const sveNovosti = novosti.data ?? [];
-        if (sveNovosti.length) {
-          const istaknuta = sveNovosti.find((n) => n.featured);
-          next.news = {
-            items: sveNovosti.filter((n) => !n.featured).map(newsFromRow),
-            featured: istaknuta
-              ? {
-                  ...newsFromRow(istaknuta),
-                  flag: 'Izdvojeno',
-                  meta: `${istaknuta.date ?? ''} · ${istaknuta.cat ?? ''}`.trim(),
-                }
-              : d.news.featured,
-          };
-        }
+        /* Istaknuta objava ostaje u popisu, pa stranica objave može naći i
+           nju. Isti poziv slaže i ugrađene novosti, pa se ta dva izvora ne
+           mogu razići. */
+        if (novosti.data?.length) next.news = slozinovosti(novosti.data);
 
         /* Utakmice iz baze prolaze kroz `matchFromRow`, koji zna i za stare
            retke bez termina i rezultata — pa nenadograđena baza daje točno

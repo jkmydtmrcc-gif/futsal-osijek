@@ -2,15 +2,24 @@ import { Link, useParams } from 'react-router-dom';
 import Pip from '../components/Pip';
 import Reveal from '../components/Reveal';
 import NewsCard from '../components/NewsCard';
-import Meta from '../components/Meta';
+import PageHero from '../components/PageHero';
 import NijePronadeno from './NijePronadeno';
 import { useContent } from '../lib/content';
 
-/** Pojedinačna novost — `/novosti/{id}`. */
+/**
+ * Pojedinačna novost — `/novosti/{id}`.
+ *
+ * Vrh je isti kao na svakoj drugoj podstranici, samo bez klupske fotografije:
+ * objava ima svoju, i ona stoji u punoj veličini iznad teksta. Ista slika
+ * dvaput bila bi ponavljanje, a ne naglasak.
+ */
 export default function Novost() {
   const { id } = useParams();
   const { news } = useContent();
 
+  // Istaknuta objava je od sada i u popisu, pa se nalazi i ona. Dok nije
+  // bila, klik na veliki okvir je završavao ovdje, na stranici „Nema te
+  // stranice“.
   const item = news.items.find((n) => n.id === id);
   if (!item) return <NijePronadeno />;
 
@@ -18,40 +27,23 @@ export default function Novost() {
 
   return (
     <>
-      <Meta title={item.title} description={item.lead} image={item.image} type="article" />
-
       <article className="post">
-        <section className="phero phero--post" aria-labelledby="post-naslov">
-
-          <div className="shell phero__inner">
-            <Reveal>
-              <Link className="post__back" to="/novosti">
-                ← Sve novosti
-              </Link>
-              <span className="eyebrow eyebrow--sky">
-                {item.date} · {item.cat}
-              </span>
-              <h1 className="phero__title" id="post-naslov">
-                {item.title}
-              </h1>
-            </Reveal>
-            <Reveal delay={130}>
-              <p className="phero__lead">{item.lead}</p>
-            </Reveal>
-          </div>
-        </section>
+        <PageHero
+          page={{ eyebrow: item.cat || 'Iz kluba', title: item.title, lead: item.lead }}
+          metaImage={item.image}
+          metaType="article"
+          bezFotografije
+          dugNaslov
+          nadStranica={{ to: '/novosti', label: 'Novosti' }}
+        />
 
         <section className="slab slab--paper">
           <div className="shell post__grid">
             <div className="post__main">
               {item.image && (
-                <Reveal variant="scale">
-                  <img
-                    className="post__photo"
-                    src={item.image}
-                    alt={item.title}
-                    loading="lazy"
-                  />
+                <Reveal variant="scale" as="figure" className="post__figure">
+                  <img className="post__photo" src={item.image} alt={item.title} />
+                  <figcaption className="post__caption">{item.title}</figcaption>
                 </Reveal>
               )}
 
@@ -60,6 +52,12 @@ export default function Novost() {
                   <p className="prose prose--wide">{paragraph}</p>
                 </Reveal>
               ))}
+
+              {/* Objava bez teksta nije greška — klub ponekad objavi samo
+                  naslov i fotografiju. Prazna stranica ipak nije u redu. */}
+              {(item.body ?? []).length === 0 && (
+                <p className="prose prose--wide">{item.lead}</p>
+              )}
             </div>
 
             <Reveal as="aside" variant="right" delay={140} className="post__aside">

@@ -10,7 +10,7 @@ import FeaturePhoto from '../components/FeaturePhoto';
 const SVE = 'Sve';
 
 export default function Novosti() {
-  const { pages, news, images } = useContent();
+  const { pages, news } = useContent();
   const [filter, setFilter] = useState(SVE);
   const featured = news.featured;
 
@@ -22,44 +22,54 @@ export default function Novosti() {
     return [SVE, ...seen];
   }, [news.items]);
 
-  const shown = useMemo(
-    () => (filter === SVE ? news.items : news.items.filter((n) => n.cat === filter)),
-    [news.items, filter]
-  );
+  const sveNaOkupu = filter === SVE;
+
+  /* Istaknuta objava stoji u velikom okviru iznad, pa je u mreži nema —
+     ali samo dok se gleda sve. Odabere li posjetitelj kategoriju, okvir se
+     makne i objava se vraća među ostale; inače bi ispala iz vlastite
+     kategorije. */
+  const shown = useMemo(() => {
+    if (filter !== SVE) return news.items.filter((n) => n.cat === filter);
+    return news.items.filter((n) => n.id !== featured?.id);
+  }, [news.items, filter, featured]);
 
   return (
     <>
-      <PageHero page={pages['/novosti']} grafika={images.artNovosti} />
+      <PageHero page={pages['/novosti']} />
 
       <section className="slab slab--paper" aria-labelledby="naslov-vijesti">
 
         <div className="shell">
           <Reveal>
-            <span className="eyebrow">Izdvojeno</span>
+            <span className="eyebrow">{sveNaOkupu ? 'Izdvojeno' : 'Odabrano'}</span>
             <h2 className="section-title" id="naslov-vijesti">
-              Iz kluba
+              {sveNaOkupu ? 'Iz kluba' : filter}
             </h2>
           </Reveal>
 
-          <Reveal
-            as={Link}
-            to={featured.id ? `/novosti/${featured.id}` : '/novosti'}
-            variant="scale"
-            className="feature feature--link"
-            delay={100}
-          >
-            <FeaturePhoto src={featured.image} alt={featured.title} />
-            <div className="feature__veil" aria-hidden="true" />
-            <div className="feature__body">
-              <span className="feature__flag">{featured.flag}</span>
-              <h3 className="feature__title">{featured.title}</h3>
-              <p className="feature__lead">{featured.lead}</p>
-              <div className="feature__meta">
-                <Pip size="md" tone="sky" />
-                <span>{featured.meta}</span>
+          {/* Veliki okvir stoji samo dok se gleda sve. Pod filtrom bi ista
+              objava bila i u okviru i u mreži ispod njega. */}
+          {sveNaOkupu && featured && (
+            <Reveal
+              as={Link}
+              to={`/novosti/${featured.id}`}
+              variant="scale"
+              className="feature feature--link"
+              delay={100}
+            >
+              <FeaturePhoto src={featured.image} alt={featured.title} />
+              <div className="feature__veil" aria-hidden="true" />
+              <div className="feature__body">
+                <span className="feature__flag">{featured.flag}</span>
+                <h3 className="feature__title">{featured.title}</h3>
+                <p className="feature__lead">{featured.lead}</p>
+                <div className="feature__meta">
+                  <Pip size="md" tone="sky" />
+                  <span>{featured.meta}</span>
+                </div>
               </div>
-            </div>
-          </Reveal>
+            </Reveal>
+          )}
 
           <Reveal className="chips" delay={140} role="group" aria-label="Filtriranje novosti">
             {cats.map((c) => (

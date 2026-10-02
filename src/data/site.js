@@ -289,30 +289,27 @@ export const CLUBS = [
   'Vrgorac',
 ];
 
-export const FEATURED_NEWS = {
-  id: 'finale-2024-25',
-  flag: 'Izdvojeno',
-  title: 'Finale doigravanja nakon pobjede protiv Futsal Dinama',
-  lead: 'U sezoni 2024/25 klub je do prvog finala došao preko Torcide Biberon u četvrtfinalu i Futsal Dinama u polufinalu.',
-  meta: 'Sezona 2024/25 · Doigravanje',
-  image: '/uploads/S-oskanvma10_GOM_300525-970.webp',
-};
-
 /**
  * Novosti.
  *
  * `id` je i adresa pojedinačne novosti (`/novosti/{id}`), pa mora biti
  * jedinstven i bez razmaka. `body` je niz odlomaka — tako se tekst piše i
  * uređuje bez HTML-a.
+ *
+ * `featured` označava objavu koja ide u veliki okvir na naslovnici i na
+ * stranici Novosti. Istaknuta objava je **obična objava s oznakom**, a ne
+ * zaseban zapis: dok je bila zasebna, ista je priča postojala dvaput pod
+ * istim ključem i klik na okvir je vodio na stranicu koje nema.
  */
 export const NEWS = [
   {
     id: 'vitor-lima-povratak',
     date: 'Ljeto 2026.',
     cat: 'Transferi',
+    featured: true,
     title: 'Vitor Lima vratio se u klub',
     lead: 'Povratak brazilskog igrača klub je najavio na svojim društvenim mrežama.',
-    image: '/uploads/aa.jpg',
+    image: '/uploads/S-oskanvma10_GOM_300525-970.webp',
     body: [
       'Vitor Lima ponovno je igrač MNK Osijek Kandit. Povratak je klub objavio na svojim društvenim mrežama, a navijači su ga dočekali kao jedno od najvažnijih pojačanja ljeta.',
       'Lima je u prethodnom mandatu bio jedno od prepoznatljivih lica momčadi na Zrinjevcu i igrač na kojeg se u napadu računalo u najvažnijim utakmicama sezone.',
@@ -448,16 +445,8 @@ export const LEGAL_LINKS = [
 
 export const IMAGES = {
   crest: '/grb.webp',
-  /* Izrezani igrač (bez pozadine) koji stoji uz tablicu. */
-  cutout: '/uploads/igraci/grafika-igrac.webp',
-  /* Grafike u vrhu podstranica — bez njih je tamo naslov u praznini. */
-  artNovosti: '/uploads/grafike/oko.webp',
-  artKontakt: '/uploads/grafike/srce.webp',
-  artRaspored: '/uploads/grafike/slavlje.webp',
-  artPostava: '/uploads/grafike/palci.webp',
-  artUlaznice: '/uploads/grafike/vratar.webp',
-  artKlub: '/uploads/grafike/prst.webp',
-  artShop: '/uploads/grafike/grb-pokaz.webp',
+  /* Slavlje s navijačima. Isto je u heroju na naslovnici i u vrhu svake
+     podstranice, pa je nakon prve stranice već u međuspremniku. */
   celebration: '/uploads/S-oskanvma10_GOM_300525-970.webp',
   team: '/uploads/aa.jpg',
   kandit: '/uploads/kandit-logo.png',
