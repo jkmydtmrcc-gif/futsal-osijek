@@ -90,7 +90,7 @@ export function ContentProvider({ children }) {
            mijenja da bi rezultati proradili. */
         if (utakmice.data?.length) {
           const svi = utakmice.data.map((row) => matchFromRow(row, next.league.ourClub));
-          const { nadolazece, odigrane, sljedeca, zadnja } = razvrstaj(svi, Date.now());
+          const { nadolazece, odigrane, sljedeca, zadnja, uzivo } = razvrstaj(svi, Date.now());
           next.league = {
             ...next.league,
             demo: false,
@@ -99,6 +99,10 @@ export function ContentProvider({ children }) {
             results: odigrane,
             sljedeca,
             zadnja,
+            /* Utakmica u prijenosu. Traka i heroj prelaze na živi rezultat
+               samo kad ovo postoji — pa se izvan utakmice ništa ne osvježava
+               u pozadini. */
+            uzivo,
             forma: forma(odigrane),
           };
         }

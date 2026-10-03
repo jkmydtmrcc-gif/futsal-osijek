@@ -110,6 +110,27 @@ console.log('\nrazvrstavanje');
 {
   const r = razvrstaj([], Date.now());
   jest(r.sljedeca === null && r.zadnja === null, 'prazan popis ne ruši');
+  jest(r.uzivo === null, 'prazan popis nema utakmicu u prijenosu');
+}
+{
+  // Utakmica u prijenosu: termin joj je prošao, pa bi bez iznimke pala među
+  // odigrane i traka bi je pokazala kao „zadnje odigrano" — bez rezultata.
+  const sad = Date.parse('2026-10-24T18:00:00Z');
+  const redci = [
+    { id: 'a', home: 'Osijek Kandit', away: 'Rijeka', kickoff: '2026-10-17T17:00:00Z', home_score: 3, away_score: 2 },
+    { id: 'b', home: 'Osijek Kandit', away: 'Olmissum', kickoff: '2026-10-24T17:00:00Z', status: 'uzivo' },
+    { id: 'c', home: 'Crnica', away: 'Osijek Kandit', kickoff: '2026-10-31T17:00:00Z' },
+  ];
+  const r = razvrstaj(redci.map((x) => matchFromRow(x, NAS)), sad);
+  jest(r.uzivo?.id === 'b', 'utakmica u prijenosu se izdvoji');
+  jest(r.odigrane.every((u) => u.id !== 'b'), 'nije među odigranima');
+  jest(r.nadolazece.every((u) => u.id !== 'b'), 'nije ni među nadolazećima');
+  jest(r.zadnja.id === 'a', 'zadnji rezultat ostaje prava odigrana utakmica');
+  jest(r.sljedeca.id === 'c', 'sljedeća je prava nadolazeća');
+}
+{
+  const u = matchFromRow({ id: 'x', home: 'A', away: 'B', status: 'uzivo' }, NAS);
+  jest(u.uzivo === true && u.odigrana === false, 'prijenos nije odigrana utakmica');
 }
 
 console.log('\nforma');

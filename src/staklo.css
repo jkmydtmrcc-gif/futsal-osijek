@@ -90,7 +90,6 @@
    se kao uzorak, ali oko po njoj mjeri dubinu — i zamućenje iznad ima
    što razmazati. */
 .slab--dark,
-.phero,
 .hero,
 .league,
 .venue,
@@ -102,6 +101,18 @@
     radial-gradient(940px 620px at 68% 114%, rgba(11,71,168,.34),  transparent 68%),
     repeating-linear-gradient(90deg, rgba(255,255,255,.035) 0 1px, transparent 1px 72px),
     repeating-linear-gradient(0deg,  rgba(255,255,255,.028) 0 1px, transparent 1px 72px);
+}
+
+/* Vrh podstranice ima mrlje svjetla, ali **nema mrežu**.
+   Preko ravne plave plohe se te crte ne vide; preko fotografije izgledaju
+   kao ogrebotine na skenu. Bez njih nema ni šava ondje gdje slika počinje,
+   pa fotografija može biti pojas uz desni rub umjesto da se razvlači preko
+   cijele širine samo da bi se mreža mogla nastaviti. */
+.phero {
+  background-color: var(--navy);
+  background-image:
+    radial-gradient(1100px 560px at 8% -16%, rgba(42,126,240,.34), transparent 64%),
+    radial-gradient(820px 460px at 52% 118%, rgba(11,71,168,.30),  transparent 70%);
 }
 
 /* --------------------------------------------------------------------------

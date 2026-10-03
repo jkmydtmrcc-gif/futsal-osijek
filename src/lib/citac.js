@@ -23,10 +23,19 @@ const key = okolina.VITE_SUPABASE_ANON_KEY;
 /** Je li Supabase uopće postavljen? Bez ključeva stranica radi na ugrađenom sadržaju. */
 export const bazaPostavljena = Boolean(url && key);
 
-/** Adresa jednog upita. Izdvojeno da se može provjeriti bez mreže. */
-export function adresaUpita(baza, tablica, poredak) {
+/**
+ * Adresa jednog upita. Izdvojeno da se može provjeriti bez mreže.
+ *
+ * `filtri` su PostgREST uvjeti, npr. `{ status: 'eq.uzivo' }`. Bez njih bi
+ * prijenos uživo pri svakom osvježavanju povlačio sve događaje svih utakmica
+ * sezone — a osvježava se svakih petnaest sekundi.
+ */
+export function adresaUpita(baza, tablica, poredak, filtri) {
   const p = new URLSearchParams({ select: '*' });
   if (poredak) p.set('order', `${poredak}.asc`);
+  Object.entries(filtri ?? {}).forEach(([stupac, uvjet]) => {
+    if (uvjet !== undefined && uvjet !== null && uvjet !== '') p.set(stupac, uvjet);
+  });
   return `${String(baza).replace(/\/+$/, '')}/rest/v1/${encodeURIComponent(tablica)}?${p}`;
 }
 
@@ -50,14 +59,14 @@ export function procitajOdgovor(status, tijelo) {
   return { data: tijelo, error: null };
 }
 
-/** Svi retci jedne tablice, poredani po `poredak`. */
-export async function procitaj(tablica, poredak, { signal } = {}) {
+/** Retci jedne tablice, poredani po `poredak` i suženi `filtri`ma. */
+export async function procitaj(tablica, poredak, { signal, filtri } = {}) {
   if (!bazaPostavljena) {
     return { data: null, error: { message: 'Baza nije postavljena.', code: 'nema-baze' } };
   }
 
   try {
-    const odgovor = await fetch(adresaUpita(url, tablica, poredak), {
+    const odgovor = await fetch(adresaUpita(url, tablica, poredak, filtri), {
       headers: {
         apikey: key,
         Authorization: `Bearer ${key}`,

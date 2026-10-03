@@ -73,6 +73,8 @@ export function matchFromRow(row, nasKlub = '') {
   // Odigrana je kad ima oba rezultata; status je samo dodatna potvrda, pa
   // odgođena utakmica s upisanim rezultatom ne ispadne „nadolazeća".
   const odigrana = (homeScore !== null && awayScore !== null) || row.status === 'odigrano';
+  // Utakmica u prijenosu nije ni odigrana ni nadolazeća — ona je *sada*.
+  const uzivo = row.status === 'uzivo';
 
   const nas = norm(nasKlub);
   const jeDoma = nas ? norm(home) === nas : true;
@@ -103,6 +105,7 @@ export function matchFromRow(row, nasKlub = '') {
     homeScore,
     awayScore,
     status: row.status || '',
+    uzivo,
     title: home && away ? `${home} — ${away}` : row.title || home || '',
     score: odigrana ? `${homeScore}:${awayScore}` : '',
     outcome: ishod,
@@ -120,6 +123,10 @@ export function matchFromRow(row, nasKlub = '') {
  * Utakmica bez trenutka i bez rezultata ostaje u nadolazećima, u redoslijedu
  * u kojem je upisana — to je točno današnje ponašanje, pa nenadograđena baza
  * izgleda kao i prije.
+ *
+ * Utakmica u prijenosu izlazi iz obje skupine. Njezin je termin prošao, pa bi
+ * inače pala među odigrane i traka bi je pokazala kao „zadnje odigrano" —
+ * bez rezultata, jer ga još nema.
  */
 export function razvrstaj(utakmice, sad = Date.now()) {
   const sada = sad instanceof Date ? sad.getTime() : sad;
@@ -127,8 +134,10 @@ export function razvrstaj(utakmice, sad = Date.now()) {
 
   const odigrane = [];
   const nadolazece = [];
+  const uzivo = utakmice.find((u) => u.uzivo) ?? null;
 
   utakmice.forEach((u) => {
+    if (u.uzivo) return;
     const t = vrijeme(u);
     if (u.odigrana || (Number.isFinite(t) && t < sada)) odigrane.push(u);
     else nadolazece.push(u);
@@ -150,6 +159,7 @@ export function razvrstaj(utakmice, sad = Date.now()) {
   return {
     odigrane,
     nadolazece,
+    uzivo,
     zadnja: odigrane.find((u) => u.nasa) ?? null,
     sljedeca: nadolazece.find((u) => u.nasa) ?? null,
   };

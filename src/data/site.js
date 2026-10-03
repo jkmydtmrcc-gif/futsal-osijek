@@ -16,6 +16,7 @@ export const NAV_LINKS = [
   { id: 'klub', label: 'Klub', to: '/klub' },
   { id: 'postava', label: 'Prva postava', to: '/postava' },
   { id: 'raspored', label: 'Raspored', to: '/raspored' },
+  { id: 'uzivo', label: 'Uživo', to: '/uzivo' },
   { id: 'shop', label: 'Fan Shop', to: '/shop' },
   { id: 'novosti', label: 'Novosti', to: '/novosti' },
   { id: 'kontakt', label: 'Kontakt', to: '/kontakt' },
@@ -445,9 +446,10 @@ export const LEGAL_LINKS = [
 
 export const IMAGES = {
   crest: '/grb.webp',
-  /* Slavlje s navijačima. Isto je u heroju na naslovnici i u vrhu svake
-     podstranice, pa je nakon prve stranice već u međuspremniku. */
+  /* Slavlje s navijačima — heroj naslovnice, /klub i /ulaznice. */
   celebration: '/uploads/S-oskanvma10_GOM_300525-970.webp',
+  /* Tribina na Zrinjevcu — vrh svake podstranice. */
+  tribina: '/uploads/tribina.webp',
   team: '/uploads/aa.jpg',
   kandit: '/uploads/kandit-logo.png',
 };
@@ -489,6 +491,12 @@ export const PAGES = {
     eyebrow: 'Klupska oprema',
     title: 'Fan Shop',
     lead: 'Opremu prodaje SalaSport — jedina specijalizirana futsal trgovina u Hrvatskoj.',
+  },
+  '/uzivo': {
+    navId: 'uzivo',
+    eyebrow: 'Prijenos',
+    title: 'Uživo',
+    lead: 'Rezultat, strijelci i tijek utakmice dok se igra — minutu po minutu sa Zrinjevca.',
   },
   '/novosti': {
     navId: 'novosti',

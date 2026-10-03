@@ -13,6 +13,7 @@ import Postava from './pages/Postava';
 import Raspored from './pages/Raspored';
 import Shop from './pages/Shop';
 import Novosti from './pages/Novosti';
+import Uzivo from './pages/Uzivo';
 import Novost from './pages/Novost';
 import Kontakt from './pages/Kontakt';
 import Ulaznice from './pages/Ulaznice';
@@ -75,6 +76,7 @@ export default function App() {
               <Route path="/postava" element={<Postava />} />
               <Route path="/raspored" element={<Raspored />} />
               <Route path="/shop" element={<Shop />} />
+              <Route path="/uzivo" element={<Uzivo />} />
               <Route path="/novosti" element={<Novosti />} />
               <Route path="/novosti/:id" element={<Novost />} />
               <Route path="/kontakt" element={<Kontakt />} />

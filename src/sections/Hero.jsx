@@ -1,7 +1,9 @@
 import { Link } from 'react-router-dom';
 import Pip from '../components/Pip';
 import { useContent } from '../lib/content';
+import useUzivo from '../lib/useUzivo';
 import { formatSat, opisRazmaka } from '../lib/vrijeme';
+import { rezultatIzDogadaja, stanjePrijenosa, opisStanja } from '../lib/uzivo';
 
 /**
  * Hero ne koristi <Reveal> — sadržaj je odmah u kadru, pa ulazne animacije
@@ -12,7 +14,10 @@ export default function Hero() {
 
   // Prvo što navijača zanima na vrhu stranice je sljedeća utakmica.
   // Dok je nema u rasporedu, na njezino mjesto idu klupske brojke.
+  // A dok utakmica traje — ona ima prednost pred svime.
   const sljedeca = league.fixtures[0] ?? null;
+  const prijenos = useUzivo(league.ourClub, Boolean(league.uzivo));
+  const uzivo = prijenos.utakmica ?? league.uzivo;
 
   return (
     <section className="hero" id="pocetna">
@@ -62,7 +67,9 @@ export default function Hero() {
             <span className="hero__frame-tag">Zrinjevac · bijelo-plavi</span>
           </div>
 
-          {sljedeca ? (
+          {uzivo ? (
+            <ZivoKartica utakmica={uzivo} dogadaji={prijenos.dogadaji} />
+          ) : sljedeca ? (
             <div className="hero__facts hero__next">
               <span className="eyebrow eyebrow--sm">Sljedeća utakmica</span>
               <div className="hero__next-meta">
@@ -106,5 +113,43 @@ export default function Hero() {
         </div>
       </div>
     </section>
+  );
+}
+
+/**
+ * Kartica sljedeće utakmice dok ona traje.
+ *
+ * Rezultat se računa iz događaja, kao i svugdje drugdje — tri mjesta koja
+ * pokazuju isti rezultat (heroj, traka, stranica prijenosa) čitaju isti niz,
+ * pa se ne mogu razići.
+ */
+function ZivoKartica({ utakmica, dogadaji }) {
+  const rezultat = rezultatIzDogadaja(dogadaji, utakmica.jeDoma);
+  const stanje = stanjePrijenosa(dogadaji);
+
+  return (
+    <div className="hero__facts hero__next hero__next--uzivo">
+      <span className="uzivo-znak">
+        <span className="uzivo-znak__tocka" aria-hidden="true" />
+        Uživo
+      </span>
+      <div className="hero__next-meta">
+        <span className="hero__next-when">{opisStanja(stanje)}</span>
+        <span className="hero__next-comp">
+          {[utakmica.comp, utakmica.round].filter(Boolean).join(' · ')}
+        </span>
+      </div>
+      <div className="hero__zivo">
+        <span className={utakmica.jeDoma ? 'je-nas' : ''}>{utakmica.home}</span>
+        <strong>
+          {rezultat.home}:{rezultat.away}
+        </strong>
+        <span className={!utakmica.jeDoma ? 'je-nas' : ''}>{utakmica.away}</span>
+      </div>
+      <span className="hero__next-venue">{utakmica.venue}</span>
+      <Link className="hero__next-link" to="/uzivo">
+        Prati utakmicu uživo →
+      </Link>
+    </div>
   );
 }

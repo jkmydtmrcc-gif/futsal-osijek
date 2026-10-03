@@ -52,6 +52,7 @@ export function zadaniSadrzaj() {
       matches: [],
       sljedeca: null,
       zadnja: null,
+      uzivo: null,
       forma: [],
       clubs: SITE.CLUBS,
       timeline: SITE.TIMELINE,

@@ -9,13 +9,16 @@ import { useContent } from '../lib/content';
  * Zajednički vrh svake podstranice — ista tema kao tamne sekcije naslovnice.
  *
  * Klupska fotografija ulazi s desnog ruba i gubi se u plavom prema naslovu.
- * Prije je ondje stajao izrezani igrač: ukras širok tristotinjak piksela uz
- * golemu praznu plohu lijevo od njega. Fotografija preko pola vrha daje istom
- * prostoru sadržaj, a ista je na svim podstranicama, pa se vrh čita kao jedan
- * oblik, a ne kao sedam različitih uvoda.
+ * Ista je na svim podstranicama, pa se vrh čita kao jedan oblik, a ne kao
+ * sedam različitih uvoda.
  *
  * Nestajanje radi koprena u gradijentu, a ne `mask-image`: isti učinak, a
  * nema preglednika u kojem bi otkazao i ostavio tvrdi rub preko naslova.
+ *
+ * Širina pojasa je ograničena na 660px jer je fotografija 600×400: `cover` je
+ * pri visini vrha od 440px diže 1,1×, i to je točno granica do koje nema
+ * uvećanja. Preko nje bi slika omekšala, što se na velikom ekranu vidi prije
+ * svega ostalog.
  *
  * `bezFotografije` koristi stranica pojedine objave — ondje fotografija stoji
  * u punoj veličini uz tekst, pa bi ista slika dvaput bila ponavljanje.
@@ -35,7 +38,7 @@ export default function PageHero({
 }) {
   const { images } = useContent();
   const [failed, setFailed] = useState(false);
-  const foto = bezFotografije || failed ? null : images.celebration;
+  const foto = bezFotografije || failed ? null : images.tribina;
 
   // Putanja u vrhu: kratka, ali kaže gdje si. Stranice izvan izbornika
   // (ulaznice, kolačići, pojedina novost) uzimaju vlastiti naslov.
@@ -58,14 +61,17 @@ export default function PageHero({
             src={foto}
             alt=""
             /* Iznad pregiba je na svakoj podstranici, pa ne smije biti
-               `lazy`. Ista je datoteka kao hero na naslovnici, dakle
-               najčešće je već u međuspremniku. */
+               `lazy` — tada bi se učitala tek nakon prvog iscrtavanja i vrh
+               bi na trenutak bio prazna plava ploha. */
             fetchPriority="high"
             onError={() => setFailed(true)}
           />
           <span className="phero__foto-koprena" />
         </div>
       )}
+
+      {/* Crta na dnu stoji i bez fotografije, pa svaki vrh završava isto. */}
+      <span className="phero__rub" aria-hidden="true" />
 
       <div className="shell">
         <nav className="phero__staza" aria-label="Putanja">

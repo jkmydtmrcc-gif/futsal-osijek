@@ -384,3 +384,76 @@
 @media (max-width: 700px) {
   .auvoz__redak { grid-template-columns: 1fr; gap: 2px; }
 }
+
+/* ─────────────────────────────────────────────────────────────
+   Konzola za prijenos uživo
+   Koristi se za zapisničkim stolom dok utakmica traje, pa su gumbi veliki i
+   razmaknuti — promašaj klika ovdje znači krivi podatak na javnoj stranici.
+   ───────────────────────────────────────────────────────────── */
+.akonzola__semafor {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+  margin-top: 16px;
+  padding: 16px 18px;
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.14);
+}
+.akonzola__znak {
+  padding: 5px 11px;
+  font-weight: 900;
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.6);
+  border: 1px solid rgba(255,255,255,.2);
+}
+.akonzola__znak.je-uzivo { background: #c81e2d; border-color: #c81e2d; color: #fff; }
+.akonzola__rezultat {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 700;
+  color: rgba(255,255,255,.75);
+}
+.akonzola__rezultat strong { font-size: 30px; font-weight: 900; color: #fff; font-variant-numeric: tabular-nums; }
+.akonzola__rezultat em { font-style: normal; font-size: 24px; color: rgba(255,255,255,.4); }
+.akonzola__stanje { margin-left: auto; font-size: 13px; color: #7fb0f0; }
+
+.akonzola { margin-top: 18px; display: flex; flex-direction: column; gap: 14px; }
+.akonzola__vrijeme { display: flex; flex-wrap: wrap; gap: 14px; align-items: flex-end; }
+.akonzola__gumbi { display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-start; }
+.akonzola__gumbi--stanje { margin-top: 14px; }
+.akonzola__gumbi .agumb { padding: 13px 20px; font-size: 14px; }
+.akonzola__par { position: relative; display: flex; flex-direction: column; gap: 8px; }
+.akonzola__strijelci {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px;
+  background: rgba(0,0,0,.3);
+  border: 1px solid rgba(255,255,255,.14);
+}
+.akonzola__strijelci .agumb { justify-content: flex-start; text-align: left; }
+
+.akonzola__komentar { display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end; }
+.akonzola__komentar .apolje { flex: 1 1 320px; }
+
+.akonzola__postave { margin-top: 18px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,.1); }
+.akonzola__kvacice { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 16px; }
+.agumb.je-odabran { background: #0b47a8; border-color: #2a7ef0; color: #fff; }
+
+.akonzola__tijek { margin-top: 22px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,.1); }
+.akonzola__redak {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 9px 0;
+  border-bottom: 1px solid rgba(255,255,255,.07);
+}
+.akonzola__redak.je-nas { border-left: 3px solid #2a7ef0; padding-left: 12px; }
+.akonzola__minuta { flex: none; min-width: 40px; font-weight: 900; color: #7fb0f0; font-variant-numeric: tabular-nums; }
+.akonzola__opis { flex: 1; min-width: 0; font-size: 14px; color: rgba(255,255,255,.82); }
+.akonzola__redak .agumb { flex: none; padding: 5px 12px; font-size: 11px; }

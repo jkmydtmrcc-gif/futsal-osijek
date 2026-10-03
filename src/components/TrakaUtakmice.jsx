@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom';
 import { useContent } from '../lib/content';
+import useUzivo from '../lib/useUzivo';
 import { formatDatum, formatSat, opisRazmaka } from '../lib/vrijeme';
+import { rezultatIzDogadaja, stanjePrijenosa, opisStanja } from '../lib/uzivo';
 
 /**
  * Traka sa zadnjim rezultatom i sljedećom utakmicom.
@@ -14,6 +16,10 @@ import { formatDatum, formatSat, opisRazmaka } from '../lib/vrijeme';
  *
  * Kad nema ni rezultata ni termina — traka se ne prikazuje. Prazan okvir s
  * crticama izgleda gore nego da ga nema.
+ *
+ * Dok utakmica traje, traka prelazi na živi rezultat. Tek tada počinje i
+ * osvježavanje u pozadini: izvan utakmice se ne šalje nijedan dodatni upit,
+ * jer bi inače svaki posjetitelj cijeli dan pitao za utakmicu koje nema.
  */
 
 function Klub({ ime, istaknut }) {
@@ -22,10 +28,18 @@ function Klub({ ime, istaknut }) {
 
 export default function TrakaUtakmice() {
   const { league } = useContent();
+  const najavljena = Boolean(league.uzivo);
+  const prijenos = useUzivo(league.ourClub, najavljena);
+
   const zadnja = league.zadnja;
   const sljedeca = league.sljedeca;
+  const uzivo = prijenos.utakmica ?? league.uzivo;
 
-  if (!zadnja && !sljedeca) return null;
+  if (!uzivo && !zadnja && !sljedeca) return null;
+
+  if (uzivo) {
+    return <Prijenos utakmica={uzivo} dogadaji={prijenos.dogadaji} />;
+  }
 
   return (
     <aside className="tru" aria-label="Zadnji rezultat i sljedeća utakmica">
@@ -77,6 +91,47 @@ export default function TrakaUtakmice() {
 
         <Link className="tru__veza" to="/raspored">
           Raspored i tablica →
+        </Link>
+      </div>
+    </aside>
+  );
+}
+
+/**
+ * Traka dok utakmica traje.
+ *
+ * Rezultat se računa iz događaja, isto kao na stranici prijenosa — dva
+ * prikaza istog niza ne mogu reći različite stvari.
+ */
+function Prijenos({ utakmica, dogadaji }) {
+  const rezultat = rezultatIzDogadaja(dogadaji, utakmica.jeDoma);
+  const stanje = stanjePrijenosa(dogadaji);
+
+  return (
+    <aside className="tru tru--uzivo" aria-label="Utakmica u tijeku">
+      <div className="shell tru__inner">
+        <div className="tru__blok">
+          <span className="uzivo-znak">
+            <span className="uzivo-znak__tocka" aria-hidden="true" />
+            Uživo
+          </span>
+        </div>
+
+        <div className="tru__blok tru__blok--siri">
+          <div className="tru__redak">
+            <Klub ime={utakmica.home} istaknut={utakmica.jeDoma} />
+            <span className="tru__rezultat tru__rezultat--uzivo">
+              {rezultat.home}:{rezultat.away}
+            </span>
+            <Klub ime={utakmica.away} istaknut={!utakmica.jeDoma} />
+          </div>
+          <span className="tru__pod">
+            {[opisStanja(stanje), utakmica.comp].filter(Boolean).join(' · ')}
+          </span>
+        </div>
+
+        <Link className="tru__veza tru__veza--uzivo" to="/uzivo">
+          Prati uživo →
         </Link>
       </div>
     </aside>

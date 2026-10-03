@@ -426,3 +426,69 @@ select * from (values
   (9, 'Vrgorac',         6, 0, 1, 5, 12, 28,  1)
 ) as v(pos, club, played, wins, draws, losses, goals_for, goals_against, points)
 where not exists (select 1 from tablica);
+
+-- ─────────────────────────────────────────────────────────────
+-- 7. PRIJENOS UŽIVO                                (dodano 2026)
+-- ─────────────────────────────────────────────────────────────
+-- Klub odigra utakmicu, a stranica za to vrijeme šuti — rezultat se pojavi
+-- tek kad ga netko poslije upiše. Ove dvije tablice su sve što treba da
+-- navijač prati utakmicu dok traje.
+--
+-- Rezultat se namjerno **ne** sprema ovdje: računa se iz golova u `dogadaji`,
+-- pa semafor ne može proturječiti tijeku ispod sebe. U `utakmice` se upiše
+-- tek na kraju, kad je konačan.
+
+-- 7.1 Tijek utakmice
+create table if not exists dogadaji (
+  id          uuid primary key default gen_random_uuid(),
+  utakmica_id uuid not null references utakmice(id) on delete cascade,
+  minuta      int,
+  poluvrijeme int  not null default 1,
+  -- pocetak | gol | autogol | deseterac | zuti | crveni | timeout
+  -- | kraj_pol | kraj | komentar
+  vrsta       text not null default 'komentar',
+  nasa        boolean not null default true,   -- naša momčad ili protivnik
+  igrac_id    uuid references igraci(id) on delete set null,
+  ime         text not null default '',        -- protivnički igrač
+  tekst       text not null default '',
+  sort_order  int  not null default 0,
+  created_at  timestamptz not null default now()
+);
+create index if not exists dogadaji_utakmica on dogadaji(utakmica_id);
+
+-- 7.2 Postave
+-- `pocetna` razdvaja početnu petorku od klupe. Naši igrači se vežu po
+-- `igrac_id`, protivnici se upisuju imenom — njih u bazi nema i nema razloga
+-- da ih bude.
+create table if not exists postave (
+  id          uuid primary key default gen_random_uuid(),
+  utakmica_id uuid not null references utakmice(id) on delete cascade,
+  nasa        boolean not null default true,
+  igrac_id    uuid references igraci(id) on delete set null,
+  ime         text not null default '',
+  broj        int,
+  pocetna     boolean not null default true,
+  sort_order  int  not null default 0,
+  created_at  timestamptz not null default now()
+);
+create index if not exists postave_utakmica on postave(utakmica_id);
+
+-- 7.3 Pristup: čita svatko, mijenja samo prijavljeni
+alter table dogadaji enable row level security;
+alter table postave  enable row level security;
+
+do $$
+declare t text;
+begin
+  foreach t in array array['dogadaji','postave'] loop
+    execute format('drop policy if exists "javno citanje" on %I', t);
+    execute format('drop policy if exists "uredjivanje za prijavljene" on %I', t);
+
+    execute format(
+      'create policy "javno citanje" on %I for select using (true)', t);
+
+    execute format(
+      'create policy "uredjivanje za prijavljene" on %I for all
+         to authenticated using (true) with check (true)', t);
+  end loop;
+end $$;

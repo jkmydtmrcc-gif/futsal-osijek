@@ -30,6 +30,34 @@ jest(
   'kosa crta na kraju adrese ne udvostručuje se'
 );
 
+console.log('\nfiltri (prijenos uživo)');
+{
+  // Bez filtra bi se svakih petnaest sekundi povlačili svi događaji sezone.
+  const a = adresaUpita('https://abc.supabase.co', 'dogadaji', 'sort_order', {
+    utakmica_id: 'eq.11111111-2222-3333-4444-555555555555',
+  });
+  jest(a.includes('utakmica_id=eq.11111111'), 'uvjet se nađe u adresi');
+  jest(a.includes('order=sort_order.asc'), 'poredak preživi uz filtar');
+}
+{
+  const a = adresaUpita('https://abc.supabase.co', 'utakmice', null, { status: 'eq.uzivo' });
+  jest(a.includes('status=eq.uzivo') && !a.includes('order='), 'filtar radi i bez poretka');
+}
+{
+  // Prazan uvjet ne smije postati `?status=` — PostgREST na to vrati 400 i
+  // stranica bi tiho pala na ugrađeni sadržaj.
+  const a = adresaUpita('https://abc.supabase.co', 'utakmice', null, {
+    status: '',
+    comp: undefined,
+    round: null,
+  });
+  jest(!a.includes('status=') && !a.includes('comp=') && !a.includes('round='), 'prazni uvjeti se preskaču');
+}
+jest(
+  !adresaUpita('https://abc.supabase.co', 'igraci', 'sort_order').includes('&amp;'),
+  'bez filtara adresa ostaje ista kao prije'
+);
+
 console.log('\noblik odgovora');
 {
   const r = procitajOdgovor(200, [{ id: 1 }]);

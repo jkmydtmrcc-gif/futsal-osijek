@@ -7,6 +7,7 @@ import { Polje, Tekst, Kvacica, SlikaPolje, Broj, DatumVrijeme, Odabir } from '.
 import Statistika from './Statistika';
 import Strijelci from './Strijelci';
 import UvozRasporeda from './UvozRasporeda';
+import KonzolaUzivo from './Uzivo';
 import useTable from './useTable';
 import { formatDatum, formatSat } from '../lib/vrijeme';
 import ProvjeraRetka from './ProvjeraRetka';
@@ -14,6 +15,9 @@ import Postavke from './Postavke';
 import './admin.css';
 
 const KARTICE = [
+  /* Prijenos je prvi: na dan utakmice je jedino što se otvara, i otvara se
+     u žurbi. */
+  { id: 'uzivo', label: 'Uživo' },
   { id: 'igraci', label: 'Igrači' },
   { id: 'novosti', label: 'Novosti' },
   { id: 'utakmice', label: 'Utakmice' },
@@ -25,6 +29,8 @@ const KARTICE = [
 
 const STATUSI = [
   { value: '', label: 'Uobičajeno' },
+  { value: 'uzivo', label: 'U prijenosu' },
+  { value: 'odigrano', label: 'Odigrano' },
   { value: 'odgodeno', label: 'Odgođeno' },
   { value: 'otkazano', label: 'Otkazano' },
 ];
@@ -40,7 +46,7 @@ function opisUtakmice(r) {
 
 export default function AdminApp() {
   const [sesija, setSesija] = useState(undefined); // undefined = još provjeravam
-  const [kartica, setKartica] = useState('igraci');
+  const [kartica, setKartica] = useState('uzivo');
 
   useEffect(() => {
     if (!supabase) {
@@ -97,6 +103,8 @@ export default function AdminApp() {
       </nav>
 
       <main className="admin__sadrzaj">
+        {kartica === 'uzivo' && <KonzolaUzivo />}
+
         {kartica === 'igraci' && (
           <Urednik
             naslov="Igrači"
