@@ -14,7 +14,7 @@ export const VENUE = 'Športska dvorana Zrinjevac · 1.160 mjesta';
 export const NAV_LINKS = [
   { id: 'pocetna', label: 'Početna', to: '/' },
   { id: 'klub', label: 'Klub', to: '/klub' },
-  { id: 'postava', label: 'Prva postava', to: '/postava' },
+  { id: 'postava', label: 'Momčad', to: '/postava' },
   { id: 'raspored', label: 'Raspored', to: '/raspored' },
   { id: 'uzivo', label: 'Uživo', to: '/uzivo' },
   { id: 'shop', label: 'Fan Shop', to: '/shop' },
@@ -56,12 +56,19 @@ export const IMPACT = [
 ];
 
 /**
- * Igrači.
+ * Momčad: igrači i trener, u istom popisu.
  *
  * `number` je broj na dresu — prikazuje se velik, u obrisu, u kutu kartice.
- * `photo` je izrezan portret (bez pozadine) u `public/uploads/igraci/`.
- * Ako datoteka ne postoji ili se ne učita, kartica pada natrag na prezime
- * u pozadini, pa se slike mogu dodavati jedna po jedna.
+ * Trener ga nema (`null`). `pos` odlučuje u koju skupinu osoba ide
+ * (`POSITION_GROUPS`).
+ *
+ * `photo` je izrezan portret (bez pozadine). Prazan je dok slike nema — tada
+ * kartica pokaže prezime u pozadini, umjesto da se traži datoteka koje nema.
+ * Slike se dodaju u administraciji (Igrači → Fotografija), koja ih sama
+ * smanji i izreže im pozadinu.
+ *
+ * Imena bez imena (samo prezime) čekaju puna imena iz klupskog popisa
+ * kadra; uređuju se u administraciji.
  */
 export const PLAYERS = [
   {
@@ -157,6 +164,146 @@ export const PLAYERS = [
     photo: '/uploads/igraci/antonio-sekulic.webp',
     birth: '',
     from: 'Hrvatska',
+    height: '',
+    foot: '',
+    joined: '',
+    stats: [],
+  },
+  {
+    id: 'victor-lopez',
+    name: 'Víctor López',
+    number: 33,
+    pos: 'Vratar',
+    note: 'Španjolska',
+    photo: '',
+    birth: '',
+    from: 'Španjolska',
+    height: '',
+    foot: '',
+    joined: '',
+    stats: [],
+  },
+  {
+    id: 'suton',
+    name: 'Suton',
+    number: 88,
+    pos: 'Igrač u polju',
+    note: '',
+    photo: '',
+    birth: '',
+    from: '',
+    height: '',
+    foot: '',
+    joined: '',
+    stats: [],
+  },
+  {
+    id: 'trdin',
+    name: 'Trdin',
+    number: 11,
+    pos: 'Igrač u polju',
+    note: '',
+    photo: '',
+    birth: '',
+    from: '',
+    height: '',
+    foot: '',
+    joined: '',
+    stats: [],
+  },
+  {
+    id: 'ronaldinho',
+    name: 'Ronaldinho',
+    number: 17,
+    pos: 'Igrač u polju',
+    note: '',
+    photo: '',
+    birth: '',
+    from: '',
+    height: '',
+    foot: '',
+    joined: '',
+    stats: [],
+  },
+  {
+    id: 'vitor-lima',
+    name: 'Vitor Lima',
+    number: 10,
+    pos: 'Igrač u polju',
+    note: 'Brazil',
+    photo: '',
+    birth: '',
+    from: 'Brazil',
+    height: '',
+    foot: '',
+    joined: '',
+    stats: [],
+  },
+  {
+    id: 'yuri',
+    name: 'Yuri',
+    number: 20,
+    pos: 'Igrač u polju',
+    note: '',
+    photo: '',
+    birth: '',
+    from: '',
+    height: '',
+    foot: '',
+    joined: '',
+    stats: [],
+  },
+  {
+    id: 'jurisic',
+    name: 'Jurišić',
+    number: 18,
+    pos: 'Igrač u polju',
+    note: '',
+    photo: '',
+    birth: '',
+    from: '',
+    height: '',
+    foot: '',
+    joined: '',
+    stats: [],
+  },
+  {
+    id: 'jakopec',
+    name: 'Jakopec',
+    number: 27,
+    pos: 'Igrač u polju',
+    note: '',
+    photo: '',
+    birth: '',
+    from: '',
+    height: '',
+    foot: '',
+    joined: '',
+    stats: [],
+  },
+  {
+    id: 'mioc',
+    name: 'Mioč',
+    number: 40,
+    pos: 'Igrač u polju',
+    note: '',
+    photo: '',
+    birth: '',
+    from: '',
+    height: '',
+    foot: '',
+    joined: '',
+    stats: [],
+  },
+  {
+    id: 'carmine-tarantino',
+    name: 'Carmine Tarantino',
+    number: null,
+    pos: 'Trener',
+    note: '',
+    photo: '',
+    birth: '',
+    from: '',
     height: '',
     foot: '',
     joined: '',
@@ -401,7 +548,7 @@ export const SPONSOR_TIERS = [
 
 export const FOOTER_LINKS = [
   { label: 'O klubu', to: '/klub' },
-  { label: 'Prva postava', to: '/postava' },
+  { label: 'Momčad', to: '/postava' },
   { label: 'Raspored i tablica', to: '/raspored' },
   { label: 'Novosti', to: '/novosti' },
   { label: 'Fan Shop', to: '/shop' },
@@ -437,7 +584,7 @@ export const CONTACT = {
 };
 
 /* Potpis izrađivača u podnožju. */
-export const CREDIT = { prefix: 'Izrada', name: 'Flomis j.d.o.o.' };
+export const CREDIT = { prefix: 'Izrada', name: 'Flomis j.d.o.o.', href: 'https://flomis.hr' };
 
 export const LEGAL_LINKS = [
   { label: 'Kolačići', to: '/kolacici' },
@@ -476,9 +623,9 @@ export const PAGES = {
   },
   '/postava': {
     navId: 'postava',
-    eyebrow: 'Sezona 2025/26',
-    title: 'Prva postava',
-    lead: 'Igrači, brojevi i pozicije. Stožer predvodi Carmine Tarantino, momčad kapetan Andrej Pandurević.',
+    eyebrow: 'Sezona 2026/27',
+    title: 'Momčad',
+    lead: 'Igrači, trener i brojevi na dresovima. Momčad predvodi kapetan Andrej Pandurević, a stručni stožer trener Carmine Tarantino.',
   },
   '/raspored': {
     navId: 'raspored',
@@ -778,8 +925,9 @@ export const TICKET_FAQ = [
   },
 ];
 
-/** Redoslijed pozicija na stranici postave. */
+/** Redoslijed skupina na stranici momčadi. */
 export const POSITION_GROUPS = [
   { id: 'vratari', label: 'Vratari', match: ['Vratar'] },
   { id: 'polje', label: 'Igrači u polju', match: ['Igrač u polju', 'Kapetan'] },
+  { id: 'trener', label: 'Trener', match: ['Trener', 'Glavni trener'] },
 ];

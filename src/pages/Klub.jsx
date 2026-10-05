@@ -13,7 +13,7 @@ export default function Klub() {
       <PageHero page={pages['/klub']}>
         <div className="phero__actions">
           <Link className="btn btn--solid" to="/postava">
-            Prva postava
+            Momčad
           </Link>
           <Link className="btn btn--ghost" to={TICKETS_PATH}>
             Dolazak na utakmicu

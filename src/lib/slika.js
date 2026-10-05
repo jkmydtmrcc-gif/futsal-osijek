@@ -12,7 +12,7 @@
  * vanjskoj usluzi, pa ništa ne košta i fotografija ne putuje nikamo osim u
  * klupski Storage.
  */
-import { ukloniPozadinu, okvirSadrzaja, ocjena } from './pozadina.js';
+import { ukloniPozadinu, okvirSadrzaja, ocjena, PLATNO, rasporedPortreta } from './pozadina.js';
 
 const KVALITETA = 0.88;
 
@@ -62,10 +62,15 @@ export async function pripremiSliku(datoteka, { maxSirina = 1200 } = {}) {
 }
 
 /**
- * Portret igrača: smanjivanje, rezanje pozadine i obrezivanje na ono što je
- * ostalo. Oko lika se ostavlja mali zrak da kartica ne reže igrača po rubu.
+ * Portret igrača: smanjivanje, rezanje pozadine i slaganje lika na platno
+ * iste veličine za sve igrače.
+ *
+ * Lik se ne reže po obrisu nego se postavlja na platno omjera kartice
+ * (`PLATNO`), uvijek iste visine i uz donji rub (`rasporedPortreta`). Tako su
+ * svi igrači na kartici jednako veliki, bez obzira kako je fotografija
+ * kadrirana i u kojoj je pozi igrač.
  */
-export async function pripremiPortret(datoteka, { maxSirina = 900, prag = 28 } = {}) {
+export async function pripremiPortret(datoteka, { maxSirina = 1100, prag = 28 } = {}) {
   const { ctx, w, h } = await ucitaj(datoteka, maxSirina);
   const piksel = ctx.getImageData(0, 0, w, h);
 
@@ -77,25 +82,33 @@ export async function pripremiPortret(datoteka, { maxSirina = 900, prag = 28 } =
     return { ...(await pripremiSliku(datoteka, { maxSirina })), udio: rez.udio, ocjena: ocjena(rez.udio) };
   }
 
-  const zrak = Math.round(Math.max(okvir.width, okvir.height) * 0.02);
-  const x = Math.max(0, okvir.x - zrak);
-  const y = Math.max(0, okvir.y - zrak);
-  const sirina = Math.min(w - x, okvir.width + zrak * 2);
-  const visina = Math.min(h - y, okvir.height + zrak * 2);
-
   const izvor = document.createElement('canvas');
   izvor.width = w;
   izvor.height = h;
   izvor.getContext('2d').putImageData(new ImageData(rez.data, w, h), 0, 0);
 
+  const mjesto = rasporedPortreta(okvir);
   const izlaz = document.createElement('canvas');
-  izlaz.width = sirina;
-  izlaz.height = visina;
-  izlaz.getContext('2d').drawImage(izvor, x, y, sirina, visina, 0, 0, sirina, visina);
+  izlaz.width = PLATNO.sirina;
+  izlaz.height = PLATNO.visina;
+  const izlazCtx = izlaz.getContext('2d');
+  izlazCtx.imageSmoothingQuality = 'high';
+  izlazCtx.drawImage(
+    izvor,
+    okvir.x, okvir.y, okvir.width, okvir.height,
+    mjesto.x, mjesto.y, mjesto.sirina, mjesto.visina
+  );
 
   // WebP i PNG čuvaju prozirnost; JPEG ne, pa se za portrete ne koristi.
   const { tip, nastavak } = zapis();
   const blob = await naBlob(izlaz, tip);
 
-  return { blob, nastavak, sirina, visina, udio: rez.udio, ocjena: ocjena(rez.udio) };
+  return {
+    blob,
+    nastavak,
+    sirina: PLATNO.sirina,
+    visina: PLATNO.visina,
+    udio: rez.udio,
+    ocjena: ocjena(rez.udio),
+  };
 }

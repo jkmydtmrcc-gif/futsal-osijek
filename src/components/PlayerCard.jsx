@@ -20,6 +20,7 @@ export default function PlayerCard({ player, index = 0, onOpen }) {
   const [failed, setFailed] = useState(false);
   const showPhoto = Boolean(player.photo) && !failed;
   const { first, last } = splitName(player.name);
+  const imaBroj = player.number !== null && player.number !== undefined && player.number !== '';
 
   /* Kad se klikom otvara profil, kartica je gumb — ne `article` s `onClick`.
      Tako radi i tipkovnica i čitač ekrana, bez ručnog dodavanja role i
@@ -34,10 +35,13 @@ export default function PlayerCard({ player, index = 0, onOpen }) {
       delay={stupnjevito(index)}
       className={`player${showPhoto ? ' has-photo' : ''}${onOpen ? ' player--btn' : ''}`}
     >
-      {/* Broj na dresu, ne redni broj u popisu. */}
-      <span className={`player__num${String(player.number).length === 1 ? ' is-single' : ''}`} aria-hidden="true">
-        {player.number}
-      </span>
+      {/* Broj na dresu, ne redni broj u popisu. Trener ga nema, pa i kartica
+          ostaje bez njega — a „0" je pravi broj i ne smije nestati. */}
+      {imaBroj && (
+        <span className={`player__num${String(player.number).length === 1 ? ' is-single' : ''}`} aria-hidden="true">
+          {player.number}
+        </span>
+      )}
 
       <div className="player__glow" aria-hidden="true" />
       <div className="player__grain" aria-hidden="true" />
@@ -45,7 +49,7 @@ export default function PlayerCard({ player, index = 0, onOpen }) {
       {/* Prezime stoji uvijek, iza igrača. Slika je `lazy`, pa se ona
           ispod preloma ni ne pokuša učitati — bez ovoga bi kartica s
           nedostajućom slikom ostala prazna dok se ne doskrola do nje. */}
-      <span className="player__ghost" aria-hidden="true">
+      <span className="player__ghost" aria-hidden="true" style={{ '--duljina': Math.max(last.length, 5) }}>
         {last}
       </span>
 
@@ -68,7 +72,7 @@ export default function PlayerCard({ player, index = 0, onOpen }) {
         <h3 className="player__last">
           {last}
         </h3>
-        <span className="player__note">{player.note}</span>
+        {player.note && <span className="player__note">{player.note}</span>}
       </div>
 
       {onOpen && (

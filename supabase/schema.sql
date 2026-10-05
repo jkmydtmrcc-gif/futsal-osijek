@@ -492,3 +492,11 @@ begin
          to authenticated using (true) with check (true)', t);
   end loop;
 end $$;
+
+-- ─────────────────────────────────────────────────────────────
+-- 8. TRENER U MOMČADI                              (dodano 2026)
+-- ─────────────────────────────────────────────────────────────
+-- Trener ima karticu i profil kao i igrači, ali nema broj na dresu. Stupac
+-- `number` je do sada bio obavezan, pa trenera nije bilo moguće upisati.
+-- `null` znači „nema broja"; 0 je i dalje pravi broj.
+alter table igraci alter column number drop not null;

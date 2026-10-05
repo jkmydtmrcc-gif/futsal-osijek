@@ -190,3 +190,50 @@ export function ocjena(udio) {
   if (udio > 0.93) return { ok: false, poruka: 'Uklonjeno je gotovo sve — provjeri je li ostao igrač.' };
   return { ok: true, poruka: `Uklonjeno ${Math.round(udio * 100)}% slike.` };
 }
+
+/**
+ * Platno portreta: omjer 5:7, isti kao kartica igrača.
+ *
+ * Kartica prikazuje portret s `object-fit: contain` uz donji rub. Kad platno
+ * ima omjer same kartice, slika je ispunjava do ruba i nema ni praznog traka
+ * sa strane ni odrezanog lika.
+ */
+export const PLATNO = { sirina: 640, visina: 896 };
+
+/**
+ * Gdje na platnu stoji lik, da svi igrači budu **jednako veliki**.
+ *
+ * Prije se slika rezala po obrisu lika, pa je veličina na kartici ovisila o
+ * pozi: igrač raširenih ruku je bio širok, kartica ga je `contain`-om stisnula
+ * po širini i ispao je sitniji od onog koji stoji uspravno. Isto tako su stare
+ * fotografije imale lik od 84% do 95% visine kadra. Sad svaki lik dobije istu
+ * visinu — bez obzira na pozu, original i veličinu pozadine.
+ *
+ * `visina` je udio visine platna koji zauzima lik, `dno` razmak od donjeg
+ * ruba (igrač stoji na dnu kartice, ne lebdi), `najvecaSirina` gornja granica
+ * za širok lik. Tek kad lik nikako ne stane u visinu a da ne izađe na strane,
+ * ispada nešto manji — i to je jedina iznimka.
+ *
+ * Vraća mjesto i mjeru za `drawImage`; ne dira sliku, pa se daje provjeriti
+ * bez preglednika.
+ */
+export function rasporedPortreta(
+  okvir,
+  platno = PLATNO,
+  { visina = 0.92, dno = 0.02, najvecaSirina = 0.94 } = {}
+) {
+  const mjera = Math.min(
+    (platno.visina * visina) / okvir.height,
+    (platno.sirina * najvecaSirina) / okvir.width
+  );
+  const sirina = Math.max(1, Math.round(okvir.width * mjera));
+  const visinaLika = Math.max(1, Math.round(okvir.height * mjera));
+
+  return {
+    mjera,
+    sirina,
+    visina: visinaLika,
+    x: Math.round((platno.sirina - sirina) / 2),
+    y: platno.visina - visinaLika - Math.round(platno.visina * dno),
+  };
+}

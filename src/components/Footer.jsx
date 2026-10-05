@@ -85,13 +85,22 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="footer-credit">
+        {/* Potpis je poveznica na izrađivača. Otvara se u novoj kartici da
+            posjetitelj ne napusti klupsku stranicu, a `noopener` onemogućuje
+            otvorenoj stranici pristup ovoj. */}
+        <a
+          className="footer-credit"
+          href={CREDIT.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={`${CREDIT.prefix} ${CREDIT.name} — otvara flomis.hr u novoj kartici`}
+        >
           <span className="footer-credit__line" aria-hidden="true" />
           <span className="footer-credit__text">
             {CREDIT.prefix} <strong>{CREDIT.name}</strong>
           </span>
           <span className="footer-credit__line" aria-hidden="true" />
-        </div>
+        </a>
       </div>
     </footer>
   );

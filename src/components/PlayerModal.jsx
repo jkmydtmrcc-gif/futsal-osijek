@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import Pip from './Pip';
 import { COMPETITIONS, STAT_FIELDS } from '../data/site';
+import { jeTrener } from '../lib/momcad';
 
 /**
  * Kartica igrača preko cijelog ekrana.
@@ -23,6 +24,8 @@ export default function PlayerModal({ player, onClose }) {
   const closeRef = useRef(null);
 
   const stats = player?.stats ?? [];
+  // Trener nema utakmice ni golove, pa mu blok statistike ne treba.
+  const trener = jeTrener(player);
 
   /* Sezone i natjecanja se izvode iz upisane statistike — izbornik nudi samo
      ono za što stvarno postoje brojke. */
@@ -169,6 +172,7 @@ export default function PlayerModal({ player, onClose }) {
             )}
 
             {/* --- Statistika ---------------------------------------------- */}
+            {!trener && (
             <div className="pm__stats">
               <div className="pm__stats-head">
                 <span className="pm__stats-title">Statistika</span>
@@ -225,6 +229,7 @@ export default function PlayerModal({ player, onClose }) {
                 </>
               )}
             </div>
+            )}
           </div>
         </div>
       </div>

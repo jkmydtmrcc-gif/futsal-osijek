@@ -5,51 +5,46 @@ import PageHero from '../components/PageHero';
 import PlayerCard from '../components/PlayerCard';
 import PlayerModal from '../components/PlayerModal';
 import Pip from '../components/Pip';
+import { oblik } from '../lib/tekst';
 import { POSITION_GROUPS } from '../data/site';
 import { useContent } from '../lib/content';
-
-/**
- * Igrači se dijele po pozicijama iz `POSITION_GROUPS`. Ako netko u
- * administraciji upiše poziciju koja nije ni u jednoj skupini, ne nestaje —
- * dobiva vlastitu skupinu na kraju, pod svojim nazivom pozicije.
- */
-function groupByPosition(players) {
-  const groups = POSITION_GROUPS.map((g) => ({
-    id: g.id,
-    label: g.label,
-    players: players.filter((p) => g.match.includes(p.pos)),
-  }));
-
-  const claimed = new Set(POSITION_GROUPS.flatMap((g) => g.match));
-  const rest = players.filter((p) => !claimed.has(p.pos));
-  rest.forEach((p) => {
-    const found = groups.find((g) => g.label === p.pos);
-    if (found) found.players.push(p);
-    else groups.push({ id: p.pos, label: p.pos || 'Ostali', players: [p] });
-  });
-
-  return groups.filter((g) => g.players.length > 0);
-}
+import {
+  grupirajMomcad,
+  samoIgraci,
+  samoTreneri,
+  brojeviNaDresovima,
+  stozerBezKartica,
+} from '../lib/momcad';
 
 export default function Postava() {
   const { pages, players, staff } = useContent();
-  const groups = useMemo(() => groupByPosition(players), [players]);
+  const groups = useMemo(() => grupirajMomcad(players, POSITION_GROUPS), [players]);
   const [open, setOpen] = useState(null);
 
-  const keepers = players.filter((p) => p.pos === 'Vratar').length;
+  /* Trener ima karticu kao i igrači, ali nije igrač: ne ulazi u broj igrača,
+     ni u brojeve na dresovima. */
+  const igraci = samoIgraci(players);
+  const treneri = samoTreneri(players);
+  const keepers = igraci.filter((p) => p.pos === 'Vratar').length;
+  const brojevi = useMemo(() => brojeviNaDresovima(players), [players]);
+
+  /* Trener i kapetan stoje u momčadi s fotografijom, pa ih popis stožera ne
+     ponavlja. Ostane li stožer prazan, cijeli se odsječak ne prikazuje. */
+  const stozer = useMemo(() => stozerBezKartica(staff, players), [staff, players]);
+  const uStozeru = stozer.length + treneri.length;
 
   return (
     <>
       <PageHero page={pages['/postava']}>
         <div className="phero__stats">
           <span className="phero__stat">
-            <strong>{players.length}</strong> igrača
+            <strong>{igraci.length}</strong> {oblik(igraci.length, 'igrač', 'igrača', 'igrača')}
           </span>
           <span className="phero__stat">
             <strong>{keepers}</strong> {keepers === 1 ? 'vratar' : 'vratara'}
           </span>
           <span className="phero__stat">
-            <strong>{staff.length}</strong> u stožeru
+            <strong>{uStozeru}</strong> u stožeru
           </span>
         </div>
       </PageHero>
@@ -62,9 +57,9 @@ export default function Postava() {
               dvadeset brojeva puta 45 ms je gotovo sekunda skakanja — to je
               gif, ne popis momčadi. */}
           <Reveal className="numbers">
-            {players.map((p) => (
-              <span className="numbers__n" key={p.name}>
-                {p.number}
+            {brojevi.map((b) => (
+              <span className="numbers__n" key={b.key}>
+                {b.broj}
               </span>
             ))}
           </Reveal>
@@ -75,9 +70,9 @@ export default function Postava() {
       <section className="slab slab--paper" aria-labelledby="naslov-igraci">
         <div className="shell">
           <Reveal>
-            <span className="eyebrow">Igrači</span>
+            <span className="eyebrow">Kadar</span>
             <h2 className="section-title" id="naslov-igraci">
-              Momčad
+              Sezona 2026/27
             </h2>
           </Reveal>
 
@@ -105,6 +100,7 @@ export default function Postava() {
       </section>
 
       {/* --- Stožer -------------------------------------------------------- */}
+      {stozer.length > 0 && (
       <section className="slab slab--dark" aria-labelledby="naslov-stozer">
         <div className="shell">
           <Reveal>
@@ -115,7 +111,7 @@ export default function Postava() {
           </Reveal>
 
           <div className="staff-grid">
-            {staff.map((s, i) => (
+            {stozer.map((s, i) => (
               <Reveal className="staff-card" delay={stupnjevito(i, 110, 3)} key={s.role}>
                 <span className="staff-card__role">{s.role}</span>
                 <h3 className="staff-card__name">{s.name}</h3>
@@ -133,6 +129,7 @@ export default function Postava() {
           </Reveal>
         </div>
       </section>
+      )}
 
       {open && <PlayerModal player={open} onClose={() => setOpen(null)} />}
     </>

@@ -11,6 +11,7 @@ import KonzolaUzivo from './Uzivo';
 import useTable from './useTable';
 import { formatDatum, formatSat } from '../lib/vrijeme';
 import ProvjeraRetka from './ProvjeraRetka';
+import { jeTrener } from '../lib/momcad';
 import Postavke from './Postavke';
 import './admin.css';
 
@@ -110,14 +111,16 @@ export default function AdminApp() {
             naslov="Igrači"
             opis="Sve odavde vidi se u kartici koja se otvori klikom na igrača. Prazno polje se u kartici ne prikazuje."
             tablica="igraci"
-            opisRetka={(r) => `${r.number || '?'} · ${r.name || 'Novi igrač'}`}
+            opisRetka={(r) => `${r.number ?? (jeTrener(r) ? 'Trener' : '?')} · ${r.name || 'Novi igrač'}`}
             prazan={(r) => ({ sort_order: r.length + 1, name: 'Novi igrač', number: 0, pos: 'Igrač u polju', note: 'Hrvatska', photo: '', birth: '', from_place: '', height: '', foot: '', joined: '' })}
             podsadrzaj={(red) => <Statistika igracId={red.id} />}
             polja={(n, set) => (
               <>
                 <Polje label="Ime i prezime" value={n.name} onChange={set('name')} />
-                <Polje label="Broj na dresu" type="number" value={n.number} onChange={set('number')} />
-                <Polje label="Pozicija" value={n.pos} onChange={set('pos')} placeholder="Vratar / Igrač u polju / Kapetan" />
+                {/* Prazno polje je `null`, ne 0: trener broj nema, a 0 je pravi
+                    broj na dresu. */}
+                <Broj label="Broj na dresu (trener ga nema)" value={n.number} onChange={set('number')} min="0" />
+                <Polje label="Pozicija" value={n.pos} onChange={set('pos')} placeholder="Vratar / Igrač u polju / Kapetan / Trener" />
                 <Polje label="Napomena (država ili status)" value={n.note} onChange={set('note')} />
                 <Polje label="Datum rođenja" value={n.birth} onChange={set('birth')} placeholder="14. 3. 1998." />
                 <Polje label="Odakle je" value={n.from_place} onChange={set('from_place')} placeholder="Osijek, Hrvatska" />

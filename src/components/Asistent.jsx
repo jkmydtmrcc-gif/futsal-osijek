@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { useContent, useStandings } from '../lib/content';
 import AsistentIkona from './AsistentIkona';
 import { TEME_RIJECI, norm, odaberiTemu } from '../lib/asistent';
+import { jeTrener, samoIgraci } from '../lib/momcad';
+import { oblik } from '../lib/tekst';
 
 /**
  * Klupski asistent.
@@ -117,18 +119,21 @@ export default function Asistent() {
         rijeci: TEME_RIJECI.postava,
         pitanje: 'Tko igra za klub?',
         odgovor: () => {
-          const trener = staff.find((s) => norm(s.role).includes('trener'));
+          // Trener je sad u popisu momčadi; popis stožera je pričuva.
+          const trener =
+            players.find((p) => jeTrener(p)) ?? staff.find((s) => norm(s.role).includes('trener'));
           const kapetan =
             staff.find((s) => norm(s.role).includes('kapetan')) ??
             players.find((p) => norm(p.pos).includes('kapetan'));
-          const dijelovi = [`U prvoj postavi je ${players.length} igrača.`];
+          const igraci = samoIgraci(players);
+          const dijelovi = [`U momčadi je ${igraci.length} ${oblik(igraci.length, 'igrač', 'igrača', 'igrača')}.`];
           if (trener) dijelovi.push(`Trener: ${trener.name}.`);
           if (kapetan) dijelovi.push(`Kapetan: ${kapetan.name}.`);
           dijelovi.push('Klik na igrača otvara njegov profil i statistiku.');
           return dijelovi.join(' ');
         },
         put: '/postava',
-        putLabel: 'Prva postava',
+        putLabel: 'Momčad',
       },
       {
         id: 'novosti',

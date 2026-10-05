@@ -16,7 +16,7 @@ export default function Squad() {
       <div className="shell">
         <div className="section-head">
           <Reveal>
-            <span className="eyebrow">Prva postava</span>
+            <span className="eyebrow">Sezona 2026/27</span>
             <h2 className="section-title" id="naslov-momcad">
               Momčad
             </h2>
@@ -31,7 +31,7 @@ export default function Squad() {
 
       {/* Traka ide izvan .shell da kartice mogu kliziti do samog ruba
           ekrana, ali se prva poravnava s ostatkom sadržaja. */}
-      <Rail label="Igrači prve postave" className="squad__rail">
+      <Rail label="Momčad" className="squad__rail">
         {players.map((player, i) => (
           <div className="squad__slide" data-rail-item key={player.id ?? player.name}>
             <PlayerCard player={player} index={i} onOpen={() => setOpen(player)} />

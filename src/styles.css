@@ -1062,6 +1062,9 @@ html { scroll-behavior: smooth; }
   position: relative;
   aspect-ratio: 5 / 7;
   overflow: hidden;
+  /* Širina kartice kao mjerna jedinica (`cqw`): prezime u pozadini se skuplja
+     s karticom, pa „Ronaldinho" ne izlazi iz kadra na uskoj kartici. */
+  container-type: inline-size;
   background:
     radial-gradient(90% 60% at 50% 104%, rgba(11,71,168,.55) 0%, rgba(11,71,168,0) 60%),
     linear-gradient(163deg, #12285a 0%, #061024 52%, #0a1c40 100%);
@@ -1146,7 +1149,10 @@ html { scroll-behavior: smooth; }
   translate: -50% -50%;
   font-family: var(--font-display);
   font-weight: 900;
-  font-size: 52px;
+  /* Do 52px, ali nikad šire od ~82% kartice: dulje prezime dobije manje
+     slova umjesto da bude odrezano. 176cqw / broj slova ≈ širina jednog
+     slova uz razmak, pa duljina imena sama određuje veličinu. */
+  font-size: min(52px, calc(176cqw / var(--duljina, 7)));
   line-height: 1;
   letter-spacing: -2px;
   text-transform: uppercase;
@@ -2327,6 +2333,9 @@ html { scroll-behavior: smooth; }
   margin: 0 auto;
   padding: 0 var(--gutter) 26px;
 }
+/* Potpis je poveznica, ali ne smije izgledati kao poveznica — ostaje tih. */
+a.footer-credit { text-decoration: none; color: inherit; }
+a.footer-credit:focus-visible { outline: 2px solid var(--sky); outline-offset: 4px; }
 .footer-credit__line {
   flex: 1;
   max-width: 120px;
