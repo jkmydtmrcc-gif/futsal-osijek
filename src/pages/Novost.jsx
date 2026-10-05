@@ -3,6 +3,7 @@ import Pip from '../components/Pip';
 import Reveal from '../components/Reveal';
 import NewsCard from '../components/NewsCard';
 import PageHero from '../components/PageHero';
+import NewsFoto from '../components/NewsFoto';
 import NijePronadeno from './NijePronadeno';
 import { useContent } from '../lib/content';
 
@@ -42,7 +43,9 @@ export default function Novost() {
             <div className="post__main">
               {item.image && (
                 <Reveal variant="scale" as="figure" className="post__figure">
-                  <img className="post__photo" src={item.image} alt={item.title} />
+                  {/* Cijela fotografija, bez obzira na omjer: široka panorama i
+                      uspravan portret stoje jednako ispravno. */}
+                  <NewsFoto src={item.image} alt={item.title} varijanta="objava" loading="eager" />
                   <figcaption className="post__caption">{item.title}</figcaption>
                 </Reveal>
               )}

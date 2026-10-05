@@ -1874,26 +1874,20 @@ html { scroll-behavior: smooth; }
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
-  min-height: 420px;
 }
-.feature__photo {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: 52% 28%;
+/* Fotografija i tekst stoje jedno do drugoga, a ne tekst preko fotografije.
+   Tekst preko slike je morao sakriti dio slike pod tamnim preljevom — a slika
+   se sad prikazuje cijela. */
+.feature__body { position: relative; padding: 28px 30px 32px; }
+
+/* Okvir preko cijele širine (stranica Novosti): fotografija lijevo, tekst desno.
+   Zasebna klasa, a ne ovisnost o širini ekrana: na naslovnici okvir dijeli red
+   s popisom pa je uži od prozora i ostaje u stupcu. */
+@media (min-width: 900px) {
+  .feature--siroki { flex-direction: row; }
+  .feature--siroki > .nfoto { flex: 0 0 58%; aspect-ratio: auto; min-height: 420px; }
+  .feature--siroki .feature__body { flex: 1; align-self: center; padding: 44px 46px; }
 }
-.feature__veil {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to top,
-    rgba(6,16,36,.96) 12%,
-    rgba(6,16,36,.5) 55%,
-    rgba(6,16,36,.1) 100%);
-}
-.feature__body { position: relative; padding: 36px 34px 34px; max-width: 600px; }
 .feature__flag {
   display: inline-block;
   background: var(--blue);
@@ -1969,36 +1963,7 @@ html { scroll-behavior: smooth; }
    kartice pada na nulu i vraća se tek oko teksta — inače bi fotografija
    lebdjela u bijelom okviru. */
 .news-card--foto { padding: 0; gap: 0; }
-.news-card__media {
-  position: relative;
-  display: block;
-  /* Visina ovisi o širini, ne o slici: mreža tako ostaje poravnata i kad
-     klub upiše fotografije različitih omjera. */
-  aspect-ratio: 16 / 10;
-  overflow: hidden;
-  background: var(--navy);
-}
-.news-card__photo {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: scale .45s cubic-bezier(.22,.61,.36,1);
-}
-.news-card--link:hover .news-card__photo { scale: 1.045; }
-/* Dok fotografije nema — ista klupska ploha s grbom kakvu nose artikli. */
-.news-card__plate {
-  display: grid;
-  place-items: center;
-  background: linear-gradient(140deg, var(--navy), var(--blue));
-}
-.news-card__plate img {
-  width: 42%;
-  max-width: 96px;
-  height: auto;
-  object-fit: contain;
-  opacity: .5;
-}
+.news-card__media { position: relative; display: block; }
 .news-card--foto .news-card__body { padding: 20px 24px 24px; }
 .news-card__meta {
   font-size: 10px;
@@ -3102,15 +3067,6 @@ a.footer-credit:focus-visible { outline: 2px solid var(--sky); outline-offset: 4
 .post__grid { display: grid; grid-template-columns: minmax(0, 1fr) 268px; gap: 46px; align-items: start; }
 .post__main { max-width: 760px; }
 .post__figure { margin: 0 0 30px; }
-/* Omjer je zadan, pa visina stranice ne poskoči kad se slika učita — a
-   fotografije u bazi dolaze u svakakvim omjerima. */
-.post__photo {
-  display: block;
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  object-fit: cover;
-  box-shadow: 0 18px 44px rgba(14,20,32,.18);
-}
 .post__caption {
   margin-top: 10px;
   padding-left: 12px;
@@ -4706,9 +4662,6 @@ a.sponsor:hover { transform: translateY(-4px); border-color: var(--blue); box-sh
   }
   .reveal-mask > .reveal--up { translate: none !important; }
   .wip__progress-fill { animation: none; scale: 1 1; }
-  /* Fotografija kartice se na prijelazu miša povećava — bez prijelaza bi to
-     bio skok, što je gore od mirne slike. */
-  .news-card--link:hover .news-card__photo { scale: 1; }
 
   /* Izbornik i prijelaz rute bez gibanja, ali i dalje vidljivi. */
   .mobile-nav.is-open .mobile-nav__link,
@@ -4853,4 +4806,74 @@ a.sponsor:hover { transform: translateY(-4px); border-color: var(--blue); box-sh
   line-height: 1;
   font-variant-numeric: tabular-nums;
   color: var(--blue);
+}
+
+
+/* --------------------------------------------------------------------------
+   18. Fotografija novosti — uvijek cijela
+   Slika je u cijelosti (`contain`), a prazan prostor oko nje puni ista slika,
+   uvećana i zamućena. Komponenta: `NewsFoto`.
+   -------------------------------------------------------------------------- */
+.nfoto {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  isolation: isolate;
+  background: var(--navy);
+}
+
+/* Pozadina: ista fotografija, preko okvira i zamućena. Veća je od okvira da se
+   zamućen rub ne vidi kao svijetla vlas uz stranicu. */
+.nfoto__pozadina {
+  position: absolute;
+  inset: -14%;
+  z-index: 0;
+  width: 128%;
+  height: 128%;
+  max-width: none;
+  object-fit: cover;
+  filter: blur(26px) saturate(1.15) brightness(.7);
+}
+
+/* Slika u okviru zadanog omjera: ispunjava ga koliko može, nikad ne reže. */
+.nfoto__slika {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.nfoto--kartica,
+.nfoto--okvir { aspect-ratio: 16 / 10; }
+
+/* Stranica objave: prirodan omjer. Široka slika ispunjava širinu, uspravna je
+   ograničena visinom — oboje ostaje cijelo. Mala slika se ne razvlači preko
+   svoje veličine; stoji na sredini zamućene pozadine. */
+.nfoto--objava { box-shadow: 0 18px 44px rgba(14,20,32,.18); }
+.nfoto--objava .nfoto__slika {
+  position: relative;
+  inset: auto;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: min(78vh, 760px);
+  margin: 0 auto;
+}
+
+/* Bez fotografije: klupska ploha s grbom, ista kakvu nose artikli. */
+.nfoto--ploha {
+  display: grid;
+  place-items: center;
+  background: linear-gradient(140deg, var(--navy), var(--blue));
+}
+.nfoto--objava.nfoto--ploha { aspect-ratio: 16 / 9; }
+.nfoto__grb {
+  width: 34%;
+  max-width: 150px;
+  height: auto;
+  object-fit: contain;
+  opacity: .42;
 }

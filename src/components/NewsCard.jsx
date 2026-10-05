@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import Reveal, { stupnjevito } from './Reveal';
-import FeaturePhoto from './FeaturePhoto';
+import NewsFoto from './NewsFoto';
 
 /**
  * Kartica novosti. Cijela je poveznica na pojedinačnu novost, a kad novost
@@ -20,12 +20,7 @@ export default function NewsCard({ item, index = 0, delay = 0, sFotografijom = t
 
       {sFotografijom && (
         <div className="news-card__media">
-          <FeaturePhoto
-            src={item.image}
-            alt={item.title}
-            className="news-card__photo"
-            plateClassName="news-card__plate"
-          />
+          <NewsFoto src={item.image} alt={item.title} varijanta="kartica" />
         </div>
       )}
 

@@ -38,7 +38,7 @@ export const TOPBAR_STRIP = [
   'MNK Osijek Kandit · Športska dvorana Zrinjevac',
   '2. mjesto regularnog dijela SuperSport HMNL-a 2025/26',
   'Finalist doigravanja 2024/25',
-  'Trener: Carmine Tarantino · kapetan: Andrej Pandurević',
+  'Trener: Marko Perić · kapetan: Andrej Pandurević',
   'Vitor Lima ponovno u klubu',
 ];
 
@@ -296,8 +296,8 @@ export const PLAYERS = [
     stats: [],
   },
   {
-    id: 'carmine-tarantino',
-    name: 'Carmine Tarantino',
+    id: 'marko-peric',
+    name: 'Marko Perić',
     number: null,
     pos: 'Trener',
     note: '',
@@ -625,7 +625,7 @@ export const PAGES = {
     navId: 'postava',
     eyebrow: 'Sezona 2026/27',
     title: 'Momčad',
-    lead: 'Igrači, trener i brojevi na dresovima. Momčad predvodi kapetan Andrej Pandurević, a stručni stožer trener Carmine Tarantino.',
+    lead: 'Igrači, trener i brojevi na dresovima. Momčad predvodi kapetan Andrej Pandurević, a stručni stožer trener Marko Perić.',
   },
   '/raspored': {
     navId: 'raspored',
@@ -855,7 +855,7 @@ export const SHOP_STEPS = [
 
 /** Stožer — imena poznata iz klupskih objava. */
 export const STAFF = [
-  { role: 'Trener', name: 'Carmine Tarantino' },
+  { role: 'Trener', name: 'Marko Perić' },
   { role: 'Kapetan', name: 'Andrej Pandurević' },
 ];
 

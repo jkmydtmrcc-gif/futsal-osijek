@@ -16,7 +16,7 @@
 --   • imena i brojeve iz tablice kadra,
 --   • poziciju „Vratar" samo za Víctora Lópeza (mapa „Španjolac GOLMAN"),
 --     svi ostali su „Igrač u polju" — promijeni u administraciji gdje treba,
---   • trenera Carmine Tarantino bez broja.
+--   • trenera Marko Perić bez broja.
 --
 -- Što NIJE upisano, jer se ne zna: puna imena (većina je samo prezime),
 -- datumi rođenja, države i fotografije. Sve to se uređuje u administraciji
@@ -28,6 +28,11 @@
 
 -- Bez ovoga trener ne može u tablicu (isto je i u schema.sql, odsječak 8).
 alter table igraci alter column number drop not null;
+
+-- Ako je prije ove verzije već pokrenuta ona s prethodnim trenerom, samo se
+-- promijeni ime — red ostaje isti, pa se trener ne udvostruči. Ako nije,
+-- ovo ne pogađa nijedan red.
+update igraci set name = 'Marko Perić' where name = 'Carmine Tarantino';
 
 insert into igraci (sort_order, name, number, pos, note, photo)
 select v.sort_order, v.name, v.number, v.pos, v.note, v.photo
@@ -41,7 +46,7 @@ from (values
   (14, 'Jurišić',           18,       'Igrač u polju', '',           ''),
   (15, 'Jakopec',           27,       'Igrač u polju', '',           ''),
   (16, 'Mioč',              40,       'Igrač u polju', '',           ''),
-  (17, 'Carmine Tarantino', null::int, 'Trener',        '',           '')
+  (17, 'Marko Perić', null::int, 'Trener',        '',           '')
 ) as v(sort_order, name, number, pos, note, photo)
 where not exists (
   select 1 from igraci i

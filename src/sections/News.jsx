@@ -3,7 +3,7 @@ import Pip from '../components/Pip';
 import Reveal from '../components/Reveal';
 import NewsCard from '../components/NewsCard';
 import { useContent } from '../lib/content';
-import FeaturePhoto from '../components/FeaturePhoto';
+import NewsFoto from '../components/NewsFoto';
 
 export default function News() {
   const { news } = useContent();
@@ -42,8 +42,7 @@ export default function News() {
             variant="scale"
             className="feature feature--link"
           >
-            <FeaturePhoto src={featured.image} alt={featured.title} />
-            <div className="feature__veil" aria-hidden="true" />
+            <NewsFoto src={featured.image} alt={featured.title} varijanta="okvir" />
             <div className="feature__body">
               <span className="feature__flag">{featured.flag}</span>
               <h3 className="feature__title">{featured.title}</h3>

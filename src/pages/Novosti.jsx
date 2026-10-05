@@ -5,7 +5,7 @@ import Reveal from '../components/Reveal';
 import PageHero from '../components/PageHero';
 import NewsCard from '../components/NewsCard';
 import { useContent } from '../lib/content';
-import FeaturePhoto from '../components/FeaturePhoto';
+import NewsFoto from '../components/NewsFoto';
 
 const SVE = 'Sve';
 
@@ -54,11 +54,10 @@ export default function Novosti() {
               as={Link}
               to={`/novosti/${featured.id}`}
               variant="scale"
-              className="feature feature--link"
+              className="feature feature--link feature--siroki"
               delay={100}
             >
-              <FeaturePhoto src={featured.image} alt={featured.title} />
-              <div className="feature__veil" aria-hidden="true" />
+              <NewsFoto src={featured.image} alt={featured.title} varijanta="okvir" />
               <div className="feature__body">
                 <span className="feature__flag">{featured.flag}</span>
                 <h3 className="feature__title">{featured.title}</h3>

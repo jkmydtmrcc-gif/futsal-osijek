@@ -86,16 +86,16 @@ jest(grupirajMomcad([], POSITION_GROUPS).length === 0, 'prazna momčad nema skup
 console.log('\nstožer bez duplikata');
 {
   const staff = [
-    { role: 'Trener', name: 'Carmine Tarantino' },
+    { role: 'Trener', name: 'Marko Perić' },
     { role: 'Kapetan', name: 'Andrej Pandurević' },
     { role: 'Fizioterapeut', name: 'Ivo Ivić' },
   ];
-  const momcad = [igrac('Andrej Pandurević', 8), igrac('Carmine Tarantino', null, 'Trener')];
+  const momcad = [igrac('Andrej Pandurević', 8), igrac('Marko Perić', null, 'Trener')];
   const s = stozerBezKartica(staff, momcad);
   jest(s.length === 1 && s[0].name === 'Ivo Ivić', 'ostaje samo onaj tko nema karticu');
 }
 {
-  const s = stozerBezKartica([{ role: 'Trener', name: 'ČARMINE tarantino' }], [igrac('Carmine Tarantino', null, 'Trener')]);
+  const s = stozerBezKartica([{ role: 'Trener', name: 'MARKO perić' }], [igrac('Marko Perić', null, 'Trener')]);
   jest(s.length === 0, 'imena se uspoređuju bez obzira na velika slova');
 }
 jest(stozerBezKartica(undefined, undefined).length === 0, 'prazan stožer ne ruši');
@@ -131,7 +131,7 @@ console.log('\nugrađeni kadar');
 
 console.log('\nredak iz baze bez broja');
 {
-  const p = playerFromRow({ id: 'x', name: 'Carmine Tarantino', number: null, pos: 'Trener' }, []);
+  const p = playerFromRow({ id: 'x', name: 'Marko Perić', number: null, pos: 'Trener' }, []);
   jest(p.number === null, 'trener iz baze ostaje bez broja');
   jest(jeTrener(p), 'i prepoznaje se kao trener');
 }
