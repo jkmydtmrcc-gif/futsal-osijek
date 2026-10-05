@@ -532,16 +532,15 @@ export const SPONSOR_TIERS = [
     id: 'gold',
     tag: 'Gold sponzori',
     size: 'md',
-    /* Razine s više sponzora klize kao traka — tako ih stane koliko god
-       treba, bez reda koji se lomi na pola ekrana. */
-    rotate: true,
+    /* Gold stoji u mreži. Karusel s redovima pripada podupirateljima. */
     sponsors: [],
   },
   {
     id: 'podupiratelji',
     tag: 'Podupiratelji',
     size: 'sm',
-    rotate: true,
+    /* Podupiratelji idu u tri reda karusela, svaki u suprotnom smjeru —
+       tek kad ih je barem šest, inače u mrežu (`lib/sponzori.js`). */
     sponsors: [],
   },
 ];

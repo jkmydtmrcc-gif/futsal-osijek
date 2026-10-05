@@ -3,6 +3,15 @@ import Reveal from '../components/Reveal';
 import Marquee from '../components/Marquee';
 import { CONTACT_PATH } from '../data/site';
 import { useContent } from '../lib/content';
+import {
+  razvrstajRazine,
+  jePodupiratelj,
+  razdijeliNaRedove,
+  smjerReda,
+  popuniTraku,
+  trajanjeTrake,
+  SIRINA_CELIJE,
+} from '../lib/sponzori';
 
 /**
  * Sponzori u razinama: glavni, gold, podupiratelji.
@@ -11,11 +20,19 @@ import { useContent } from '../lib/content';
  * Namjerno se ne podmeće tuđi logotip kao zamjena: to je izgledalo kao da
  * klub ima osamnaest istih sponzora.
  */
-function SponsorCell({ sponsor, size }) {
+function SponsorCell({ sponsor, size, eager = false }) {
+  /* Logotip stoji u okviru stalne visine i s razmakom oko sebe, a unutra se
+     smanjuje da stane (`contain`) — nikad se ne reže ni razvlači. Tako široki
+     i uspravni logotipi dobivaju isti prostor, pa kartice izgledaju kao niz, a
+     ne kao zbirka različitih komada. */
   const inner = sponsor.logo ? (
-    <img src={sponsor.logo} alt={sponsor.name} loading="lazy" />
+    <span className="sponsor__logo">
+      <img src={sponsor.logo} alt={sponsor.name} loading={eager ? 'eager' : 'lazy'} />
+    </span>
   ) : (
-    <span className="sponsor__name">{sponsor.name}</span>
+    <span className="sponsor__logo">
+      <span className="sponsor__name">{sponsor.name}</span>
+    </span>
   );
 
   const className = `sponsor sponsor--${size}${sponsor.logo ? ' has-logo' : ''}`;
@@ -38,23 +55,75 @@ function SponsorCell({ sponsor, size }) {
 }
 
 /**
- * Traka kliže pomakom za pola staze, pa mora biti barem dvostruko šira od
- * ekrana. S dva ili tri sponzora nije — popis se zato ponavlja dok ne bude
- * dovoljno dug da petlja izgleda neprekinuto.
+ * Nevidljiv popis poveznica za čitače ekrana.
+ *
+ * Traka je ukras i `Marquee` je skriva — uz to da svakog sponzora prikazuje
+ * dvaput. Zato isti popis, jednom, stoji i kao običan popis.
  */
-function popuni(sponsors, najmanje = 8) {
-  if (sponsors.length === 0) return sponsors;
-  const out = [];
-  while (out.length < najmanje) out.push(...sponsors);
-  return out;
+function PopisZaCitace({ sponsors }) {
+  return (
+    <ul className="sr-only">
+      {sponsors.map((sponsor, i) => (
+        <li key={`${sponsor.name}-${i}-a11y`}>
+          {sponsor.href ? (
+            <a href={sponsor.href} target="_blank" rel="noopener noreferrer">
+              {sponsor.name}
+            </a>
+          ) : (
+            sponsor.name
+          )}
+        </li>
+      ))}
+    </ul>
+  );
 }
+
+/**
+ * Jedan red karusela.
+ *
+ * Trajanje se računa iz puta, a ne zadaje fiksno: red s više logotipa bi
+ * inače klizio brže od kraćeg. Brzina se razlikuje tek malo među redovima
+ * (`brzina`), da ne idu u koraku.
+ */
+function Traka({ sponsors, size, smjer, brzina = 36 }) {
+  const cell = SIRINA_CELIJE[size] ?? SIRINA_CELIJE.md;
+  const stavke = popuniTraku(sponsors, cell);
+
+  return (
+    <Marquee
+      items={stavke}
+      className="tier__rail"
+      trackClassName={`tier__track tier__track--${size}`}
+      trackStyle={{
+        '--celija': `${cell}px`,
+        animationDuration: `${trajanjeTrake(stavke.length, cell, 12, brzina)}s`,
+      }}
+      reverse={smjer === 'desno'}
+      faded
+    >
+      {(sponsor, i, kopija) => (
+        <span
+          className={`tier__cell tier__cell--rail${kopija ? ' tier__cell--kopija' : ''}`}
+          key={`${sponsor.name}-${i}`}
+        >
+          <SponsorCell sponsor={sponsor} size={size} eager />
+        </span>
+      )}
+    </Marquee>
+  );
+}
+
+/** Svaki red malo drukčijom brzinom, da tri reda ne kližu u koraku. */
+const BRZINE = [36, 42, 39];
 
 export default function Partners() {
   const { sponsors, hero } = useContent();
 
   // Razina bez ijednog sponzora se ne prikazuje. Prazna razina s natpisom
   // „Gold sponzori“ i ničim ispod izgleda kao da je nešto otpalo.
-  const razine = sponsors.tiers.filter((tier) => tier.sponsors.length > 0);
+  // Redoslijed je uvijek glavni → gold → podupiratelji, bez obzira kojim je
+  // redom vlasnik upisivao.
+  const razine = razvrstajRazine(sponsors.tiers.filter((tier) => tier.sponsors.length > 0));
 
   return (
     <section className="partners" aria-labelledby="naslov-partneri">
@@ -81,52 +150,7 @@ export default function Partners() {
                 <span className="tier__line" aria-hidden="true" />
               </div>
 
-              {/* Razina označena za rotaciju klizi kao traka; ostale stoje u
-                  mreži. Traka se zaustavlja na prelazak mišem, da se logotip
-                  stigne pročitati i kliknuti. Traka ima smisla tek kad ima
-                  što klizati — s dva sponzora ostaje mreža. */}
-              {tier.rotate && tier.sponsors.length > 4 ? (
-                <>
-                  {/* Traka je ukras i `Marquee` je skriva čitačima ekrana — uz
-                      to da svakog sponzora prikazuje dvaput. Zato isti popis
-                      stoji i kao običan, nevidljiv popis poveznica. */}
-                  <ul className="sr-only">
-                    {tier.sponsors.map((sponsor, i) => (
-                      <li key={`${sponsor.name}-${i}-a11y`}>
-                        {sponsor.href ? (
-                          <a href={sponsor.href} target="_blank" rel="noopener noreferrer">
-                            {sponsor.name}
-                          </a>
-                        ) : (
-                          sponsor.name
-                        )}
-                      </li>
-                    ))}
-                  </ul>
-                  <Marquee
-                    items={popuni(tier.sponsors)}
-                    className="tier__rail"
-                    trackClassName={`tier__track tier__track--${tier.size}`}
-                    faded
-                  >
-                    {(sponsor, i) => (
-                      <span className="tier__cell tier__cell--rail" key={`${sponsor.name}-${i}`}>
-                        <SponsorCell sponsor={sponsor} size={tier.size} />
-                      </span>
-                    )}
-                  </Marquee>
-                </>
-              ) : (
-                /* Cijela razina se pojavi odjednom — logotipi koji uskaču
-                   jedan po jedan djeluju kao da ih se broji. */
-                <div className="tier__grid">
-                  {tier.sponsors.map((sponsor, i) => (
-                    <div key={`${sponsor.name}-${i}`} className="tier__cell">
-                      <SponsorCell sponsor={sponsor} size={tier.size} />
-                    </div>
-                  ))}
-                </div>
-              )}
+              <Sadrzaj tier={tier} />
             </Reveal>
           ))}
         </div>
@@ -149,5 +173,60 @@ export default function Partners() {
         </Reveal>
       </div>
     </section>
+  );
+}
+
+/**
+ * Sadržaj jedne razine.
+ *
+ * - Podupiratelji: tri reda karusela, svaki u suprotnom smjeru od susjednog.
+ *   Tek kad ih ima dovoljno (`NAJMANJE_ZA_REDOVE`); inače mreža, jer tri reda
+ *   s dva logotipa daju isti logotip ponovljen dvadeset puta.
+ * - Gold: mreža. Rotira se samo ako je razina označena za rotaciju i ima
+ *   dovoljno sponzora — tada kao jedan red.
+ * - Glavni: uvijek mreža, jer jedan sponzor rastegnut na cijelu širinu
+ *   izgleda kao prazan okvir.
+ */
+function Sadrzaj({ tier }) {
+  const redovi = jePodupiratelj(tier) ? razdijeliNaRedove(tier.sponsors, 3) : null;
+
+  if (redovi) {
+    return (
+      <>
+        <PopisZaCitace sponsors={tier.sponsors} />
+        <div className="tier__redovi">
+          {redovi.map((red, r) => (
+            <Traka
+              sponsors={red}
+              size={tier.size === 'lg' ? 'md' : tier.size}
+              smjer={smjerReda(r)}
+              brzina={BRZINE[r % BRZINE.length]}
+              key={r}
+            />
+          ))}
+        </div>
+      </>
+    );
+  }
+
+  if (tier.rotate && tier.size !== 'lg' && tier.sponsors.length > 4) {
+    return (
+      <>
+        <PopisZaCitace sponsors={tier.sponsors} />
+        <Traka sponsors={tier.sponsors} size={tier.size} smjer="lijevo" />
+      </>
+    );
+  }
+
+  /* Cijela razina se pojavi odjednom — logotipi koji uskaču jedan po jedan
+     djeluju kao da ih se broji. */
+  return (
+    <div className="tier__grid">
+      {tier.sponsors.map((sponsor, i) => (
+        <div key={`${sponsor.name}-${i}`} className="tier__cell">
+          <SponsorCell sponsor={sponsor} size={tier.size} />
+        </div>
+      ))}
+    </div>
   );
 }
