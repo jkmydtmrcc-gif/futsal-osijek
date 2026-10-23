@@ -297,7 +297,11 @@ end $$;
 insert into sponzori (sort_order, tier, tag, size, name, logo, href, note, rotate)
 select * from (values
   (1, 'glavni', 'Glavni sponzori', 'lg', 'Kandit', '/uploads/kandit-logo.png',
-      'https://www.kandit.hr/', 'Naziv sponzor kluba', false)
+      'https://www.kandit.hr/', 'Naziv sponzor kluba', false),
+  (50, 'tehnicki', 'Tehnički sponzor', 'md', 'Sala Sport', '/uploads/salasport-logo.png',
+      'https://salasport.hr/', '', false),
+  (90, 'web', 'Web partner', 'sm', 'Flomis', '/uploads/flomis-logo.png',
+      'https://www.flomis.hr/', '', false)
 ) as v(sort_order, tier, tag, size, name, logo, href, note, rotate)
 where not exists (select 1 from sponzori);
 

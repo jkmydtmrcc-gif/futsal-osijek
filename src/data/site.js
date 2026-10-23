@@ -545,12 +545,38 @@ export const SPONSOR_TIERS = [
     sponsors: [],
   },
   {
+    id: 'tehnicki',
+    tag: 'Tehnički sponzor',
+    size: 'md',
+    sponsors: [
+      {
+        name: 'Sala Sport',
+        logo: '/uploads/salasport-logo.png',
+        href: 'https://salasport.hr/',
+        note: '',
+      },
+    ],
+  },
+  {
     id: 'podupiratelji',
     tag: 'Podupiratelji',
     size: 'sm',
     /* Podupiratelji idu u tri reda karusela, svaki u suprotnom smjeru —
        tek kad ih je barem šest, inače u mrežu (`lib/sponzori.js`). */
     sponsors: [],
+  },
+  {
+    id: 'web',
+    tag: 'Web partner',
+    size: 'sm',
+    sponsors: [
+      {
+        name: 'Flomis',
+        logo: '/uploads/flomis-logo.png',
+        href: 'https://www.flomis.hr/',
+        note: '',
+      },
+    ],
   },
 ];
 

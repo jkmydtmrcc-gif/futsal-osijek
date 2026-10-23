@@ -13,8 +13,11 @@ const norm = (s) =>
     .replace(/\s+/g, ' ')
     .trim();
 
-/** Glavni, pa gold, pa podupiratelji. Što nije među njima ide na kraj. */
-const REDOSLIJED = ['glavni', 'gold', 'podupir'];
+/**
+ * Glavni, gold, tehnički sponzor, podupiratelji, web partner. Što nije među
+ * njima ide na kraj.
+ */
+const REDOSLIJED = ['glavni', 'gold', 'tehnick', 'podupir', 'web'];
 
 /**
  * Razine u pravom redoslijedu, bez obzira kako su upisane.

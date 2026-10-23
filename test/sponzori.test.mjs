@@ -47,6 +47,19 @@ console.log('\nporedak razina');
   const r = razvrstajRazine([razina('medijski'), razina('podupiratelji'), razina('partneri'), razina('glavni')]);
   jest(r.map((x) => x.id).join() === 'glavni,podupiratelji,medijski,partneri', `nepoznate na kraju, redom (${r.map((x) => x.id).join()})`);
 }
+{
+  // Tehnički sponzor ide ispod golda, web partner ispod podupiratelja.
+  const r = razvrstajRazine([
+    razina('web', 'Web partner'),
+    razina('podupiratelji', 'Podupiratelji'),
+    razina('tehnicki', 'Tehnički sponzor'),
+    razina('gold', 'Gold sponzori'),
+    razina('glavni', 'Glavni sponzori'),
+  ]);
+  jest(r.map((x) => x.id).join() === 'glavni,gold,tehnicki,podupiratelji,web', `tehnički ispod golda, web ispod podupiratelja (${r.map((x) => x.id).join()})`);
+  const s = razvrstajRazine([razina('x', 'Web partner'), razina('y', 'TEHNIČKI SPONZOR')]);
+  jest(s.map((x) => x.id).join() === 'y,x', 'prepoznaje se i po naslovu s kvačicama');
+}
 jest(razvrstajRazine([]).length === 0, 'prazan popis ne ruši');
 jest(razvrstajRazine(undefined).length === 0, 'nepostojeći popis ne ruši');
 {
