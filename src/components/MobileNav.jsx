@@ -39,10 +39,30 @@ export default function MobileNav({ open, onClose, activeId, returnFocusRef }) {
     };
   }, [open]);
 
+  // Zavjesa počinje točno ispod zaglavlja. Visina zaglavlja nije stalna —
+  // ovisi o širini, pismu i traci s vijestima — pa se mjeri, a ne pogađa.
+  // Pogođena (110px) je na nekim mobitelima bila niža od stvarne, pa je
+  // „Početna" ostajala pod zaglavljem.
+  useEffect(() => {
+    if (!open) return undefined;
+    const izmjeri = () => {
+      const zaglavlje = document.querySelector('.masthead');
+      const dno = zaglavlje?.getBoundingClientRect().bottom;
+      if (dno > 0) panelRef.current?.style.setProperty('--header-h', `${Math.ceil(dno)}px`);
+    };
+    izmjeri();
+    window.addEventListener('resize', izmjeri);
+    return () => window.removeEventListener('resize', izmjeri);
+  }, [open]);
+
   // Fokus ulazi u panel pri otvaranju i vraća se na gumb pri zatvaranju.
+  // Na sam panel, a ne na prvu poveznicu: poveznica s fokusom na mobitelu
+  // dobije plavi okvir, kao da je odabrana. Tipkovnica i dalje kreće od vrha
+  // — prvi Tab vodi na „Početnu".
   useEffect(() => {
     if (open) {
-      panelRef.current?.querySelector('a')?.focus();
+      panelRef.current?.scrollTo?.(0, 0);
+      panelRef.current?.focus({ preventScroll: true });
     } else if (document.activeElement === document.body) {
       returnFocusRef?.current?.focus();
     }
@@ -56,7 +76,7 @@ export default function MobileNav({ open, onClose, activeId, returnFocusRef }) {
       aria-hidden={!open}
     >
 
-      <div className="mobile-nav__panel" ref={panelRef}>
+      <div className="mobile-nav__panel" ref={panelRef} tabIndex={-1}>
         <nav className="mobile-nav__list" aria-label="Mobilna navigacija">
           {NAV_LINKS.map((link, i) => (
             <Link

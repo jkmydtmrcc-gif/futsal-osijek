@@ -560,13 +560,22 @@ html { scroll-behavior: smooth; }
   height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  gap: 26px;
-  padding: calc(var(--header-h, 128px) + 28px) var(--gutter) 36px;
+  /* Ne `justify-content: center`: kad je izbornik viši od ekrana, centriranje
+     gura prve stavke iznad vrha, pod zaglavlje, gdje se do njih ne može ni
+     klizanjem. Automatske margine centriraju samo dok ima mjesta — čim ga
+     nema, padnu na nulu i izbornik počinje odmah ispod zaglavlja. */
+  justify-content: flex-start;
+  gap: 22px;
+  /* `--header-h` mjeri `MobileNav.jsx` na stvarnom zaglavlju; ove vrijednosti
+     su samo pričuva do prvog mjerenja. */
+  padding: calc(var(--header-h, 128px) + 18px) var(--gutter) 32px;
   overflow-y: auto;
+  overscroll-behavior: contain;
 }
+.mobile-nav__panel:focus { outline: none; }
 
-.mobile-nav__list { display: flex; flex-direction: column; }
+.mobile-nav__list { display: flex; flex-direction: column; margin-top: auto; }
+.mobile-nav__foot { margin-bottom: auto; }
 
 /* Stavke ulaze jedna po jedna; pri zatvaranju idu odjednom, bez kašnjenja. */
 .mobile-nav__link,
@@ -589,7 +598,10 @@ html { scroll-behavior: smooth; }
   display: flex;
   align-items: baseline;
   gap: 16px;
-  padding: 15px 4px;
+  /* Visina stavke prati visinu ekrana, da svih osam stane i na manjem
+     mobitelu s otvorenom trakom preglednika. */
+  padding: clamp(8px, 1.4vh, 15px) 4px;
+  padding: clamp(8px, 1.4dvh, 15px) 4px;
   border-bottom: 1px solid rgba(255,255,255,.1);
   color: var(--white);
 }
@@ -608,7 +620,8 @@ html { scroll-behavior: smooth; }
   flex: 1;
   font-family: var(--font-display);
   font-weight: 900;
-  font-size: clamp(28px, 8vw, 40px);
+  font-size: clamp(26px, min(8vw, 4.6vh), 40px);
+  font-size: clamp(26px, min(8vw, 4.6dvh), 40px);
   line-height: 1;
   letter-spacing: -.4px;
   text-transform: uppercase;
@@ -683,12 +696,11 @@ html { scroll-behavior: smooth; }
 .site-header.is-menu-open .nav-toggle:hover { background: rgba(255,255,255,.1); }
 .site-header.is-menu-open .nav-toggle__bar { background: var(--white); }
 
-/* Gumb za ulaznice je i u zavjesi — ovdje se makne da se ne ponavlja. */
-.site-header.is-menu-open .masthead__cta {
-  opacity: 0;
-  pointer-events: none;
-  translate: 12px 0;
-}
+/* Dok je izbornik otvoren, gumb za ulaznice se makne iz trake — i to
+   potpuno, a ne samo proziran: prozirni je i dalje zauzimao mjesto, pa je
+   gumb za zatvaranje (X) stajao na sredini zaglavlja umjesto uz desni rub. */
+.site-header.is-menu-open .masthead__cta { display: none; }
+.site-header.is-menu-open .nav-toggle { margin-left: auto; }
 .masthead__cta { transition: background .2s ease, transform .2s ease, opacity .3s ease, translate .3s ease; }
 .brand__name, .brand__sub { transition: color .3s ease; }
 
@@ -4545,7 +4557,8 @@ a.sponsor:hover { transform: translateY(-4px); border-color: var(--blue); box-sh
 /* Ispod 980px traka s poveznicama ustupa mjesto hamburgeru. */
 @media (max-width: 980px) {
   .nav { display: none; }
-  .nav-toggle { display: inline-flex; }
+  /* Hamburger uvijek uz desni rub — i kad uz njega nema gumba za ulaznice. */
+  .nav-toggle { display: inline-flex; margin-left: auto; }
   .masthead__inner { gap: 12px; }
   .masthead__cta { margin-left: auto; }
   .mobile-nav__panel { --header-h: 128px; }
@@ -4601,7 +4614,6 @@ a.sponsor:hover { transform: translateY(-4px); border-color: var(--blue); box-sh
    hamburger, a "Kupi ulaznicu" je odmah na vrhu otvorenog izbornika. */
 @media (max-width: 380px) {
   .masthead__cta { display: none; }
-  .nav-toggle { margin-left: auto; }
 }
 
 /* --------------------------------------------------------------------------

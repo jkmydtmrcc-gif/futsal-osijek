@@ -364,6 +364,16 @@ a.sponsor:hover {
   background: rgba(255,255,255,.88);
   box-shadow: 0 1px 0 rgba(11,71,168,.1), 0 14px 36px rgba(6,16,36,.16);
 }
+/* Otvoren izbornik: zaglavlje se stapa s tamnom zavjesom — i kad je stranica
+   pomaknuta. Bez ovoga je pomaknuta stranica zadržala svijetlo staklo, a
+   bijeli natpis kluba na njemu se nije vidio. */
+.site-header.is-menu-open .masthead,
+.site-header.is-menu-open.is-scrolled .masthead {
+  background: var(--navy);
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
 
 .topbar {
   background-color: var(--navy);
