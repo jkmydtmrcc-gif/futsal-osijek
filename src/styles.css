@@ -28,9 +28,15 @@
 
   /* Pričuve imaju podešene mjere (vidi `fonts.css`), pa se zamjena pisma ne
      vidi kao poskakivanje teksta. */
-  --font-body:    Saira, 'Saira pricuva', system-ui, sans-serif;
+  --font-body:    Saira, 'Saira pricuva', system-ui, sans-serif,
+                  'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji';
   --font-display: 'Saira Condensed', 'Saira Condensed pricuva', Saira, system-ui, sans-serif;
   --font-mono:    ui-monospace, Menlo, monospace;
+  /* Pismo za čitanje novosti (vidi `fonts.css`). Emotikoni dolaze iz
+     sustavnih pisama — navedena su izričito, da ih preglednik ne traži
+     redom po svim pismima. */
+  --font-citanje: Inter, system-ui, Arial, sans-serif,
+                  'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji';
 
   --shell: 1360px;   /* maksimalna širina sadržaja */
   --gutter: 28px;
@@ -1963,6 +1969,7 @@ html { scroll-behavior: smooth; }
 }
 .feature__lead {
   margin: 14px 0 0;
+  font-family: var(--font-citanje);
   font-size: 15px;
   line-height: 1.6;
   color: rgba(255,255,255,.8);
@@ -2037,6 +2044,7 @@ html { scroll-behavior: smooth; }
 }
 .news-card__lead {
   margin: 0;
+  font-family: var(--font-citanje);
   font-size: 14px;
   line-height: 1.55;
   color: var(--muted);
@@ -3120,9 +3128,53 @@ a.footer-credit:focus-visible { outline: 2px solid var(--sky); outline-offset: 4
 
 .post__grid { display: grid; grid-template-columns: minmax(0, 1fr) 268px; gap: 46px; align-items: start; }
 .post__main { max-width: 760px; }
+
+/* Tekst objave: Inter, malo veći i s više zraka među redcima — čita se kao
+   članak, a ne kao natpis. */
+.post__tekst,
+.post__tekst .prose {
+  font-family: var(--font-citanje);
+  font-size: 17.5px;
+  line-height: 1.75;
+  color: #2b3445;
+  letter-spacing: -.005em;
+}
+.post__tekst .prose { margin: 0 0 1.1em; max-width: 720px; }
+.post__tekst strong { font-weight: 700; color: var(--ink); }
+.post__tekst em { font-style: italic; }
+.post__tekst u { text-decoration-thickness: 1.5px; text-underline-offset: 3px; }
+.prose__podnaslov {
+  margin: 1.6em 0 .55em;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 26px;
+  line-height: 1.15;
+  letter-spacing: .1px;
+  text-transform: uppercase;
+  color: var(--ink);
+  text-wrap: balance;
+}
+.post__tekst > :first-child .prose__podnaslov,
+.post__tekst > .prose__podnaslov:first-child { margin-top: .2em; }
+.prose__popis { padding-left: 1.3em; }
+.prose__popis li { margin: .3em 0; padding-left: .2em; }
+.prose__popis--ul li::marker { color: var(--blue); }
+.prose__popis--ol li::marker { color: var(--blue); font-weight: 700; }
+.prose__citat {
+  padding: 6px 0 6px 20px;
+  border-left: 3px solid var(--blue);
+  font-style: italic;
+  color: var(--ink);
+}
+.prose__citat p { margin: 0; }
+@media (max-width: 560px) {
+  .post__tekst, .post__tekst .prose { font-size: 16.5px; line-height: 1.7; }
+  .prose__podnaslov { font-size: 22px; }
+}
 .post__figure { margin: 0 0 30px; }
 .post__caption {
   margin-top: 10px;
+  font-family: var(--font-citanje);
   padding-left: 12px;
   border-left: 3px solid var(--blue);
   font-size: 12.5px;

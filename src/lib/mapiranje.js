@@ -1,3 +1,4 @@
+import { bezOznaka } from './oblikovanje.js';
 import * as SITE from '../data/site.js';
 
 /**
@@ -114,7 +115,9 @@ export const newsFromRow = (row) => ({
   date: row.date ?? '',
   cat: row.cat ?? '',
   title: row.title ?? '',
-  lead: row.lead ?? '',
+  /* Uvod stoji na karticama i u opisu stranice za tražilice, gdje
+     oblikovanja nema — zalutala zvjezdica se tamo ne smije vidjeti. */
+  lead: bezOznaka(row.lead ?? ''),
   image: row.image ?? '',
   featured: Boolean(row.featured),
   body: Array.isArray(row.body)

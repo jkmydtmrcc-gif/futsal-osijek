@@ -457,3 +457,61 @@
 .akonzola__minuta { flex: none; min-width: 40px; font-weight: 900; color: #7fb0f0; font-variant-numeric: tabular-nums; }
 .akonzola__opis { flex: 1; min-width: 0; font-size: 14px; color: rgba(255,255,255,.82); }
 .akonzola__redak .agumb { flex: none; padding: 5px 12px; font-size: 11px; }
+
+/* --------------------------------------------------------------------------
+   Tekst objave: alatna traka, emotikoni i pregled
+   -------------------------------------------------------------------------- */
+.atekst__traka {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 8px;
+  background: #0d1729;
+  border: 1px solid rgba(255,255,255,.16);
+  border-bottom: 0;
+}
+.atekst__razmak { flex: 1; }
+.atekst__gumb {
+  min-width: 36px;
+  height: 34px;
+  padding: 0 11px;
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.18);
+  color: #e8eef8;
+  font-family: var(--font-body);
+  font-size: 13.5px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.atekst__gumb:hover { background: rgba(42,126,240,.28); border-color: #2a7ef0; }
+.atekst__gumb:focus-visible { outline: 2px solid #2a7ef0; outline-offset: 1px; }
+.atekst__gumb.je-ukljucen { background: #2a7ef0; border-color: #2a7ef0; color: #fff; }
+.atekst__emotikoni {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
+  gap: 4px;
+  padding: 8px;
+  background: #0d1729;
+  border: 1px solid rgba(255,255,255,.16);
+  border-bottom: 0;
+}
+.atekst__emotikon {
+  height: 40px;
+  background: transparent;
+  border: 1px solid transparent;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif;
+}
+.atekst__emotikon:hover { background: rgba(255,255,255,.1); border-color: rgba(255,255,255,.2); }
+.atekst__polje { min-height: 220px; font-size: 15px; }
+.atekst__pomoc { font-size: 12px; line-height: 1.5; color: rgba(232,238,248,.62); }
+/* Pregled je na bijeloj podlozi, istim pismom i veličinom kao na stranici —
+   da se vidi točno ono što će posjetitelj vidjeti. */
+.atekst__pregled {
+  margin-top: 6px;
+  padding: 22px 26px 8px;
+  background: #fff;
+  border-left: 3px solid #2a7ef0;
+}

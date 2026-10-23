@@ -4,6 +4,7 @@ import Reveal from '../components/Reveal';
 import NewsCard from '../components/NewsCard';
 import PageHero from '../components/PageHero';
 import NewsFoto from '../components/NewsFoto';
+import Oblikovano from '../components/Oblikovano';
 import NijePronadeno from './NijePronadeno';
 import { useContent } from '../lib/content';
 
@@ -50,16 +51,21 @@ export default function Novost() {
                 </Reveal>
               )}
 
-              {(item.body ?? []).map((paragraph, i) => (
-                <Reveal key={i} delay={60 + i * 70}>
-                  <p className="prose prose--wide">{paragraph}</p>
-                </Reveal>
-              ))}
+              {/* Tekst s oblikovanjem iz administracije: podebljano, kurziv,
+                  podnaslovi, popisi, citati, poveznice i emotikoni. Stare
+                  objave bez oznaka izgledaju točno kao prije. */}
+              <div className="post__tekst">
+                <Oblikovano
+                  tekst={item.body ?? []}
+                  omot={Reveal}
+                  omotProps={(i) => ({ delay: 60 + Math.min(i, 6) * 70 })}
+                />
+              </div>
 
               {/* Objava bez teksta nije greška — klub ponekad objavi samo
                   naslov i fotografiju. Prazna stranica ipak nije u redu. */}
               {(item.body ?? []).length === 0 && (
-                <p className="prose prose--wide">{item.lead}</p>
+                <p className="prose prose--wide post__tekst">{item.lead}</p>
               )}
             </div>
 

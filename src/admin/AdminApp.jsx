@@ -13,6 +13,7 @@ import { formatDatum, formatSat } from '../lib/vrijeme';
 import ProvjeraRetka from './ProvjeraRetka';
 import { jeTrener } from '../lib/momcad';
 import Postavke from './Postavke';
+import TekstObjave from './TekstObjave';
 import './admin.css';
 
 const KARTICE = [
@@ -147,7 +148,7 @@ export default function AdminApp() {
                 <Polje label="Datum (slobodan tekst)" value={n.date} onChange={set('date')} placeholder="Sezona 2025/26" />
                 <Polje label="Kategorija" value={n.cat} onChange={set('cat')} placeholder="Liga" />
                 <Tekst label="Uvod" value={n.lead} onChange={set('lead')} />
-                <Tekst label="Tekst objave (prazan red između odlomaka)" rows={8} value={n.body} onChange={set('body')} />
+                <TekstObjave label="Tekst objave" rows={10} value={n.body} onChange={set('body')} />
                 {/* Prazna adresa i dalje radi — poveznica tada nosi ključ iz
                     baze. Zato napomena, a ne obavezno polje. */}
                 <Polje
