@@ -2,6 +2,17 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "rewrites": [
     {
+      "source": "/:put((?!api/|assets/|fonts/|uploads/).*)",
+      "has": [
+        {
+          "type": "header",
+          "key": "user-agent",
+          "value": ".*(facebookexternalhit|Facebot|meta-externalagent|WhatsApp|Twitterbot|LinkedInBot|Slackbot|Discordbot|TelegramBot|Viber|SkypeUriPreview|Pinterest|redditbot|Applebot|Embedly|vkShare|Iframely|Mastodon|Bluesky|Snapchat|SnapchatAds|Google-InspectionTool|bingbot|DuckDuckBot|YandexBot).*"
+        }
+      ],
+      "destination": "/api/dijeljenje?put=/:put"
+    },
+    {
       "source": "/((?!api/).*)",
       "destination": "/index.html"
     }

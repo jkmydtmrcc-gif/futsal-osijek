@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import { punNaslov, skrati, IME_KLUBA } from '../lib/dijeljenje';
 
 /**
  * Naslov stranice i oznake za dijeljenje.
@@ -13,14 +14,14 @@ import { useLocation } from 'react-router-dom';
  * dijeli na Facebooku i u WhatsApp grupama, a bez njih poveznica stigne kao
  * goli link, bez slike i naslova.
  *
- * Napomena o tražilicama: ovo se postavlja u pregledniku, nakon učitavanja.
- * Google to čita jer izvršava JavaScript, ali Facebookov i WhatsAppov
- * pregledavatelj ne izvršavaju — njima vrijedi ono što stoji u `index.html`.
- * Zato u `index.html` stoji potpun skup oznaka za klub kao cjelinu, a ovo ih
- * po rutama precizira.
+ * Napomena o pregledavateljima: ovo se postavlja u pregledniku, nakon
+ * učitavanja. Google to čita jer izvršava JavaScript, ali Facebookov i
+ * WhatsAppov pregledavatelj ne izvršavaju. Njima iste oznake, izračunate
+ * istom funkcijom (`lib/dijeljenje.js`), upisuje poslužitelj
+ * (`api/dijeljenje.js`) — pa podijeljena novost stiže sa svojom slikom i
+ * tekstom, a ne s naslovnom.
  */
 
-const SITE = 'MNK Osijek Kandit';
 
 /** Postavlja `<meta>` po imenu ili svojstvu; stvara oznaku ako je nema. */
 function setMeta(attr, key, value) {
@@ -44,19 +45,12 @@ function setLink(rel, href) {
   el.setAttribute('href', href);
 }
 
-/** Skraćuje opis na duljinu koju tražilice još prikazuju cijelu. */
-function trim(text, max = 160) {
-  const clean = String(text ?? '').replace(/\s+/g, ' ').trim();
-  if (clean.length <= max) return clean;
-  return `${clean.slice(0, max - 1).replace(/[\s,;:.–—-]+\S*$/, '')}…`;
-}
-
 export default function Meta({ title, description, image, type = 'website' }) {
   const { pathname } = useLocation();
 
   useEffect(() => {
-    const full = title ? `${title} — ${SITE}` : `${SITE} — službene stranice kluba`;
-    const desc = trim(description);
+    const full = punNaslov(title);
+    const desc = skrati(description);
     const url = `${window.location.origin}${pathname}`;
     /* Slika za dijeljenje mora biti puna adresa — relativna putanja se u
        Facebookovom pregledavatelju ne razriješi. */
@@ -68,7 +62,7 @@ export default function Meta({ title, description, image, type = 'website' }) {
     setMeta('name', 'description', desc);
     setLink('canonical', url);
 
-    setMeta('property', 'og:site_name', SITE);
+    setMeta('property', 'og:site_name', IME_KLUBA);
     setMeta('property', 'og:type', type);
     setMeta('property', 'og:title', full);
     setMeta('property', 'og:description', desc);
