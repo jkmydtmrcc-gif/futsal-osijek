@@ -37,6 +37,8 @@ export function zadaniSadrzaj() {
     league: {
       ourClub: SITE.OUR_CLUB,
       playoffCutoff: SITE.PLAYOFF_CUTOFF,
+      relegationPlayoff: SITE.RELEGATION_PLAYOFF,
+      relegation: SITE.RELEGATION,
       note: SITE.STANDINGS_NOTE,
       /* `isUs` i `isPlayoff` se ovdje namjerno odbacuju: izvode se pri
          čitanju, pa tablica iz baze i ugrađena tablica prolaze istim putem. */

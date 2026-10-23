@@ -333,8 +333,13 @@ export const STAT_FIELDS = [
 /* Ime kluba po kojem se redak u tablici ističe. */
 export const OUR_CLUB = 'Osijek Kandit';
 
-/* Mjesta koja vode u doigravanje — dobivaju svjetliju boju pozicije. */
-export const PLAYOFF_CUTOFF = 4;
+/* Zone tablice. Prvih `PLAYOFF_CUTOFF` mjesta vodi u doigravanje; od ostalih,
+   zadnjih `RELEGATION` ispada, a `RELEGATION_PLAYOFF` mjesta neposredno iznad
+   njih igra doigravanje za ostanak. Nula gasi pojedinu zonu. U administraciji
+   se mijenja pod „Tablica — postavke“. */
+export const PLAYOFF_CUTOFF = 8;
+export const RELEGATION_PLAYOFF = 1;
+export const RELEGATION = 1;
 
 /**
  * Tablica.
@@ -344,20 +349,23 @@ export const PLAYOFF_CUTOFF = 4;
  * inicijale kluba u pločici. Upisuje se u administraciji, pod „Tablica i
  * raspored“.
  */
-/* Brojke su ogledne, ali su složne: P+N+I daje odigrano, 3·P+N daje bodove,
-   a zbroj danih golova jednak je zbroju primljenih. Nesložan primjer bi pao
-   na istoj provjeri koja u administraciji hvata tipfelere, pa bi izgledao kao
-   greška umjesto kao primjer. Gol-razlika se ne upisuje — računa se. */
+/* Brojke su složne: P+N+I daje odigrano, 3·P+N daje bodove, a zbroj danih
+   golova jednak je zbroju primljenih. Nesložan primjer bi pao na istoj
+   provjeri koja u administraciji hvata tipfelere, pa bi izgledao kao greška
+   umjesto kao primjer. Gol-razlika se ne upisuje — računa se.
+   `form` je zadnjih pet ishoda, najstariji prvi: P pobjeda, N neriješeno,
+   I izgubljeno (prihvaća se i W · D · L). */
 const STANDINGS_ROWS = [
-  { pos: 1, club: 'Olmissum',        played: 6, wins: 5, draws: 1, losses: 0, goals_for: 34, goals_against: 14, points: 16, logo: '' },
-  { pos: 2, club: 'Osijek Kandit',   played: 6, wins: 4, draws: 2, losses: 0, goals_for: 31, goals_against: 17, points: 14, logo: '/uploads/images.jpeg' },
-  { pos: 3, club: 'Futsal Dinamo',   played: 6, wins: 4, draws: 0, losses: 2, goals_for: 28, goals_against: 20, points: 12, logo: '' },
-  { pos: 4, club: 'Rijeka',          played: 6, wins: 3, draws: 1, losses: 2, goals_for: 24, goals_against: 21, points: 10, logo: '' },
-  { pos: 5, club: 'Novo vrijeme',    played: 6, wins: 2, draws: 2, losses: 2, goals_for: 22, goals_against: 22, points:  8, logo: '' },
-  { pos: 6, club: 'Torcida Biberon', played: 6, wins: 2, draws: 1, losses: 3, goals_for: 20, goals_against: 24, points:  7, logo: '' },
-  { pos: 7, club: 'Square',          played: 6, wins: 2, draws: 0, losses: 4, goals_for: 19, goals_against: 27, points:  6, logo: '' },
-  { pos: 8, club: 'Crnica',          played: 6, wins: 1, draws: 0, losses: 5, goals_for: 15, goals_against: 32, points:  3, logo: '' },
-  { pos: 9, club: 'Vrgorac',         played: 6, wins: 0, draws: 1, losses: 5, goals_for: 12, goals_against: 28, points:  1, logo: '' },
+  { pos:  1, club: 'Olmissum',      played: 3, wins: 2, draws: 1, losses: 0, goals_for: 14, goals_against:  6, points: 7, form: 'PPN', logo: '' },
+  { pos:  2, club: 'Square',        played: 3, wins: 2, draws: 1, losses: 0, goals_for: 16, goals_against: 10, points: 7, form: 'PPN', logo: '' },
+  { pos:  3, club: 'Osijek Kandit', played: 3, wins: 2, draws: 0, losses: 1, goals_for: 16, goals_against: 10, points: 6, form: 'PPI', logo: '/uploads/images.jpeg' },
+  { pos:  4, club: 'Rijeka',        played: 3, wins: 2, draws: 0, losses: 1, goals_for: 15, goals_against: 11, points: 6, form: 'PIP', logo: '' },
+  { pos:  5, club: 'Futsal Pula',   played: 3, wins: 2, draws: 0, losses: 1, goals_for:  7, goals_against: 10, points: 6, form: 'PPI', logo: '' },
+  { pos:  6, club: 'Dinamo',        played: 3, wins: 1, draws: 1, losses: 1, goals_for:  7, goals_against:  5, points: 4, form: 'IPN', logo: '' },
+  { pos:  7, club: 'Crnica',        played: 3, wins: 1, draws: 0, losses: 2, goals_for:  9, goals_against:  8, points: 3, form: 'IIP', logo: '' },
+  { pos:  8, club: 'Novo Vrijeme',  played: 3, wins: 1, draws: 0, losses: 2, goals_for: 12, goals_against: 17, points: 3, form: 'IIP', logo: '' },
+  { pos:  9, club: 'Hajduk',        played: 3, wins: 0, draws: 1, losses: 2, goals_for:  8, goals_against: 12, points: 1, form: 'IIN', logo: '' },
+  { pos: 10, club: 'Torcida',       played: 3, wins: 0, draws: 0, losses: 3, goals_for:  2, goals_against: 17, points: 0, form: 'III', logo: '' },
 ];
 
 /**
@@ -427,14 +435,15 @@ export const TIMELINE = [
 
 export const CLUBS = [
   'Osijek Kandit',
-  'Futsal Dinamo',
-  'Novo vrijeme',
   'Olmissum',
-  'Rijeka',
-  'Torcida Biberon',
   'Square',
+  'Rijeka',
+  'Futsal Pula',
+  'Dinamo',
   'Crnica',
-  'Vrgorac',
+  'Novo Vrijeme',
+  'Hajduk',
+  'Torcida',
 ];
 
 /**

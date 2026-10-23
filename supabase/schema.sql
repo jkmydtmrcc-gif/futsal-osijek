@@ -374,8 +374,8 @@ end $$;
 -- 6. TABLICA LIGE: PUNI REDAK                      (dodano 2026)
 -- ─────────────────────────────────────────────────────────────
 -- Redak je imao mjesto, klub, odigrano i bodove. Nijedna futsal tablica u
--- Hrvatskoj ne izgleda tako — standardni redak je Ut · P · N · I · G+ · G− ·
--- GR · Bod. Gol-razlika se namjerno **ne** sprema: računa se iz golova, pa ne
+-- Hrvatskoj ne izgleda tako — standardni redak je Ut · P · N · I · GR · Golovi ·
+-- Posljednjih 5 · Bod. Gol-razlika se namjerno **ne** sprema: računa se iz golova, pa ne
 -- može proturječiti retku u kojem stoji.
 --
 -- Sve ima zadanu nulu, pa stari redci ostanu ispravni. Dok su nule, stranica
@@ -386,6 +386,12 @@ alter table tablica add column if not exists draws         int not null default 
 alter table tablica add column if not exists losses        int not null default 0;
 alter table tablica add column if not exists goals_for     int not null default 0;
 alter table tablica add column if not exists goals_against int not null default 0;
+
+-- Zadnjih pet ishoda, najstariji prvi: P pobjeda · N neriješeno · I izgubljeno
+-- (prihvaća se i W · D · L). Stupac „Posljednjih 5“ pojavi se tek kad ijedan
+-- redak ima nešto upisano. Za naš klub, dok je prazno, forma se računa iz
+-- odigranih utakmica.
+alter table tablica add column if not exists form text not null default '';
 
 -- Datum ažuriranja stoji ispod tablice, uz naveden izvor. Vodi se sam, jer
 -- datum koji se upisuje ručno prije ili kasnije ostane lanjski — a tablica s
@@ -413,18 +419,19 @@ create trigger tablica_updated_at
 -- Upis stoji ovdje, a ne uz ostale ogledne podatke gore, jer traži stupce koje
 -- dobiva tek nekoliko redaka iznad. `where not exists` znači da postojeća baza
 -- ostaje netaknuta — ovo je samo za prvo pokretanje.
-insert into tablica (pos, club, played, wins, draws, losses, goals_for, goals_against, points)
+insert into tablica (pos, club, played, wins, draws, losses, goals_for, goals_against, points, form)
 select * from (values
-  (1, 'Olmissum',        6, 5, 1, 0, 34, 14, 16),
-  (2, 'Osijek Kandit',   6, 4, 2, 0, 31, 17, 14),
-  (3, 'Futsal Dinamo',   6, 4, 0, 2, 28, 20, 12),
-  (4, 'Rijeka',          6, 3, 1, 2, 24, 21, 10),
-  (5, 'Novo vrijeme',    6, 2, 2, 2, 22, 22,  8),
-  (6, 'Torcida Biberon', 6, 2, 1, 3, 20, 24,  7),
-  (7, 'Square',          6, 2, 0, 4, 19, 27,  6),
-  (8, 'Crnica',          6, 1, 0, 5, 15, 32,  3),
-  (9, 'Vrgorac',         6, 0, 1, 5, 12, 28,  1)
-) as v(pos, club, played, wins, draws, losses, goals_for, goals_against, points)
+  ( 1, 'Olmissum',      3, 2, 1, 0, 14,  6, 7, 'PPN'),
+  ( 2, 'Square',        3, 2, 1, 0, 16, 10, 7, 'PPN'),
+  ( 3, 'Osijek Kandit', 3, 2, 0, 1, 16, 10, 6, 'PPI'),
+  ( 4, 'Rijeka',        3, 2, 0, 1, 15, 11, 6, 'PIP'),
+  ( 5, 'Futsal Pula',   3, 2, 0, 1,  7, 10, 6, 'PPI'),
+  ( 6, 'Dinamo',        3, 1, 1, 1,  7,  5, 4, 'IPN'),
+  ( 7, 'Crnica',        3, 1, 0, 2,  9,  8, 3, 'IIP'),
+  ( 8, 'Novo Vrijeme',  3, 1, 0, 2, 12, 17, 3, 'IIP'),
+  ( 9, 'Hajduk',        3, 0, 1, 2,  8, 12, 1, 'IIN'),
+  (10, 'Torcida',       3, 0, 0, 3,  2, 17, 0, 'III')
+) as v(pos, club, played, wins, draws, losses, goals_for, goals_against, points, form)
 where not exists (select 1 from tablica);
 
 -- ─────────────────────────────────────────────────────────────

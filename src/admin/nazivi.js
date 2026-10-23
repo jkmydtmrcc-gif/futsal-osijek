@@ -23,6 +23,7 @@ const NAZIVI = {
   losses: 'Porazi',
   goals_for: 'Dani golovi',
   goals_against: 'Primljeni golovi',
+  form: 'Posljednjih 5',
 
   logo: 'Grb kluba',
   slug: 'Oznaka u adresi',

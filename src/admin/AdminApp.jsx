@@ -169,7 +169,7 @@ export default function AdminApp() {
         {kartica === 'tablica' && (
           <Urednik
             naslov="Tablica lige"
-            opis="Osijek Kandit se sam ističe u tablici — piši ime točno tako. Klub bez upisanog grba pokaže inicijale. Gol-razliku ne upisuješ, računa se sama; ako se brojke ne zbrajaju, redak to kaže ispod polja. Dok su pobjede, neriješeno i porazi na nuli, stranica pokazuje kraću tablicu."
+            opis="Osijek Kandit se sam ističe u tablici — piši ime točno tako. Klub bez upisanog grba pokaže inicijale. Gol-razliku ne upisuješ, računa se sama; ako se brojke ne zbrajaju, redak to kaže ispod polja. Dok su pobjede, neriješeno i porazi na nuli, stranica pokazuje kraću tablicu. Zone (doigravanje, za ostanak, ispadanje) određuju se po mjestu — koliko mjesta ide u koju zonu mijenjaš pod „Postavke → Tablica“. „Posljednjih 5“ upiši slovima, najstariji prvi (P pobjeda, N neriješeno, I izgubljeno — npr. PPN); za naš klub, dok je prazno, forma se računa iz odigranih utakmica."
             tablica="tablica"
             poredakPo="pos"
             opisRetka={(r) => `${r.pos}. ${r.club || 'Novi klub'} — ${r.points ?? 0} bod.`}
@@ -183,6 +183,7 @@ export default function AdminApp() {
               goals_for: 0,
               goals_against: 0,
               points: 0,
+              form: '',
               logo: '',
             })}
             polja={(n, set) => (
@@ -201,6 +202,12 @@ export default function AdminApp() {
                   min="0"
                 />
                 <Broj label="Bodovi" value={n.points} onChange={set('points')} min="0" />
+                <Polje
+                  label="Posljednjih 5 (npr. PPN)"
+                  value={n.form}
+                  onChange={set('form')}
+                  placeholder="PPNIP"
+                />
                 <SlikaPolje label="Grb kluba" value={n.logo} onChange={set('logo')} />
                 {/* Gol-razlika se ne upisuje — računa se, pa ne može
                     proturječiti golovima iz istog retka. */}

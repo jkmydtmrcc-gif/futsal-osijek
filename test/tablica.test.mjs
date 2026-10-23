@@ -14,6 +14,10 @@ import {
   formatGR,
   provjeriRedak,
   formaKluba,
+  formaIzTeksta,
+  imaFormu,
+  oznaciZone,
+  grupirajZone,
   slozi,
 } from '../src/lib/tablica.js';
 
@@ -104,8 +108,57 @@ console.log('\naritmetika retka');
 
 console.log('\nforma');
 jest(formaKluba({ isUs: true }, ['w', 'd', 'w']).join('') === 'wdw', 'naš redak dobije formu');
-jest(formaKluba({ isUs: false }, ['w', 'd', 'w']).length === 0, 'tuđi redak ne dobije izmišljenu formu');
+jest(formaKluba({ isUs: false }, ['w', 'd', 'w']).length === 0, 'tuđi redak ne dobije izmišljenu formu iz naših utakmica');
 jest(formaKluba({ isUs: true }, undefined).length === 0, 'bez forme ne ruši');
+jest(formaKluba({ isUs: false, form: 'WWD' }, ['l']).join('') === 'wwd', 'upisana forma tuđeg kluba se prikazuje');
+jest(formaKluba({ isUs: true, form: 'LLW' }, ['w', 'w', 'w']).join('') === 'llw', 'upisana forma ima prednost pred izračunatom');
+jest(formaKluba({ isUs: true, form: '' }, ['w', 'd']).join('') === 'wd', 'bez upisa naš redak se računa iz utakmica');
+
+console.log('\nforma iz teksta');
+jest(formaIzTeksta('WWD').join('') === 'wwd', 'engleska slova');
+jest(formaIzTeksta('ppn').join('') === 'wwd', 'hrvatska slova, mala');
+jest(formaIzTeksta('P, N I').join('') === 'wdl', 'razmaci i zarezi se preskaču');
+jest(formaIzTeksta('PPPPPNI').join('') === 'wwwdl', 'više od pet — vrijedi zadnjih pet');
+jest(formaIzTeksta('x?!').length === 0 && formaIzTeksta(null).length === 0, 'smeće i null daju praznu formu');
+jest(imaFormu([{ forma: [] }, { forma: ['w'] }]) === true, 'stupac forme ima smisla kad ijedan redak ima formu');
+jest(imaFormu([{ forma: [] }, {}]) === false && imaFormu(undefined) === false, 'bez ijedne forme stupca nema');
+
+console.log('\nzone');
+{
+  const deset = Array.from({ length: 10 }, (_, i) => ({ pos: i + 1 }));
+  const z = oznaciZone(deset, { doigravanje: 8, ostanak: 1, ispadanje: 1 });
+  jest(z.slice(0, 8).every((x) => x === 'doigravanje'), 'prvih osam je doigravanje');
+  jest(z[8] === 'ostanak' && z[9] === 'ispadanje', 'deveti za ostanak, deseti ispada');
+}
+{
+  const devet = Array.from({ length: 9 }, (_, i) => ({ pos: i + 1 }));
+  const z = oznaciZone(devet, { doigravanje: 4, ostanak: 2, ispadanje: 1 });
+  jest(z[4] === null && z[5] === null && z[6] === 'ostanak' && z[7] === 'ostanak' && z[8] === 'ispadanje', 'što ostane u sredini nema zonu');
+}
+{
+  const cetiri = Array.from({ length: 4 }, (_, i) => ({ pos: i + 1 }));
+  const z = oznaciZone(cetiri, { doigravanje: 3, ostanak: 5, ispadanje: 5 });
+  jest(z.join() === 'doigravanje,doigravanje,doigravanje,ispadanje', 'u maloj ligi doigravanje ima prednost, zone se ne preklapaju');
+}
+{
+  const redci = [{ pos: 1 }, { pos: 2 }, { pos: 3 }];
+  jest(oznaciZone(redci, { doigravanje: 0, ostanak: 1, ispadanje: 1 }).every((x) => x === null), 'bez doigravanja nema nikakvih zona');
+  const z = oznaciZone([{ pos: 0 }, { pos: 1 }], { doigravanje: 1, ispadanje: 1 });
+  jest(z[0] === null && z[1] === 'doigravanje', 'redak bez mjesta ne upada ni u jednu zonu');
+}
+{
+  const redci = slozi(
+    Array.from({ length: 10 }, (_, i) => ({ pos: i + 1, club: `K${i + 1}`, form: i === 0 ? 'WWD' : '' })),
+    { playoffCutoff: 8, relegationPlayoff: 1, relegation: 1 }
+  );
+  const skupine = grupirajZone(redci);
+  jest(skupine.length === 3, 'tri skupine: ' + skupine.map((g) => g.zona).join(', '));
+  jest(skupine[0].naslov === 'Doigravanje' && skupine[0].redci.length === 8, 'naslov i broj redaka prve skupine');
+  jest(skupine[1].naslov === 'Doigravanje za ostanak' && skupine[2].naslov === 'Ispadanje', 'nazivi ostalih zona');
+  jest(redci[0].forma.join('') === 'wwd' && redci[1].forma.length === 0, 'forma iz stupca stiže do retka');
+  jest(grupirajZone([]).length === 0, 'prazna tablica nema skupina');
+  jest(grupirajZone([{ pos: 1 }, { pos: 2 }])[0].naslov === '', 'redci bez zone nemaju naslov');
+}
 
 console.log('\nslaganje tablice za prikaz');
 {
@@ -120,8 +173,8 @@ console.log('\nslaganje tablice za prikaz');
 
   jest(redci[1].isUs === true && redci[0].isUs === false, 'naš klub je prepoznat po imenu');
   jest(redci[0].isPlayoff === true && redci[2].isPlayoff === false, 'granica doigravanja');
-  jest(redci[1].forma.join('') === 'wwd', 'forma ide samo uz naš redak');
-  jest(redci[0].forma.length === 0, 'tuđi redak ostaje bez forme');
+  jest(redci[1].forma.join('') === 'wwd', 'naš redak bez upisa dobije formu iz utakmica');
+  jest(redci[0].forma.length === 0, 'tuđi redak bez upisa ostaje bez forme');
   jest(redci[1].gd === 14, 'gol-razlika je izvedena i ovdje');
 }
 {

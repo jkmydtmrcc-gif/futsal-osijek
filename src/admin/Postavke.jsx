@@ -64,7 +64,9 @@ const SKUPINE = [
     naslov: 'Tablica — postavke',
     polja: [
       { put: 'ourClub', label: 'Naš klub (ime kojim se redak ističe)' },
-      { put: 'playoffCutoff', label: 'Mjesta za doigravanje', tip: 'broj' },
+      { put: 'playoffCutoff', label: 'Mjesta za doigravanje (odozgo)', tip: 'broj' },
+      { put: 'relegationPlayoff', label: 'Mjesta za doigravanje za ostanak (iznad ispadanja)', tip: 'broj' },
+      { put: 'relegation', label: 'Mjesta koja ispadaju (odozdo)', tip: 'broj' },
       { put: 'note', label: 'Napomena ispod tablice', tip: 'tekst' },
       { put: 'clubs', label: 'Klubovi lige (jedan po retku)', tip: 'popis' },
     ],

@@ -154,8 +154,8 @@ export function useContent() {
 }
 
 /**
- * Tablica s izvedenim poljima: gol-razlika, koji redak smo mi, koji vodi u
- * doigravanje i forma uz naš redak. Sve se računa pri čitanju, pa se u bazi
+ * Tablica s izvedenim poljima: gol-razlika, koji redak smo mi, u kojoj je
+ * zoni (doigravanje, ostanak, ispadanje) i kakva je forma. Sve se računa pri čitanju, pa se u bazi
  * drže samo upisani podaci — ništa izvedeno ne može zastarjeti.
  */
 export function useStandings() {
@@ -166,8 +166,17 @@ export function useStandings() {
       slozi(league.standings, {
         ourClub: league.ourClub,
         playoffCutoff: league.playoffCutoff,
+        relegationPlayoff: league.relegationPlayoff,
+        relegation: league.relegation,
         forma: league.forma,
       }),
-    [league.standings, league.ourClub, league.playoffCutoff, league.forma]
+    [
+      league.standings,
+      league.ourClub,
+      league.playoffCutoff,
+      league.relegationPlayoff,
+      league.relegation,
+      league.forma,
+    ]
   );
 }
