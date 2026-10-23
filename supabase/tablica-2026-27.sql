@@ -5,7 +5,9 @@
 -- Ovo NIJE dio `schema.sql`. Pokreće se jednom, u Supabase → SQL Editor, kad
 -- želiš da se u bazi tablica zamijeni ovom s deset klubova.
 --
--- Prije ovoga pokreni `schema.sql` (treba stupac `form`).
+-- Samostalno je: sam doda stupac `form` ako ga nema, pa ne treba prije
+-- pokretati `schema.sql`. Uz tablicu postavi i zone (8 mjesta doigravanje,
+-- 1 doigravanje za ostanak, 1 ispadanje) i popis klubova lige.
 --
 -- Zašto zasebno: `schema.sql` se lijepi cijel i više puta, a ovo BRIŠE sve
 -- retke tablice i upisuje ih ispočetka. Pokreni samo ako želiš baš to.
@@ -35,5 +37,27 @@ values
   (10, 'Torcida',       3, 0, 0, 3,  2, 17, 0, 'III');
 
 update tablica set logo = '/uploads/images.jpeg' where club = 'Osijek Kandit';
+
+-- Zone i popis klubova. Spaja se s postojećim postavkama tablice, pa naš
+-- klub i napomena ostaju kakvi jesu. Baza bez tablice `postavke` (vrlo stara
+-- shema) se preskače — tada vrijede zadane zone sa stranice, iste ove.
+do $$
+begin
+  if to_regclass('public.postavke') is not null then
+    insert into postavke (key, value)
+    values ('league', '{}'::jsonb)
+    on conflict (key) do nothing;
+
+    update postavke
+    set value = value || jsonb_build_object(
+      'playoffCutoff', 8,
+      'relegationPlayoff', 1,
+      'relegation', 1,
+      'clubs', jsonb_build_array('Osijek Kandit', 'Olmissum', 'Square', 'Rijeka',
+        'Futsal Pula', 'Dinamo', 'Crnica', 'Novo Vrijeme', 'Hajduk', 'Torcida')
+    )
+    where key = 'league';
+  end if;
+end $$;
 
 commit;
