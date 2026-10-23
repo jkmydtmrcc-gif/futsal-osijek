@@ -10,7 +10,7 @@ npm install
 cp .env.example .env      # Supabase ključevi (neobavezno)
 npm run dev
 npm run build
-npm test                  # pretvorbe, asistent, rez pozadine, čitač, greške baze
+npm test                  # pretvorbe, rez pozadine, čitač, greške baze
 ```
 
 Stranica radi i **bez** Supabasea — tada prikazuje ugrađeni sadržaj iz
@@ -170,28 +170,6 @@ Google i za karticu preglednika.
 `sitemap.xml` se zapisuje pri buildu iz `SITE_URL` ili s Vercelove domene. Bez
 ijednog od toga se namjerno ne zapisuje — kriva domena u sitemapu je gora nego
 nikakva.
-
-## Klupski asistent
-
-Odgovara iz podataka koji su već na stranici — raspored, tablica, postava,
-kontakt, Fan Shop. Nije jezični model: ne zove nikakvu vanjsku uslugu, ne košta
-ništa i ne može reći nešto čega u klupskim podacima nema. Kad ne prepozna
-pitanje, to i kaže i ponudi teme koje zna.
-
-Prepoznavanje teme živi u `src/lib/asistent.js`, odvojeno od komponente, pa ga
-`npm test` može gađati izravno. Povod: na „gdje kupiti dres" asistent je
-odgovarao o dvorani. Brojanje pogodaka je obje teme izjednačilo — „gdje" za
-dvoranu, „dres" za Fan Shop — pa je pobijedila ona koja je prva u popisu.
-
-Sada duži izraz nosi više bodova (specifičniji je), upitne riječi skoro ništa,
-a dvosmisleni izrazi stoje cijeli: ne „kupit" nego „kupit ulaznic" i
-„kupit dres". Ključne riječi su u istoj datoteci kao i bodovanje — da test ne
-provjerava izmišljeni popis dok stranica radi po svojem.
-
-Znak (`AsistentIkona.jsx`) je klupski štit koji je ujedno oblačić za razgovor:
-obris prati siluetu grba, tri točke unutra kažu što gumb radi. Prije toga je
-bila futsal lopta — na 36 piksela su joj se šavovi stopili u pet krakova, pa
-je izgledala kao volan.
 
 ## Kolačići
 

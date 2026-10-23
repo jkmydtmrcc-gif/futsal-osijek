@@ -5,7 +5,6 @@ import Footer from './components/Footer';
 import ScrollToTop from './components/ScrollToTop';
 import KolaciciTraka from './components/Kolacici';
 import TrakaUtakmice from './components/TrakaUtakmice';
-import Asistent from './components/Asistent';
 import Partners from './sections/Partners';
 import Naslovnica from './pages/Naslovnica';
 import Klub from './pages/Klub';
@@ -91,10 +90,7 @@ export default function App() {
         <Footer />
       </div>
 
-      {/* Redoslijed je bitan: pravilo `.ck ~ .as-fab` skriva asistenta dok
-          obavijest o kolačićima stoji, a `~` hvata samo ono što slijedi. */}
       <KolaciciTraka />
-      <Asistent />
     </>
   );
 }
