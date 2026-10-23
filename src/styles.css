@@ -1936,7 +1936,9 @@ html { scroll-behavior: smooth; }
    s popisom pa je uži od prozora i ostaje u stupcu. */
 @media (min-width: 900px) {
   .feature--siroki { flex-direction: row; }
-  .feature--siroki > .nfoto { flex: 0 0 58%; aspect-ratio: auto; min-height: 420px; }
+  /* Isti omjer kao svaki drugi okvir novosti (16:10), a ne visina teksta do
+     sebe — tako jedna veličina slike ispuni svaki okvir od ruba do ruba. */
+  .feature--siroki > .nfoto { flex: 0 0 58%; aspect-ratio: 16 / 10; align-self: center; }
   .feature--siroki .feature__body { flex: 1; align-self: center; padding: 44px 46px; }
 }
 .feature__flag {
